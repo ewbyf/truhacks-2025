@@ -17,10 +17,10 @@ const LibraryScreen = () => {
 				<View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 15 }}>
 					<Text style={styles.subtitle}>{selected == "playlists" ? 'Playlists' : 'Songs'}</Text>
                     <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-                        <TouchableOpacity style={[styles.selectionButton, {backgroundColor: selected == "playlists" ? '#732DFC' : 'gray'}]} onPress={() => setSelected('playlists')}>
+                        <TouchableOpacity style={[styles.selectionButton, {backgroundColor: selected == "playlists" ? '#732DFC' : '#403E43'}]} onPress={() => setSelected('playlists')}>
                             <Text>Playlists</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={[styles.selectionButton, {backgroundColor: selected == "songs" ? '#732DFC' : 'gray'}]} onPress={() => setSelected('songs')}>
+                        <TouchableOpacity style={[styles.selectionButton, {backgroundColor: selected == "songs" ? '#732DFC' : '#403E43'}]} onPress={() => setSelected('songs')}>
                             <Text>Songs</Text>
                         </TouchableOpacity>
                     </View>
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
 		display: 'flex',
 		justifyContent: 'center',
 		alignItems: 'center',
-		backgroundColor: 'gray',
+		backgroundColor: '#403E43',
 	},
 	playlistTitle: {
 		color: 'white',

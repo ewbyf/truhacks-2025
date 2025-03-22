@@ -108,33 +108,74 @@ const BottomPlayer = () => {
 				</View>
 			</TouchableOpacity>
 
-			{/* <View style={styles.progressContainer}>
-				<Text style={styles.progressText}>
-                {Math.floor(position / 1000)} / {Math.floor(duration / 1000)} seconds
-				</Text>
-				<Slider
-                style={styles.progressBar}
-                value={position / duration}
-                minimumValue={0}
-                maximumValue={1}
-                thumbTintColor="white"
-                minimumTrackTintColor="white"
-                onValueChange={async (value) => {
-                    if (sound) {
-                        const newPosition = value * duration;
-                        await sound.setPositionAsync(newPosition);
-                        setPosition(newPosition);
-						}
-                        }}
-                        />
-                        </View> */}
-			<BottomSheetModal ref={bottomSheetModalRef} snapPoints={[1000]} index={-1} handleComponent={null} enablePanDownToClose={true}>
+			<BottomSheetModal
+				ref={bottomSheetModalRef}
+				snapPoints={['100%']}
+				index={-1}
+				handleComponent={null}
+				onChange={(index) => {
+					if (index == 0) {
+						bottomSheetModalRef.current?.close();
+					}
+				}}
+				enablePanDownToClose={true}
+			>
 				<BottomSheetView style={styles.contentContainer}>
-					<Text>Awesome 🎉</Text>
-					<Text>Awesome 🎉</Text>
-					<Text>Awesome 🎉</Text>
-					<Text>Awesome 🎉</Text>
-					<Text>Awesome 🎉</Text>
+					<View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+						<TouchableOpacity onPress={() => bottomSheetModalRef?.current?.close()}>
+							<Icon name="chevron-down" color="white" size={36} />
+						</TouchableOpacity>
+						<Text style={styles.playlistTitle}>Playlist Name</Text>
+						<TouchableOpacity onPress={() => bottomSheetModalRef?.current?.close()}>
+							<Icon name="ellipsis-horizontal" color="white" size={36} />
+						</TouchableOpacity>
+					</View>
+					<Image source={{ uri: 'https://picsum.photos/203' }} style={{ height: 350, width: 350 }} />
+					<View style={{width: '100%'}}>
+						<View style={{ flexDirection: 'row', width: '100%' }}>
+							<View style={{gap: 5}}>
+								<Text style={styles.songName}>Song Name</Text>
+								<Text style={styles.genresName}>pop, r&b</Text>
+							</View>
+						</View>
+						<View style={styles.progressContainer}>
+							<Slider
+								style={styles.progressBar}
+								value={position / duration}
+								minimumValue={0}
+								maximumValue={1}
+								thumbTintColor="white"
+								minimumTrackTintColor="white"
+								thumbImage={require('../../assets/images/circle.png')}
+								onValueChange={async (value) => {
+									if (sound) {
+										const newPosition = value * duration;
+										await sound.setPositionAsync(newPosition);
+										setPosition(newPosition);
+									}
+								}}
+							/>
+							<View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: -10 }}>
+								<Text style={styles.timestamp}>
+									{Math.floor(Math.floor(position / 1000) / 60)}:{String(Math.floor(position / 1000) % 60).padStart(2, '0')}
+								</Text>
+								<Text style={styles.timestamp}>
+									{Math.floor(Math.floor(duration / 1000) / 60)}:{String(Math.floor(duration / 1000) % 60).padStart(2, '0')}
+								</Text>
+							</View>
+						</View>
+						<View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 20 }}>
+							<TouchableOpacity onPress={rewindSong}>
+								<Icon name="play-skip-back" color="white" size={42} />
+							</TouchableOpacity>
+							<TouchableOpacity onPress={isPlaying ? pauseSound : playSound}>
+								<Icon name={isPlaying ? 'pause-circle-sharp' : 'play-circle-sharp'} color="white" size={84} />
+							</TouchableOpacity>
+							<TouchableOpacity onPress={skipSong}>
+								<Icon name="play-skip-forward" color="white" size={42} />
+							</TouchableOpacity>
+						</View>
+					</View>
 				</BottomSheetView>
 			</BottomSheetModal>
 		</View>
@@ -145,7 +186,11 @@ const styles = StyleSheet.create({
 	contentContainer: {
 		flex: 1,
 		alignItems: 'center',
-		// position: 'absolute'
+		paddingTop: 80,
+		paddingBottom: 120,
+		paddingHorizontal: 20,
+		backgroundColor: '#333',
+        justifyContent: 'space-between'
 	},
 	container: {
 		flex: 1,
@@ -154,7 +199,7 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 		bottom: 85,
 		width: '100%',
-        backgroundColor: 'transparent'
+		backgroundColor: 'transparent',
 	},
 	player: {
 		backgroundColor: '#333',
@@ -193,19 +238,19 @@ const styles = StyleSheet.create({
 		color: 'white',
 		fontSize: 16,
 	},
-	// progressContainer: {
-	// 	marginTop: 10,
-	// 	paddingHorizontal: 20,
-	// },
-	// progressText: {
-	// 	color: 'white',
-	// 	fontSize: 14,
-	// 	marginBottom: 5,
-	// },
-	// progressBar: {
-	// 	width: '100%',
-	// 	height: 40,
-	// },
+	progressContainer: {
+		marginTop: 10,
+		width: '100%',
+	},
+	progressText: {
+		color: 'white',
+		fontSize: 14,
+		marginBottom: 5,
+	},
+	progressBar: {
+		width: '100%',
+		height: 30,
+	},
 	progressBarContainer: {
 		backgroundColor: 'gray',
 		width: '100%',
@@ -221,8 +266,25 @@ const styles = StyleSheet.create({
 		backgroundColor: 'red',
 		height: 1.5,
 	},
-	// bg-gray-100 w-full h-[1.5px] rounded mt-auto">
-	// 						<View className={`absolute bottom-0 bg-purple-300 h-[1.5px] rounded`
+	playlistTitle: {
+		color: 'white',
+		fontSize: 13,
+		fontWeight: 'bold',
+	},
+	songName: {
+		color: 'white',
+		fontSize: 28,
+		fontWeight: 'bold',
+	},
+	genresName: {
+		color: 'lightgray',
+		fontSize: 18,
+		fontWeight: 'medium',
+	},
+	timestamp: {
+		fontSize: 12,
+		color: 'lightgray',
+	},
 });
 
 export default BottomPlayer;
