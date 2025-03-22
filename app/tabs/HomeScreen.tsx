@@ -1,5 +1,4 @@
 import BottomPlayer from '../components/BottomPlayer';
-// import { Button, ButtonText } from '../components/ui/button';
 import { supabase } from '@/app/lib/supabase';
 import { useRouter } from 'expo-router';
 

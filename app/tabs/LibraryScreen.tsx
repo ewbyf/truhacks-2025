@@ -9,7 +9,6 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 const LibraryScreen = () => {
     const [selected, setSelected] = useState('playlists');
 
-
 	return (
 		<SafeAreaView style={styles.container}>
 			<KeyboardAwareScrollView showsVerticalScrollIndicator={false} style={{ paddingHorizontal: 20 }} contentContainerStyle={{paddingBottom: 80}}>
