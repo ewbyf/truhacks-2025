@@ -4,9 +4,9 @@ import { View, Text, StyleSheet, Button, SafeAreaView, ScrollView, TouchableOpac
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { BottomSheetModal, BottomSheetView, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import Icon from 'react-native-vector-icons/Ionicons';
-import RecentSong from '../components/RecentSong';
+import RecentSong from '../../components/RecentSong';
   
-const PlaylistCreateScreen = () => {
+const PlaylistScreen = () => {
     const [selected, setSelected] = useState('playlists');
 	const router = useRouter();
 
@@ -87,4 +87,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default PlaylistCreateScreen;
+export default PlaylistScreen;
