@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { View, Text, StyleSheet, Button, SafeAreaView, ScrollView, TouchableOpacity, Image, TextInput } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { BottomSheetModal, BottomSheetView, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
-import RNPickerSelect from 'react-native-picker-select'
+import RNPickerSelect from 'react-native-picker-select';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -24,6 +24,8 @@ const genres = [
 	{ name: 'Classical', icon: 'piano', library: MaterialCommunityIcons },
 	{ name: 'Electronic', icon: 'lightning-bolt', library: MaterialCommunityIcons },
 ];
+
+const api_key = "";
 
 
 export default function MusicScreen() {
@@ -50,6 +52,7 @@ export default function MusicScreen() {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
+					'Authorization': `Bearer ${api_key}`,
 				},
 				body: JSON.stringify(payload),
 			});
