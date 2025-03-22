@@ -6,41 +6,38 @@ import { useRouter } from 'expo-router';
 import Logo from './components/svgs/Logo';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import LoginBG from './components/svgs/LoginBG';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function LoginScreen() {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
-	const [loading, setLoading] = useState(false);
 	const [showPassword, setShowPassword] = useState(false);
-	const [errorMessage, setErrorMessage] = useState("");
+	const [errorMessage, setErrorMessage] = useState('');
 
 	const router = useRouter();
 
-	const handleSignIn = async () => {
+	async function signInWithEmail() {
 		if (!email.trim() || !password.trim()) {
-		  setErrorMessage('Email and password are required.');
-		  return;
+			setErrorMessage('Email and password are required.');
+			return;
 		}
-	  
-		try {
-		  const { data, error } = await supabase.auth.signInWithPassword({
-			email: email,
-			password,
-		  });
-	  
-		  if (error) {
-			setErrorMessage('Invalid email or password.');
-		  } else {
-			router.push('/tabs/HomeScreen'); // Navigate to next screen
-		  }
-		} catch (error) {
-		  console.error('Unexpected Error:', error);
-		  setErrorMessage('Something went wrong. Please try again.');
-		}
-	  }; 
+		supabase.auth
+			.signInWithPassword({
+				email: email,
+				password: password,
+			})
+			.then(async (resp) => {
+				await AsyncStorage.setItem('token', resp.data.user!.id);
+				console.log(resp.data.user!.id);
+				console.log('logged in');
+                router.navigate('./tabs/HomeScreen');
+			})
+			.catch((err) => {
+				setErrorMessage('Invalid email or password.');
+			});
+	}
 
 	async function signUpWithEmail() {
-		setLoading(true);
 		const {
 			data: { session },
 			error,
@@ -51,7 +48,6 @@ export default function LoginScreen() {
 
 		if (error) Alert.alert(error.message);
 		if (!error && !session) Alert.alert('Please check your inbox for email verification!');
-		setLoading(false);
 	}
 
 	return (
@@ -84,7 +80,7 @@ export default function LoginScreen() {
 								<Text style={styles.forgot}>Forgot Password?</Text>
 							</TouchableOpacity>
 						</View>
-						<TouchableOpacity style={styles.button} onPress={() => handleSignIn()}>
+						<TouchableOpacity style={styles.button} onPress={() => signInWithEmail()}>
 							<Text style={styles.buttonText}>Start Listening</Text>
 						</TouchableOpacity>
 					</View>
@@ -119,7 +115,7 @@ const styles = StyleSheet.create({
 		display: 'flex',
 		width: '100%',
 		height: 50,
-		paddingVertical: 0, 
+		paddingVertical: 0,
 		paddingHorizontal: 12,
 		justifyContent: 'center',
 		alignItems: 'center',

@@ -7,10 +7,20 @@ import RecentSong from '../components/RecentSong';
 import TrendingGrid from '../components/TrendingGrid';
 import LogoSmall from '../components/svgs/LogoSmall';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useContext, useEffect } from 'react';
+import { UserContext } from '../contexts/UserContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function HomeScreen() {
 	const width = Dimensions.get('window').width;
 	const router = useRouter();
+
+    const { id } = useContext(UserContext)
+
+    useEffect(() => {
+        console.log(id)
+    }, [])
+
 	return (
 		<SafeAreaView style={styles.container}>
 			<KeyboardAwareScrollView showsVerticalScrollIndicator={false} style={{ paddingHorizontal: 20 }} contentContainerStyle={{ paddingBottom: 80 }}>
@@ -18,6 +28,7 @@ export default function HomeScreen() {
 					<LogoSmall />
 					<TouchableOpacity
 						onPress={() => {
+                            AsyncStorage.removeItem('token')
 							supabase.auth.signOut();
 							router.push('/');
 						}}
