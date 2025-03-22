@@ -1,13 +1,17 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { View, Text, StyleSheet, Button, SafeAreaView, ScrollView, TouchableOpacity, Image, TextInput } from 'react-native';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { BottomSheetModal, BottomSheetView, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import { View, Text, StyleSheet, Button, SafeAreaView, ScrollView, TouchableOpacity, Image, TextInput, Alert, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import LogoSmall from '../components/svgs/LogoSmall';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import DropDownPicker from 'react-native-dropdown-picker';
+import { LogBox } from 'react-native';
+import api from '../lib/axiosConfig';
+import Toast from 'react-native-toast-message';
+
+LogBox.ignoreLogs(['VirtualizedLists should never be nested inside plain ScrollViews with the same orientation']);
 
 const genres = [
 	{ name: 'Pop', icon: 'modern-mic', library: Entypo },
@@ -19,13 +23,80 @@ const genres = [
 ];
 
 export default function MusicScreen() {
-    const [selectedGenre, setSelectedGenre] = useState('Pop');
+	const [selectedGenre, setSelectedGenre] = useState('Pop');
+	const [selectedTopic, setSelectedTopic] = useState('');
+	const [open, setOpen] = useState(false);
+	const [items, setItems] = useState([
+		{ label: 'Math', value: 'Math' },
+		{ label: 'Computer Science', value: 'Computer Science' },
+		{ label: 'History', value: 'History' },
+		{ label: 'Geography', value: 'Geography' },
+		{ label: 'Physics', value: 'Physics' },
+	]);
+	const [prompt, setPrompt] = useState('');
+	const [loading, setLoading] = useState(false);
+
+	const createSong = () => {
+		if (selectedTopic == '') {
+			Alert.alert('Must select a topic');
+			return;
+		}
+		console.log({ selectedGenre, selectedTopic, prompt });
+		setLoading(true);
+		api.post('/api/v1/sonic/create', {
+			customMode: false,
+			gpt_description_prompt: prompt,
+			tags: selectedGenre,
+		})
+			.then((resp) => {
+				console.log(resp.data);
+				fetchSong(resp.data.task_id);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	const fetchSong = async (task_id: string) => {
+		api.get(`/api/v1/sonic/task/${task_id}`)
+			.then((resp) => {
+				if (resp.data[0].state != 'succeeded') {
+					setTimeout(() => {
+						fetchSong(task_id);
+					}, 3000);
+				} else {
+					// success
+					setLoading(false);
+                    showSuccess();
+				}
+				console.log(resp.data[0]);
+			})
+			.catch((err) => {
+				console.log(err);
+				setTimeout(() => {
+					fetchSong(task_id);
+				}, 3000);
+			});
+	};
+
+	const showSuccess = () => {
+		Toast.show({
+			type: 'success',
+			text1: 'Song successfully created',
+			text2: 'Your song has been added to your library.',
+		});
+	};
 
 	return (
 		<SafeAreaView style={styles.container}>
-            <KeyboardAwareScrollView showsVerticalScrollIndicator={false} style={{ paddingHorizontal: 20 }} contentContainerStyle={{paddingBottom: 80}}>
+			<KeyboardAwareScrollView
+				showsVerticalScrollIndicator={false}
+				style={{ paddingHorizontal: 20 }}
+				contentContainerStyle={{ paddingBottom: 100 }}
+				nestedScrollEnabled={true}
+			>
 				<View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-					<LogoSmall/>
+					<LogoSmall />
 				</View>
 				<View style={styles.column}>
 					<Text style={styles.title}>Create Your Song</Text>
@@ -34,7 +105,36 @@ export default function MusicScreen() {
 							<Icon name="rocket-sharp" size={16} color="white" />
 							<Text style={styles.label}>TOPIC</Text>
 						</View>
-						<TextInput style={styles.input} placeholder="What would you like to learn about?" placeholderTextColor={'gray'}></TextInput>
+						<DropDownPicker
+							style={styles.input}
+							placeholder="What would you like to learn about?"
+							placeholderStyle={{ color: 'gray' }}
+							open={open}
+							value={selectedTopic}
+							items={items}
+							setOpen={setOpen}
+							setValue={setSelectedTopic}
+							setItems={setItems}
+							ArrowDownIconComponent={({ style }) => <Icon name="chevron-down" color="gray" size={20} />}
+							ArrowUpIconComponent={({ style }) => <Icon name="chevron-up" color="gray" size={20} />}
+							TickIconComponent={({ style }) => <Icon name="checkmark" color="white" size={20} />}
+							dropDownContainerStyle={{
+								backgroundColor: '#403E43',
+								zIndex: 10,
+							}}
+							listItemLabelStyle={{
+								color: 'gray',
+							}}
+							selectedItemLabelStyle={{
+								color: 'white',
+							}}
+							textStyle={{
+								color: 'white',
+								fontSize: 16,
+								fontWeight: 'bold',
+							}}
+							scrollViewProps={{ nestedScrollEnabled: true }}
+						/>
 					</View>
 					<View style={styles.field}>
 						<View style={styles.row}>
@@ -45,7 +145,11 @@ export default function MusicScreen() {
 							{genres.map((genre, index) => {
 								const IconComponent = genre.library;
 								return (
-									<TouchableOpacity key={index} style={[styles.button, {backgroundColor: selectedGenre == genre.name ? "#732DFC" : "#403E43"}]} onPress={() => setSelectedGenre(genre.name)}>
+									<TouchableOpacity
+										key={index}
+										style={[styles.button, { backgroundColor: selectedGenre == genre.name ? '#732DFC' : '#403E43' }]}
+										onPress={() => setSelectedGenre(genre.name)}
+									>
 										<IconComponent name={genre.icon} size={24} color="white" />
 										<Text style={styles.buttonText}>{genre.name}</Text>
 									</TouchableOpacity>
@@ -58,13 +162,24 @@ export default function MusicScreen() {
 							<Icon name="sparkles-sharp" size={16} color="white" />
 							<Text style={styles.label}>DETAILS</Text>
 						</View>
-                        <TextInput multiline={true} numberOfLines={3} style={[styles.input, {height: 150}]} placeholder="Enter your prompt for the song..." placeholderTextColor={'gray'}></TextInput>
+						<TextInput
+							multiline={true}
+							numberOfLines={3}
+							style={[styles.input, { height: 150 }]}
+							placeholder="Enter your prompt for the song..."
+							placeholderTextColor={'gray'}
+							onChangeText={(e) => {
+								setPrompt(e);
+							}}
+							value={prompt}
+						></TextInput>
 					</View>
-                    <TouchableOpacity style={styles.createButton}>
-                        <Text style={styles.buttonText}>Create Song</Text>
-                    </TouchableOpacity>
+					<TouchableOpacity style={styles.createButton} onPress={createSong} disabled={loading}>
+						{!loading && <Text style={styles.buttonText}>Create Song</Text>}
+						{loading && <ActivityIndicator size="small"></ActivityIndicator>}
+					</TouchableOpacity>
 				</View>
-                </KeyboardAwareScrollView>
+			</KeyboardAwareScrollView>
 		</SafeAreaView>
 	);
 }
@@ -83,7 +198,7 @@ const styles = StyleSheet.create({
 		fontSize: 36,
 		fontWeight: 'bold',
 		color: 'white',
-        marginTop: 10,
+		marginTop: 10,
 	},
 	subtitle: {
 		fontSize: 28,
@@ -128,11 +243,11 @@ const styles = StyleSheet.create({
 	button: {
 		width: '48%',
 		height: 50,
-        display: 'flex',
-        flexDirection: 'row',
+		display: 'flex',
+		flexDirection: 'row',
 		alignItems: 'center',
-        gap: 10,
-        paddingLeft: 15,
+		gap: 10,
+		paddingLeft: 15,
 		marginBottom: 10,
 		borderRadius: 10,
 	},
@@ -141,16 +256,16 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		fontWeight: 'bold',
 	},
-    createButton: {
-        backgroundColor: "#732DFC",
-        height: 50,
-        display: 'flex',
-        flexDirection: 'row',
+	createButton: {
+		backgroundColor: '#732DFC',
+		height: 50,
+		display: 'flex',
+		flexDirection: 'row',
 		alignItems: 'center',
-        justifyContent: 'center',
-        gap: 10,
-        paddingLeft: 15,
+		justifyContent: 'center',
+		gap: 10,
+		paddingLeft: 15,
 		marginBottom: 10,
 		borderRadius: 10,
-    },
+	},
 });
