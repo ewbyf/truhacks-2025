@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import LogoSmall from '../components/svgs/LogoSmall';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { UserContext } from '../contexts/UserContext';
-import Song from '../components/Song';
+import SongComponent from '../components/SongComponent';
 
 const LibraryScreen = () => {
 	const [selected, setSelected] = useState('playlists');
@@ -59,7 +59,7 @@ const LibraryScreen = () => {
 						</>
 					)}
                     {selected == 'songs' && songs.map((song) => (
-                        <Song title={song.name} tag={song.tag} image={song.cover_art} audioUri={song.song_file}></Song>
+                        <SongComponent key={song.id} song={song}></SongComponent>
                     ))}
 				</View>
 			</KeyboardAwareScrollView>

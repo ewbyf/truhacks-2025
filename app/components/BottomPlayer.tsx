@@ -37,7 +37,7 @@ const BottomPlayer = () => {
 			staysActiveInBackground: true,
 		});
 
-		const { sound } = await Audio.Sound.createAsync({ uri: currentSong.song_file }, { shouldPlay: false });
+		const { sound } = await Audio.Sound.createAsync({ uri: currentSong.song_file }, { shouldPlay: true });
 
 		setSound(sound);
 		setIsLoaded(true);
@@ -99,7 +99,7 @@ const BottomPlayer = () => {
 					<Image style={styles.artwork} source={{ uri: currentSong.cover_art }} />
 					<View style={styles.info}>
 						<Text style={styles.title}>{currentSong.name}</Text>
-						<Text style={styles.artist}>{currentSong.tag}</Text>
+						<Text style={styles.artist}>{currentSong.genre}</Text>
 					</View>
 					<View style={styles.controls}>
 						<TouchableOpacity onPress={rewindSong}>
@@ -140,12 +140,12 @@ const BottomPlayer = () => {
 							<Icon name="ellipsis-horizontal" color="white" size={36} />
 						</TouchableOpacity>
 					</View>
-					<Image source={{ uri: 'https://picsum.photos/203' }} style={{ height: 350, width: 350 }} />
+					<Image source={{ uri: currentSong.cover_art }} style={{ height: 350, width: 350 }} />
 					<View style={{ width: '100%' }}>
 						<View style={{ flexDirection: 'row', width: '100%' }}>
 							<View style={{ gap: 5 }}>
-								<Text style={styles.songName}>Song Name</Text>
-								<Text style={styles.genresName}>pop, r&b</Text>
+								<Text style={styles.songName}>{currentSong.name}</Text>
+								<Text style={styles.genresName}>{currentSong.genre}</Text>
 							</View>
 						</View>
 						<View style={styles.progressContainer}>

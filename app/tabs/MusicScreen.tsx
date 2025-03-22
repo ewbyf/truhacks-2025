@@ -12,6 +12,7 @@ import api from '../lib/axiosConfig';
 import Toast from 'react-native-toast-message';
 import { createNewSong } from '../lib/supabaseUtils';
 import { UserContext } from '../contexts/UserContext';
+import { Song } from '../interfaces/Song';
 
 LogBox.ignoreLogs(['VirtualizedLists should never be nested inside plain ScrollViews with the same orientation']);
 
@@ -29,15 +30,17 @@ export default function MusicScreen() {
 	const [selectedTopic, setSelectedTopic] = useState('');
 	const [open, setOpen] = useState(false);
 	const [items, setItems] = useState([
-		{ label: 'Math', value: 'Math' },
-		{ label: 'Computer Science', value: 'Computer Science' },
-		{ label: 'History', value: 'History' },
-		{ label: 'Geography', value: 'Geography' },
+		{ label: 'Algebra', value: 'algebra' },
+		{ label: 'Coding', value: 'coding' },
+		{ label: 'History', value: 'history' },
+		{ label: 'Geography', value: 'geography' },
 		{ label: 'Physics', value: 'Physics' },
+		{ label: 'Geometry', value: 'geometry' },
+		{ label: 'Economics', value: 'economics' },
 	]);
 	const [prompt, setPrompt] = useState('');
 	const [loading, setLoading] = useState(false);
-    const { id } = useContext(UserContext);
+	const { id, setSongs, songs } = useContext(UserContext);
 
 	const createSong = () => {
 		if (selectedTopic == '') {
@@ -45,34 +48,37 @@ export default function MusicScreen() {
 			return;
 		}
 		setLoading(true);
-		api.post('/api/v1/sonic/create', {
-			customMode: false,
-			gpt_description_prompt: prompt,
-			tags: selectedGenre,
-		})
-			.then((resp) => {
-				console.log(resp.data);
-				fetchSong(resp.data.task_id);
-			})
-			.catch((err) => {
-				console.log(err);
-			});
+		fetchSong('3536a285-cca5-4e09-b2d9-ef765df58982');
+		// api.post('/api/v1/sonic/create', {
+		// 	custom_mode: false,
+		// 	tags: selectedGenre,
+		// 	gpt_description_prompt: prompt,
+		//     mv: 'sonic-v3-5'
+		// })
+		// 	.then((resp) => {
+		// 		console.log('first req:', resp.data);
+		// 		fetchSong(resp.data.task_id);
+		// 	})
+		// 	.catch((err) => {
+		// 		console.log(err);
+		// 	});
 	};
 
 	const fetchSong = async (task_id: string) => {
+		console.log(task_id);
 		api.get(`/api/v1/sonic/task/${task_id}`)
-			.then((resp) => {
-				if (resp.data[0].state != 'succeeded') {
+			.then(async(resp) => {
+				if (resp.data.data[0].state != 'succeeded') {
 					setTimeout(() => {
 						fetchSong(task_id);
 					}, 3000);
 				} else {
 					// success
-                    createNewSong(resp.data[0].title, id, resp.data[0].tags, null, resp.data[0].audio_url);
+					const data = await createNewSong(resp.data.data[0].title, id, selectedTopic, selectedGenre, null, resp.data.data[0].audio_url);
+                    setSongs([...songs, data]);
 					setLoading(false);
 					showSuccess();
 				}
-				console.log(resp.data[0]);
 			})
 			.catch((err) => {
 				console.log(err);

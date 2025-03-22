@@ -26,6 +26,7 @@ export const UserContext = createContext<UserContextType>({
 		name: '',
 		song_file: '',
 		user_id: 0,
+        genre: ''
 	},
 	setCurrentSong: () => {},
 	queue: [],
@@ -43,6 +44,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 		name: '',
 		song_file: '',
 		user_id: 0,
+        genre: '',
 	});
 	const [queue, setQueue] = useState<Song[]>([]);
 

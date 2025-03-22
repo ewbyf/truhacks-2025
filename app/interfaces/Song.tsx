@@ -6,4 +6,5 @@ export interface Song {
     name: string;
     song_file: string;
     user_id: number;
+    genre: string;
 }

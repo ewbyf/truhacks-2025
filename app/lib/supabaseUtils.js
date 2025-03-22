@@ -22,6 +22,7 @@ export const createNewSong = async (
     songName,
     userId,
     tag,
+    genre,
     coverArt=null,
     songURL
 ) => {
@@ -51,7 +52,7 @@ export const createNewSong = async (
         }
 
         // 3. Insert a new row in the songs table with the provided metadata and the file URL
-        const { data: songData, error: songInsertError } = await supabase
+        const { data, error } = await supabase
         .from('songs')
         .insert([
             {
@@ -62,37 +63,39 @@ export const createNewSong = async (
                 user_id: userId,
             }
         ])
+        .select()
         .single();
 
-        if (songInsertError) {
-            throw songInsertError;
+        if (error) {
+            throw error;
         }
 
-        return songData;
+        return data;
     }
     else {
         // use one of the preset images from bucket dependign on tag
         
         const imageURL = tag_URL[tag];
         // 3. Insert a new row in the songs table with the provided metadata and the file URL
-        const { data: songData, error: songInsertError } = await supabase
+        const { data, error } = await supabase
         .from('songs')
         .insert([
             {
                 cover_art: imageURL,
                 tag: tag,
                 name: songName,
+                genre: genre,
                 song_file: songURL,
                 user_id: userId,
             }
         ])
+        .select()
         .single();
-
-        if (songInsertError) {
-            throw songInsertError;
+        if (error) {
+            throw error;
         }
 
-        return songData;
+        return data;
     }
 };
 
