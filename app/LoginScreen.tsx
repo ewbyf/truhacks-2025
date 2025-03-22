@@ -23,7 +23,7 @@ export default function LoginScreen() {
 				password: password,
 			})
 			.then((resp) => {
-				console.log(resp.data);
+				console.log(resp.data.user!.id);
 			})
 			.catch((err) => {
 				console.log(err);

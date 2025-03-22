@@ -9,6 +9,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import DropDownPicker from 'react-native-dropdown-picker';
 import { LogBox } from 'react-native';
 import api from '../lib/axiosConfig';
+import Toast from 'react-native-toast-message';
 
 LogBox.ignoreLogs(['VirtualizedLists should never be nested inside plain ScrollViews with the same orientation']);
 
@@ -33,7 +34,7 @@ export default function MusicScreen() {
 		{ label: 'Physics', value: 'Physics' },
 	]);
 	const [prompt, setPrompt] = useState('');
-    const [loading, setLoading] = useState(false);
+	const [loading, setLoading] = useState(false);
 
 	const createSong = () => {
 		if (selectedTopic == '') {
@@ -41,7 +42,7 @@ export default function MusicScreen() {
 			return;
 		}
 		console.log({ selectedGenre, selectedTopic, prompt });
-        setLoading(true)
+		setLoading(true);
 		api.post('/api/v1/sonic/create', {
 			customMode: false,
 			gpt_description_prompt: prompt,
@@ -63,11 +64,11 @@ export default function MusicScreen() {
 					setTimeout(() => {
 						fetchSong(task_id);
 					}, 3000);
+				} else {
+					// success
+					setLoading(false);
+                    showSuccess();
 				}
-                else {
-                    // success
-                    setLoading(false);
-                }
 				console.log(resp.data[0]);
 			})
 			.catch((err) => {
@@ -76,6 +77,14 @@ export default function MusicScreen() {
 					fetchSong(task_id);
 				}, 3000);
 			});
+	};
+
+	const showSuccess = () => {
+		Toast.show({
+			type: 'success',
+			text1: 'Song successfully created',
+			text2: 'Your song has been added to your library.',
+		});
 	};
 
 	return (
@@ -167,7 +176,7 @@ export default function MusicScreen() {
 					</View>
 					<TouchableOpacity style={styles.createButton} onPress={createSong} disabled={loading}>
 						{!loading && <Text style={styles.buttonText}>Create Song</Text>}
-                        {loading && <ActivityIndicator size="small"></ActivityIndicator>}
+						{loading && <ActivityIndicator size="small"></ActivityIndicator>}
 					</TouchableOpacity>
 				</View>
 			</KeyboardAwareScrollView>
