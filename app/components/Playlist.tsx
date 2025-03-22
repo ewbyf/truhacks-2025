@@ -4,26 +4,28 @@ import { useEffect, useState } from 'react';
 import { Audio } from 'expo-av';
 
 type PlaylistProps = {
-  title: string;
-  tag: string;
+  id: string;
+  name: string;
   image: string;
 };
 
-const Playlist = ({ title, tag, image }: PlaylistProps) => {
+const Playlist = ({ id, name, image }: PlaylistProps) => {
 
   return (
     <View style={styles.container}>
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <Image style={styles.artwork} source={{ uri: image }} />
-        <View style={styles.info}>
-          <Text style={styles.title}>{title}</Text>
+      <TouchableOpacity>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Image style={styles.artwork} source={{ uri: image }} />
+          <View style={styles.info}>
+            <Text style={styles.name}>{name}</Text>
+          </View>
+          <View style={styles.controls}>
+            <TouchableOpacity>
+              <Icon name="add" color="white" size={30} />
+            </TouchableOpacity>
+          </View>
         </View>
-        <View style={styles.controls}>
-          <TouchableOpacity>
-            <Icon name="add" color="white" size={30} />
-          </TouchableOpacity>
-        </View>
-      </View>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -45,7 +47,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: 10,
   },
-  title: {
+  name: {
     color: 'white',
     fontSize: 15,
     fontWeight: 'bold',
