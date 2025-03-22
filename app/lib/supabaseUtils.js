@@ -6,39 +6,52 @@ const generateFileName = (fileUri) => {
     return `${uuidv4()}.${extension}`;
 };
 
+// Tag set to its URL
+
+const tag_URL = {
+    'algebra': "https://vwqokxwilhvpiybjgsbt.supabase.co/storage/v1/object/sign/song-cover-art/Algebra.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJzb25nLWNvdmVyLWFydC9BbGdlYnJhLnBuZyIsImlhdCI6MTc0MjY4MDIwMSwiZXhwIjozMTU1MzExMTQ0MjAxfQ.3gtE7knLAwRKEAyMDczf4zHxN7qYiTLoEoW1pji8r4U",
+    'coding': "https://vwqokxwilhvpiybjgsbt.supabase.co/storage/v1/object/sign/song-cover-art/Coding.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJzb25nLWNvdmVyLWFydC9Db2RpbmcucG5nIiwiaWF0IjoxNzQyNjgwMjE1LCJleHAiOjMxNTUzMTExNDQyMTV9.JqzDafvJ33YTtOMJYOKuKshJiPHoy_rBzfxyHqm79RY",
+    'economics': "https://vwqokxwilhvpiybjgsbt.supabase.co/storage/v1/object/sign/song-cover-art/Economics.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJzb25nLWNvdmVyLWFydC9FY29ub21pY3MucG5nIiwiaWF0IjoxNzQyNjgwMjMyLCJleHAiOjMxNTUzMTExNDQyMzJ9.b476cCtBQ6buD_rGUcQa5YOP5z2sQLUjgT_3w4TRWF4",
+    'geography': "https://vwqokxwilhvpiybjgsbt.supabase.co/storage/v1/object/sign/song-cover-art/Geography.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJzb25nLWNvdmVyLWFydC9HZW9ncmFwaHkucG5nIiwiaWF0IjoxNzQyNjgwMjQyLCJleHAiOjMxNTUzMTExNDQyNDJ9.Ak1xWL3kj52w7IUCKuta_tJoR-Ud79p3lZcTHISlxX8",
+    'geometry': "https://vwqokxwilhvpiybjgsbt.supabase.co/storage/v1/object/sign/song-cover-art/Geometry.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJzb25nLWNvdmVyLWFydC9HZW9tZXRyeS5wbmciLCJpYXQiOjE3NDI2ODAyNTMsImV4cCI6MzE1NTMxMTE0NDI1M30.506A286-mh6zmT-unuv0mRdW7YpwFNVi1BN1VyduTYk",
+    'history': "https://vwqokxwilhvpiybjgsbt.supabase.co/storage/v1/object/sign/song-cover-art/History.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJzb25nLWNvdmVyLWFydC9IaXN0b3J5LnBuZyIsImlhdCI6MTc0MjY4MDI2MywiZXhwIjozMTU1MzExMTQ0MjYzfQ.Kv9YZOHswDq7LEQYsZieKFtn6-hEOufxmJT5PUnkixg",
+    'physics': "https://vwqokxwilhvpiybjgsbt.supabase.co/storage/v1/object/sign/song-cover-art/Physics.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJzb25nLWNvdmVyLWFydC9QaHlzaWNzLnBuZyIsImlhdCI6MTc0MjY4MDI3NiwiZXhwIjozMTU1MzExMTQ0Mjc2fQ.1OeJfXEE5xZVMDPO7lDwnlzrFxKndAjhVCeDxMMm2Y0",
+}
+
 export const createNewSong = async (
     songName,
     userId,
     tag,
-    coverArt,
+    coverArt=null,
     songURL
 ) => {
 
-    // create file names for the cover art files
-    const coverArtFileName = generateFileName(coverArt)
+    if (coverArt) {
+        // create file names for the cover art files
+        const coverArtFileName = generateFileName(coverArt)
 
-    // Upload Cover Art image file
-    const { data: imageData, error: imageError } = await supabase.storage
-        .from('song-cover-art')
-        .upload(coverArtFileName, coverArt, {
-            contentType: 'mimeType'
-        });
+        // Upload Cover Art image file
+        const { data: imageData, error: imageError } = await supabase.storage
+            .from('song-cover-art')
+            .upload(coverArtFileName, coverArt, {
+                contentType: 'mimeType'
+            });
 
-    if (imageError) {
-        throw imageError;
-    }
+        if (imageError) {
+            throw imageError;
+        }
 
-    // Get public URL for the uploaded image file
-    const { data: imageURL, error: imageURLError } = supabase.storage
-        .from('song-cover-art')
-        .getPublicUrl(coverArtFileName);
+        // Get public URL for the uploaded image file
+        const { data: imageURL, error: imageURLError } = supabase.storage
+            .from('song-cover-art')
+            .getPublicUrl(coverArtFileName);
 
-    if (imageURLError) {
-        throw imageURLError;
-    }
+        if (imageURLError) {
+            throw imageURLError;
+        }
 
-    // 3. Insert a new row in the songs table with the provided metadata and the file URL
-    const { data: songData, error: songInsertError } = await supabase
+        // 3. Insert a new row in the songs table with the provided metadata and the file URL
+        const { data: songData, error: songInsertError } = await supabase
         .from('songs')
         .insert([
             {
@@ -51,11 +64,36 @@ export const createNewSong = async (
         ])
         .single();
 
-    if (songInsertError) {
-        throw songInsertError;
-    }
+        if (songInsertError) {
+            throw songInsertError;
+        }
 
-    return songData;
+        return songData;
+    }
+    else {
+        // use one of the preset images from bucket dependign on tag
+        
+        const imageURL = tag_URL[tag];
+        // 3. Insert a new row in the songs table with the provided metadata and the file URL
+        const { data: songData, error: songInsertError } = await supabase
+        .from('songs')
+        .insert([
+            {
+                cover_art: imageURL,
+                tag: tag,
+                name: songName,
+                song_file: songURL,
+                user_id: userId,
+            }
+        ])
+        .single();
+
+        if (songInsertError) {
+            throw songInsertError;
+        }
+
+        return songData;
+    }
 };
 
 export const createNewPlaylist = async (
