@@ -154,6 +154,7 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 		bottom: 85,
 		width: '100%',
+        backgroundColor: 'transparent'
 	},
 	player: {
 		backgroundColor: '#333',

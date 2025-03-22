@@ -8,7 +8,7 @@ import { BottomSheetModal, BottomSheetModalProvider, BottomSheetView } from '@go
 
 const Navbar = ({ children }: { children: JSX.Element }) => {
 	return (
-		<GestureHandlerRootView>
+		<GestureHandlerRootView >
 			<BottomSheetModalProvider>
 				{children}
 				<Tabs
@@ -35,7 +35,7 @@ const Navbar = ({ children }: { children: JSX.Element }) => {
 						name="MusicScreen"
 						options={{
 							tabBarIcon: ({ color, size }) => <Icon name="add" color={color} size={size} />,
-							title: 'Add Music',
+							title: 'Create Songs',
 						}}
 					/>
 					<Tabs.Screen
@@ -53,13 +53,6 @@ const Navbar = ({ children }: { children: JSX.Element }) => {
 };
 
 const styles = {
-	shadow: {
-		shadowColor: '#000000',
-		shadowOffset: { width: 0, height: 5 },
-		shadowOpacity: 0.25,
-		shadowRadius: 3.5,
-		elevation: 5,
-	},
 };
 
 export default Navbar;
