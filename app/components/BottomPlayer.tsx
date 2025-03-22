@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions } from 'react-native';
 import { Audio } from 'expo-av';
-import Icon from 'react-native-vector-icons/Ionicons'
+import Icon from 'react-native-vector-icons/Ionicons';
 import Slider from '@react-native-community/slider';
 import { BottomSheetModal, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
@@ -38,7 +38,7 @@ const BottomPlayer = () => {
 	};
 
 	const playSound = async () => {
-		if (sound && isLoaded) {
+		if (sound && isLoaded && !isPlaying) {
 			await sound.playAsync();
 			setIsPlaying(true);
 		}
@@ -78,31 +78,31 @@ const BottomPlayer = () => {
 	}, []);
 
 	return (
-			<TouchableOpacity style={styles.container}>
-				<View style={styles.player}>
-					<View className="flex flex-row items-center">
-						<Image style={styles.artwork} source={{ uri: 'https://picsum.photos/100' }} />
-						<View style={styles.info}>
-							<Text style={styles.title}>Song Title</Text>
-							<Text style={styles.artist}>pop, r&b</Text>
-						</View>
-						<View style={styles.controls}>
-							<TouchableOpacity onPress={rewindSong}>
-								<Icon name="play-skip-back" color="white" size={30} />
-							</TouchableOpacity>
-							<TouchableOpacity onPress={isPlaying ? pauseSound : playSound}>
-								<Icon name={isPlaying ? 'pause' : 'play'} color="white" size={30} />
-							</TouchableOpacity>
-							<TouchableOpacity onPress={skipSong}>
-								<Icon name="play-skip-forward" color="white" size={30} />
-							</TouchableOpacity>
-						</View>
+		<TouchableOpacity style={styles.container}>
+			<View style={styles.player}>
+				<View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+					<Image style={styles.artwork} source={{ uri: 'https://picsum.photos/100' }} />
+					<View style={styles.info}>
+						<Text style={styles.title}>Song Title</Text>
+						<Text style={styles.artist}>pop, r&b</Text>
 					</View>
-					<View className="bg-gray-100 w-full h-[1.5px] rounded mt-auto">
-						<View className={`absolute bottom-0 bg-purple-300 h-[1.5px] rounded`} style={{ width: `${(position / duration) * 100}%` }}></View>
+					<View style={styles.controls}>
+						<TouchableOpacity onPress={rewindSong}>
+							<Icon name="play-skip-back" color="white" size={30} />
+						</TouchableOpacity>
+						<TouchableOpacity onPress={isPlaying ? pauseSound : playSound}>
+							<Icon name={isPlaying ? 'pause' : 'play'} color="white" size={30} />
+						</TouchableOpacity>
+						<TouchableOpacity onPress={skipSong}>
+							<Icon name="play-skip-forward" color="white" size={30} />
+						</TouchableOpacity>
 					</View>
 				</View>
-				{/* <View style={styles.progressContainer}>
+				<View style={styles.progressBarContainer}>
+					<View style={[styles.progressBarInside, { width: `${(position / duration) * 100}%` }]}></View>
+				</View>
+			</View>
+			{/* <View style={styles.progressContainer}>
 				<Text style={styles.progressText}>
 					{Math.floor(position / 1000)} / {Math.floor(duration / 1000)} seconds
 				</Text>
@@ -122,7 +122,7 @@ const BottomPlayer = () => {
 					}}
 				/>
 			</View> */}
-			</TouchableOpacity>
+		</TouchableOpacity>
 	);
 };
 
@@ -169,54 +169,36 @@ const styles = StyleSheet.create({
 		color: 'white',
 		fontSize: 16,
 	},
-	progressContainer: {
-		marginTop: 10,
-		paddingHorizontal: 20,
-	},
-	progressText: {
-		color: 'white',
-		fontSize: 14,
-		marginBottom: 5,
-	},
-	progressBar: {
+	// progressContainer: {
+	// 	marginTop: 10,
+	// 	paddingHorizontal: 20,
+	// },
+	// progressText: {
+	// 	color: 'white',
+	// 	fontSize: 14,
+	// 	marginBottom: 5,
+	// },
+	// progressBar: {
+	// 	width: '100%',
+	// 	height: 40,
+	// },
+	progressBarContainer: {
+		backgroundColor: 'gray',
 		width: '100%',
-		height: 40,
-	},
-	songInfo: {
-		marginLeft: 10,
-		flex: 1,
-	},
-	songTitle: {
-		color: '#fff',
-		fontSize: 16,
-		fontWeight: 'bold',
-	},
-	fullPlayer: {
-		flex: 1,
-		alignItems: 'center',
-		padding: 20,
-	},
-	fullTitle: {
-		color: 'white',
-		fontSize: 18,
-		fontWeight: 'bold',
-	},
-	fullAlbumCover: {
-		width: width * 0.8,
-		height: width * 0.8,
+		height: 1.5,
 		borderRadius: 10,
-		marginVertical: 20,
+		marginTop: 'auto',
 	},
-	fullSongTitle: {
-		color: '#fff',
-		fontSize: 20,
-		fontWeight: 'bold',
+	progressBarInside: {
+		position: 'absolute',
+		bottom: 0,
+        left: 0,
+        zIndex: 10,
+		backgroundColor: 'red',
+		height: 1.5,
 	},
-	fullArtist: {
-		color: '#bbb',
-		fontSize: 18,
-		marginBottom: 20,
-	},
+	// bg-gray-100 w-full h-[1.5px] rounded mt-auto">
+	// 						<View className={`absolute bottom-0 bg-purple-300 h-[1.5px] rounded`
 });
 
 export default BottomPlayer;
