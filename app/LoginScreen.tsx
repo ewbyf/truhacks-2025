@@ -12,26 +12,32 @@ export default function LoginScreen() {
 	const [password, setPassword] = useState('');
 	const [loading, setLoading] = useState(false);
 	const [showPassword, setShowPassword] = useState(false);
+	const [errorMessage, setErrorMessage] = useState("");
 
 	const router = useRouter();
 
-	async function signInWithEmail() {
-		setLoading(true);
-		supabase.auth
-			.signInWithPassword({
-				email: email,
-				password: password,
-			})
-			.then((resp) => {
-				console.log(resp.data);
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-
-		setLoading(false);
-		router.navigate('./tabs/HomeScreen');
-	}
+	const handleSignIn = async () => {
+		if (!email.trim() || !password.trim()) {
+		  setErrorMessage('Email and password are required.');
+		  return;
+		}
+	  
+		try {
+		  const { data, error } = await supabase.auth.signInWithPassword({
+			email: email,
+			password,
+		  });
+	  
+		  if (error) {
+			setErrorMessage('Invalid email or password.');
+		  } else {
+			router.push('/tabs/HomeScreen'); // Navigate to next screen
+		  }
+		} catch (error) {
+		  console.error('Unexpected Error:', error);
+		  setErrorMessage('Something went wrong. Please try again.');
+		}
+	  }; 
 
 	async function signUpWithEmail() {
 		setLoading(true);
@@ -78,7 +84,7 @@ export default function LoginScreen() {
 								<Text style={styles.forgot}>Forgot Password?</Text>
 							</TouchableOpacity>
 						</View>
-						<TouchableOpacity style={styles.button} onPress={() => signInWithEmail()}>
+						<TouchableOpacity style={styles.button} onPress={() => handleSignIn()}>
 							<Text style={styles.buttonText}>Start Listening</Text>
 						</TouchableOpacity>
 					</View>
