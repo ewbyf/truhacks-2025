@@ -5,12 +5,12 @@ import { Audio } from 'expo-av';
 
 type SongProps = {
   title: string;
-  artist: string;
+  tag: string;
   image: string;
   audioUri: string;
 };
 
-const Song = ({ title, artist, image, audioUri }: SongProps) => {
+const Song = ({ title, tag, image, audioUri }: SongProps) => {
   const [sound, setSound] = useState<Audio.Sound | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -47,7 +47,7 @@ const Song = ({ title, artist, image, audioUri }: SongProps) => {
         <Image style={styles.artwork} source={{ uri: image }} />
         <View style={styles.info}>
           <Text style={styles.title}>{title}</Text>
-          <Text style={styles.artist}>{artist}</Text>
+          <Text style={styles.tag}>{tag}</Text>
         </View>
         <View style={styles.controls}>
           <TouchableOpacity>
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: 'bold',
   },
-  artist: {
+  tag: {
     color: 'gray',
     fontSize: 12,
   },

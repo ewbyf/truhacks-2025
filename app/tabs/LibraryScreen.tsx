@@ -38,7 +38,7 @@ const LibraryScreen = () => {
 					</TouchableOpacity>
 					<TouchableOpacity style={styles.createContainer}
 						onPress={() => {
-							router.push('/tabs/PlaylistScreen');
+							router.push('./PlaylistScreen');
 						}}
 					>
 						<Image source={{ uri: 'https://picsum.photos/213' }} style={{ height: 75, width: 75 }} />
