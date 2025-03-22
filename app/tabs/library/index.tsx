@@ -30,7 +30,11 @@ const LibraryScreen = () => {
                     </View>
 				</View>
 				<View style={styles.column}>
-					<TouchableOpacity style={styles.createContainer}>
+					<TouchableOpacity style={styles.createContainer}
+						onPress={() => {
+							router.push('/tabs/library/PlaylistCreateScreen' as const);
+						}}
+					>
 						<View style={styles.createIcon}>
 							<Icon name="add" size={32} color="white"></Icon>
 						</View>
@@ -38,7 +42,7 @@ const LibraryScreen = () => {
 					</TouchableOpacity>
 					<TouchableOpacity style={styles.createContainer}
 						onPress={() => {
-							router.push('./PlaylistScreen' as const);
+							router.push('/tabs/library/PlaylistScreen' as const);
 						}}
 					>
 						<Image source={{ uri: 'https://picsum.photos/213' }} style={{ height: 75, width: 75 }} />
