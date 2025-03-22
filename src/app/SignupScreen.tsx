@@ -4,24 +4,25 @@ import { supabase } from '../lib/supabase';
 import { Input, InputField } from '../components/ui/input';
 import { Button, ButtonText } from '../components/ui/button';
 
-export default function Auth() {
+export default function SignupScreen() {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [loading, setLoading] = useState(false);
 
 	async function signInWithEmail() {
 		setLoading(true);
-		supabase.auth.signInWithPassword({
-			email: email,
-			password: password,
-		})
-        .then((resp) => {
-            Alert.alert('yay')
-            console.log(resp.data)
-        })
-        .catch((err) => {
-            console.log(err)
-        })
+		supabase.auth
+			.signInWithPassword({
+				email: email,
+				password: password,
+			})
+			.then((resp) => {
+				Alert.alert('yay');
+				console.log(resp.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
 
 		setLoading(false);
 	}
@@ -65,10 +66,11 @@ export default function Auth() {
 				</Button>
 			</View>
 			<View style={styles.verticallySpaced}>
-                <Button size="md" variant="solid" action="primary" onPress={() => signUpWithEmail()}>
+				<Button size="md" variant="solid" action="primary" onPress={() => signUpWithEmail()}>
 					<ButtonText>Sign up</ButtonText>
 				</Button>
 			</View>
+
 		</View>
 	);
 }
