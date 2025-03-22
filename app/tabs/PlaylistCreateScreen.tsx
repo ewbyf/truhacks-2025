@@ -6,7 +6,7 @@ import { BottomSheetModal, BottomSheetView, BottomSheetModalProvider } from '@go
 import Icon from 'react-native-vector-icons/Ionicons';
 import RecentSong from '../components/RecentSong';
   
-const PlaylistScreen = () => {
+const PlaylistCreateScreen = () => {
     const [selected, setSelected] = useState('playlists');
 	const router = useRouter();
 
@@ -87,4 +87,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default PlaylistScreen;
+export default PlaylistCreateScreen;
