@@ -11,23 +11,11 @@ export const createNewSong = async (
     userId,
     tag,
     coverArt,
-    mp3FilePath,
+    songURL
 ) => {
 
-    // create file names for the song and cover art files
-    const songFileName = generateFileName(mp3FilePath)
+    // create file names for the cover art files
     const coverArtFileName = generateFileName(coverArt)
-
-    // 1. Upload song MP3 file
-    const { data: mp3Data, error: mp3Error } = await supabase.storage
-        .from('song-files')
-        .upload(songFileName, mp3FilePath, {
-            contentType: 'audio/mpeg',
-        });
-
-    if (mp3Error) {
-        throw mp3Error;
-    }
 
     // Upload Cover Art image file
     const { data: imageData, error: imageError } = await supabase.storage
@@ -38,15 +26,6 @@ export const createNewSong = async (
 
     if (imageError) {
         throw imageError;
-    }
-
-    // 2. Get public URL for the uploaded MP3 file
-    const { data: songURL, error: songURLError } = supabase.storage
-        .from('song-files')
-        .getPublicUrl(songFileName);
-
-    if (songURLError) {
-        throw songURLError;
     }
 
     // Get public URL for the uploaded image file
