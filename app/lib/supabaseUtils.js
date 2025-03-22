@@ -10,31 +10,86 @@ export const createNewSong = async (
     songName,
     userId,
     tag,
-    coverArt,
+    coverArt=null,
     songURL
 ) => {
 
-    // create file names for the cover art files
-    const coverArtFileName = generateFileName(coverArt)
+    if (coverArt) {
+        // create file names for the cover art files
+        const coverArtFileName = generateFileName(coverArt)
 
-    // Upload Cover Art image file
-    const { data: imageData, error: imageError } = await supabase.storage
-        .from('song-cover-art')
-        .upload(coverArtFileName, coverArt, {
-            contentType: 'mimeType'
-        });
+        // Upload Cover Art image file
+        const { data: imageData, error: imageError } = await supabase.storage
+            .from('song-cover-art')
+            .upload(coverArtFileName, coverArt, {
+                contentType: 'mimeType'
+            });
 
-    if (imageError) {
-        throw imageError;
+        if (imageError) {
+            throw imageError;
+        }
+
+        // Get public URL for the uploaded image file
+        const { data: imageURL, error: imageURLError } = supabase.storage
+            .from('song-cover-art')
+            .getPublicUrl(coverArtFileName);
+
+        if (imageURLError) {
+            throw imageURLError;
+        }
     }
-
-    // Get public URL for the uploaded image file
-    const { data: imageURL, error: imageURLError } = supabase.storage
-        .from('song-cover-art')
-        .getPublicUrl(coverArtFileName);
-
-    if (imageURLError) {
-        throw imageURLError;
+    else {
+        // use one of the preset images from bucket dependign on tag
+        switch (tag) {
+            case 'physics':
+                const imageURL = "";
+                break;
+            case 'economics':
+                const imageURL = "";
+                break;
+            case 'algebra':
+                const imageURL = "";
+                break;
+            case 'history':
+                const imageURL = "";
+                break;
+            case 'art':
+                const imageURL = "";
+                break;
+            case 'foreign_languages':
+                const imageURL = "";
+                break;
+            case 'calculus':
+                const imageURL = "";
+                break;
+            case 'biology':
+                const imageURL = "";
+                break;
+            case 'code':
+                const imageURL = "";
+                break;
+            case 'geometry':
+                const imageURL = "";
+                break;
+            case 'geography':
+                const imageURL = "";
+                break;
+            case 'music':
+                const imageURL = "";
+                break;
+            case 'geography':
+                const imageURL = "";
+                break;
+            case 'politics':
+                const imageURL = "";
+                break;
+            case 'chemistry':
+                const imageURL = "";
+                break;
+            case 'english':
+                const imageURL = "";
+                break;
+        }
     }
 
     // 3. Insert a new row in the songs table with the provided metadata and the file URL
