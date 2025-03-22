@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import { Alert, StyleSheet, View } from 'react-native';
-import { supabase } from '../lib/supabase';
-import { Input, InputField } from '../components/ui/input';
-import { Button, ButtonText } from '../components/ui/button';
+import { Alert, StyleSheet, TouchableOpacity, View, Text } from 'react-native';
+import { supabase } from './lib/supabase';
+// import { Input, InputField } from '../../components/ui/input';
+// import { Button, ButtonText } from '../../components/ui/button';
 import { useRouter } from 'expo-router';
 
 export default function LoginScreen() {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [loading, setLoading] = useState(false);
-    const router = useRouter();
+	const router = useRouter();
 
 	async function signInWithEmail() {
 		setLoading(true);
@@ -46,7 +46,7 @@ export default function LoginScreen() {
 
 	return (
 		<View style={styles.container}>
-			<View style={[styles.verticallySpaced, styles.mt20]}>
+			{/* <View style={[styles.verticallySpaced, styles.mt20]}>
 				<Input variant="outline" size="md" isDisabled={false} isInvalid={false} isReadOnly={false}>
 					<InputField value={email} placeholder="email@address.com" autoCapitalize={'none'} onChangeText={(text) => setEmail(text)} />
 				</Input>
@@ -71,11 +71,11 @@ export default function LoginScreen() {
 				<Button size="md" variant="solid" action="primary" onPress={() => signUpWithEmail()}>
 					<ButtonText>Sign up</ButtonText>
 				</Button>
-			</View>
+			</View> */}
 			<View style={styles.verticallySpaced}>
-				<Button size="md" variant="solid" action="primary" onPress={() => router.navigate('./tabs/HomeScreen')}>
-					<ButtonText>forward</ButtonText>
-				</Button>
+				<TouchableOpacity onPress={() => router.navigate('./tabs/HomeScreen')}>
+					<Text>forward</Text>
+				</TouchableOpacity>
 			</View>
 		</View>
 	);

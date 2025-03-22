@@ -1,12 +1,11 @@
+import 'react-native-reanimated';
 import { useRouter } from 'expo-router';
 
-import 'react-native-url-polyfill/auto';
 import { useState, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
+import { supabase } from './lib/supabase';
 
 import { View, Text, SafeAreaView } from 'react-native';
 import { Session } from '@supabase/supabase-js';
-import { Button, ButtonText } from '@/components/ui/button';
 import { Redirect } from 'expo-router';
 
 export default function Page() {
