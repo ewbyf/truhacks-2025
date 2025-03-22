@@ -7,6 +7,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import LogoSmall from '../components/svgs/LogoSmall';
 
 const genres = [
 	{ name: 'Pop', icon: 'modern-mic', library: Entypo },
@@ -24,7 +25,7 @@ export default function MusicScreen() {
 		<SafeAreaView style={styles.container}>
 			<ScrollView style={{ paddingHorizontal: 20 }} contentContainerStyle={{paddingBottom: 80}}>
 				<View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-					<Text style={styles.logo}>LOGO</Text>
+					<LogoSmall/>
 				</View>
 				<View style={styles.column}>
 					<Text style={styles.title}>Create Your Song</Text>

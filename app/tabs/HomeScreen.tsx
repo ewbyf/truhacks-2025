@@ -6,15 +6,16 @@ import { useRouter } from 'expo-router';
 import { View, Text, TouchableOpacity, Image, StyleSheet, Dimensions, SafeAreaView, ScrollView } from 'react-native';
 import RecentSong from '../components/RecentSong';
 import TrendingGrid from '../components/TrendingGrid';
+import LogoSmall from '../components/svgs/LogoSmall';
 
 export default function HomeScreen() {
 	const width = Dimensions.get('window').width;
 	const router = useRouter();
 	return (
 		<SafeAreaView style={styles.container}>
-			<ScrollView>
-				<View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20}}>
-					<Text style={styles.title}>LOGO</Text>
+			<ScrollView style={{ paddingHorizontal: 20 }} contentContainerStyle={{paddingBottom: 80}}>
+				<View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', }}>
+					<LogoSmall/>
 					<TouchableOpacity
 						onPress={() => {
 							supabase.auth.signOut();
@@ -24,11 +25,11 @@ export default function HomeScreen() {
 						<Text style={{color: 'white', fontSize: 20, fontWeight: 'bold'}}>Sign out</Text>
 					</TouchableOpacity>
 				</View>
-				<Text style={styles.subtitle}>Favorites</Text>
+				<Text style={styles.title}>Home</Text>
 				<ScrollView
 					horizontal
 					showsHorizontalScrollIndicator={false}
-					style={{ display: 'flex', paddingTop: 8, paddingBottom: 25, paddingHorizontal: 20, width: width }}
+					style={{ display: 'flex', paddingTop: 8, paddingBottom: 25, width: width }}
 					contentContainerStyle={{ gap: 20, paddingRight: 40 }}
 				>
 					<TouchableOpacity style={{ width: 100, height: 100, borderRadius: 15 }}>
@@ -50,7 +51,7 @@ export default function HomeScreen() {
 				<ScrollView
 					horizontal
 					showsHorizontalScrollIndicator={false}
-					style={{ display: 'flex', paddingTop: 8, paddingBottom: 25, paddingHorizontal: 20, width: width }}
+					style={{ display: 'flex', paddingTop: 8, paddingBottom: 25, width: width }}
 					contentContainerStyle={{ gap: 20, paddingRight: 40 }}
 				>
 					<TouchableOpacity style={{ width: 100, height: 100, borderRadius: 15 }}>
@@ -83,19 +84,17 @@ const styles = StyleSheet.create({
 		backgroundColor: '#1E1E1E',
 	},
 	title: {
-		fontSize: 44,
+		fontSize: 36,
 		fontWeight: 'bold',
 		color: 'white',
 	},
 	subtitle: {
 		fontSize: 28,
-		fontWeight: 'medium',
+		fontWeight: 'bold',
 		color: 'white',
-		paddingLeft: 20,
 	},
 	recentSongs: {
 		paddingVertical: 10,
-		paddingHorizontal: 20,
 		display: 'flex',
 		gap: 10,
 	},

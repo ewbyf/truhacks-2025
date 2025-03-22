@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Button, SafeAreaView, ScrollView, TouchableOpac
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { BottomSheetModal, BottomSheetView, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import Icon from 'react-native-vector-icons/Ionicons';
+import LogoSmall from '../components/svgs/LogoSmall';
 
 const LibraryScreen = () => {
     const [selected, setSelected] = useState('playlists');
@@ -10,12 +11,13 @@ const LibraryScreen = () => {
 
 	return (
 		<SafeAreaView style={styles.container}>
-			<ScrollView style={{ paddingHorizontal: 20 }}>
+			<ScrollView style={{ paddingHorizontal: 20 }} contentContainerStyle={{paddingBottom: 80}}>
 				<View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-					<Text style={styles.title}>LOGO</Text>
+					<LogoSmall/>
 				</View>
 				<View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 15 }}>
-					<Text style={styles.subtitle}>{selected == "playlists" ? 'Playlists' : 'Songs'}</Text>
+					{/* <Text style={styles.subtitle}>{selected == "playlists" ? 'Playlists' : 'Songs'}</Text> */}
+                    <Text style={styles.title}>Library</Text>
                     <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10 }}>
                         <TouchableOpacity style={[styles.selectionButton, {backgroundColor: selected == "playlists" ? '#732DFC' : '#403E43'}]} onPress={() => setSelected('playlists')}>
                             <Text style={{color: selected == 'playlists' ? 'white' : 'black' }}>Playlists</Text>
@@ -52,7 +54,7 @@ const styles = StyleSheet.create({
         gap: 10
     },
 	title: {
-		fontSize: 44,
+		fontSize: 36,
 		fontWeight: 'bold',
 		color: 'white',
 	},
