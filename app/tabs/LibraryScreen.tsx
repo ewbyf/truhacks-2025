@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { useRouter } from 'expo-router';
 import { View, Text, StyleSheet, Button, SafeAreaView, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { BottomSheetModal, BottomSheetView, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
@@ -8,6 +9,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 
 const LibraryScreen = () => {
     const [selected, setSelected] = useState('playlists');
+	const router = useRouter();
 
 	return (
 		<SafeAreaView style={styles.container}>
@@ -34,7 +36,11 @@ const LibraryScreen = () => {
 						</View>
 						<Text style={styles.playlistTitle}>Create playlist</Text>
 					</TouchableOpacity>
-					<TouchableOpacity style={styles.createContainer}>
+					<TouchableOpacity style={styles.createContainer}
+						onPress={() => {
+							router.push('./PlaylistScreen');
+						}}
+					>
 						<Image source={{ uri: 'https://picsum.photos/213' }} style={{ height: 75, width: 75 }} />
 						<Text style={styles.playlistTitle}>Playlist #1</Text>
 					</TouchableOpacity>
