@@ -7,22 +7,23 @@ import { View, Text, TouchableOpacity, Image, StyleSheet, Dimensions, SafeAreaVi
 import RecentSong from '../components/RecentSong';
 import TrendingGrid from '../components/TrendingGrid';
 import LogoSmall from '../components/svgs/LogoSmall';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export default function HomeScreen() {
 	const width = Dimensions.get('window').width;
 	const router = useRouter();
 	return (
 		<SafeAreaView style={styles.container}>
-			<ScrollView style={{ paddingHorizontal: 20 }} contentContainerStyle={{paddingBottom: 80}}>
-				<View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', }}>
-					<LogoSmall/>
+			<KeyboardAwareScrollView showsVerticalScrollIndicator={false} style={{ paddingHorizontal: 20 }} contentContainerStyle={{ paddingBottom: 80 }}>
+				<View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+					<LogoSmall />
 					<TouchableOpacity
 						onPress={() => {
 							supabase.auth.signOut();
 							router.push('/');
 						}}
 					>
-						<Text style={{color: 'white', fontSize: 20, fontWeight: 'bold'}}>Sign out</Text>
+						<Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold' }}>Sign out</Text>
 					</TouchableOpacity>
 				</View>
 				<Text style={styles.title}>Home</Text>
@@ -73,7 +74,7 @@ export default function HomeScreen() {
 					<RecentSong></RecentSong>
 					<RecentSong></RecentSong>
 				</View>
-			</ScrollView>
+			</KeyboardAwareScrollView>
 		</SafeAreaView>
 	);
 }

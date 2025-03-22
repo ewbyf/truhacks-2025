@@ -4,6 +4,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { BottomSheetModal, BottomSheetView, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import Icon from 'react-native-vector-icons/Ionicons';
 import LogoSmall from '../components/svgs/LogoSmall';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const LibraryScreen = () => {
     const [selected, setSelected] = useState('playlists');
@@ -11,7 +12,7 @@ const LibraryScreen = () => {
 
 	return (
 		<SafeAreaView style={styles.container}>
-			<ScrollView style={{ paddingHorizontal: 20 }} contentContainerStyle={{paddingBottom: 80}}>
+			<KeyboardAwareScrollView showsVerticalScrollIndicator={false} style={{ paddingHorizontal: 20 }} contentContainerStyle={{paddingBottom: 80}}>
 				<View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
 					<LogoSmall/>
 				</View>
@@ -39,7 +40,7 @@ const LibraryScreen = () => {
 						<Text style={styles.playlistTitle}>Playlist #1</Text>
 					</TouchableOpacity>
 				</View>
-			</ScrollView>
+			</KeyboardAwareScrollView>
 		</SafeAreaView>
 	);
 };

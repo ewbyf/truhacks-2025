@@ -8,6 +8,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import LogoSmall from '../components/svgs/LogoSmall';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const genres = [
 	{ name: 'Pop', icon: 'modern-mic', library: Entypo },
@@ -23,7 +24,7 @@ export default function MusicScreen() {
 
 	return (
 		<SafeAreaView style={styles.container}>
-			<ScrollView style={{ paddingHorizontal: 20 }} contentContainerStyle={{paddingBottom: 80}}>
+            <KeyboardAwareScrollView showsVerticalScrollIndicator={false} style={{ paddingHorizontal: 20 }} contentContainerStyle={{paddingBottom: 80}}>
 				<View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
 					<LogoSmall/>
 				</View>
@@ -64,7 +65,7 @@ export default function MusicScreen() {
                         <Text style={styles.buttonText}>Create Song</Text>
                     </TouchableOpacity>
 				</View>
-			</ScrollView>
+                </KeyboardAwareScrollView>
 		</SafeAreaView>
 	);
 }
