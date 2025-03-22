@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { View, Text, StyleSheet, Button, SafeAreaView, ScrollView, TouchableOpacity, Image, TextInput } from 'react-native';
+import { View, Text, StyleSheet, Button, SafeAreaView, ScrollView, TouchableOpacity, Image, TextInput, Alert, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -8,6 +8,7 @@ import LogoSmall from '../components/svgs/LogoSmall';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { LogBox } from 'react-native';
+import api from '../lib/axiosConfig';
 
 LogBox.ignoreLogs(['VirtualizedLists should never be nested inside plain ScrollViews with the same orientation']);
 
@@ -32,10 +33,50 @@ export default function MusicScreen() {
 		{ label: 'Physics', value: 'Physics' },
 	]);
 	const [prompt, setPrompt] = useState('');
+    const [loading, setLoading] = useState(false);
 
-    const createSong = () => {
-        console.log({selectedGenre, selectedTopic, prompt})
-    }
+	const createSong = () => {
+		if (selectedTopic == '') {
+			Alert.alert('Must select a topic');
+			return;
+		}
+		console.log({ selectedGenre, selectedTopic, prompt });
+        setLoading(true)
+		api.post('/api/v1/sonic/create', {
+			customMode: false,
+			gpt_description_prompt: prompt,
+			tags: selectedGenre,
+		})
+			.then((resp) => {
+				console.log(resp.data);
+				fetchSong(resp.data.task_id);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	const fetchSong = async (task_id: string) => {
+		api.get(`/api/v1/sonic/task/${task_id}`)
+			.then((resp) => {
+				if (resp.data[0].state != 'succeeded') {
+					setTimeout(() => {
+						fetchSong(task_id);
+					}, 3000);
+				}
+                else {
+                    // success
+                    setLoading(false);
+                }
+				console.log(resp.data[0]);
+			})
+			.catch((err) => {
+				console.log(err);
+				setTimeout(() => {
+					fetchSong(task_id);
+				}, 3000);
+			});
+	};
 
 	return (
 		<SafeAreaView style={styles.container}>
@@ -118,14 +159,15 @@ export default function MusicScreen() {
 							style={[styles.input, { height: 150 }]}
 							placeholder="Enter your prompt for the song..."
 							placeholderTextColor={'gray'}
-                            onChangeText={(e) => {
-                                setPrompt(e)
-                            }}
-                            value={prompt}
+							onChangeText={(e) => {
+								setPrompt(e);
+							}}
+							value={prompt}
 						></TextInput>
 					</View>
-					<TouchableOpacity style={styles.createButton} onPress={createSong}>
-						<Text style={styles.buttonText}>Create Song</Text>
+					<TouchableOpacity style={styles.createButton} onPress={createSong} disabled={loading}>
+						{!loading && <Text style={styles.buttonText}>Create Song</Text>}
+                        {loading && <ActivityIndicator size="small"></ActivityIndicator>}
 					</TouchableOpacity>
 				</View>
 			</KeyboardAwareScrollView>
