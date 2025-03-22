@@ -1,11 +1,12 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions } from 'react-native';
 import { Audio } from 'expo-av';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Slider from '@react-native-community/slider';
-import { BottomSheetModal, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import { BottomSheetModal, BottomSheetModalProvider, BottomSheetView } from '@gorhom/bottom-sheet';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const BottomPlayer = () => {
 	const [sound, setSound] = useState<Audio.Sound | null>(null);
@@ -13,12 +14,16 @@ const BottomPlayer = () => {
 	const [isLoaded, setIsLoaded] = useState(false);
 	const [position, setPosition] = useState(0);
 	const [duration, setDuration] = useState(0);
+	const [hasInteracted, setHasInteracted] = useState(false); // Track interaction state
 
-	const bottomSheetRef = useRef<BottomSheetModal>(null);
+	const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
-	const handlePresentModalPress = useCallback(() => {
-		bottomSheetRef.current?.present();
-	}, []);
+	const handlePresentModalPress = useCallback(async () => {
+		bottomSheetModalRef.current?.present();
+		setTimeout(() => {
+			bottomSheetModalRef.current?.snapToPosition(1000);
+		}, 150);
+	}, [hasInteracted]);
 
 	const loadSound = async () => {
 		await Audio.setAudioModeAsync({
@@ -78,8 +83,8 @@ const BottomPlayer = () => {
 	}, []);
 
 	return (
-		<TouchableOpacity style={styles.container}>
-			<View style={styles.player}>
+		<View style={styles.container}>
+			<TouchableOpacity style={styles.player} onPress={handlePresentModalPress}>
 				<View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
 					<Image style={styles.artwork} source={{ uri: 'https://picsum.photos/100' }} />
 					<View style={styles.info}>
@@ -101,36 +106,54 @@ const BottomPlayer = () => {
 				<View style={styles.progressBarContainer}>
 					<View style={[styles.progressBarInside, { width: `${(position / duration) * 100}%` }]}></View>
 				</View>
-			</View>
+			</TouchableOpacity>
+
 			{/* <View style={styles.progressContainer}>
 				<Text style={styles.progressText}>
-					{Math.floor(position / 1000)} / {Math.floor(duration / 1000)} seconds
+                {Math.floor(position / 1000)} / {Math.floor(duration / 1000)} seconds
 				</Text>
 				<Slider
-					style={styles.progressBar}
-					value={position / duration}
-					minimumValue={0}
-					maximumValue={1}
-					thumbTintColor="white"
-					minimumTrackTintColor="white"
-					onValueChange={async (value) => {
-						if (sound) {
-							const newPosition = value * duration;
-							await sound.setPositionAsync(newPosition);
-							setPosition(newPosition);
+                style={styles.progressBar}
+                value={position / duration}
+                minimumValue={0}
+                maximumValue={1}
+                thumbTintColor="white"
+                minimumTrackTintColor="white"
+                onValueChange={async (value) => {
+                    if (sound) {
+                        const newPosition = value * duration;
+                        await sound.setPositionAsync(newPosition);
+                        setPosition(newPosition);
 						}
-					}}
-				/>
-			</View> */}
-		</TouchableOpacity>
+                        }}
+                        />
+                        </View> */}
+			<BottomSheetModal ref={bottomSheetModalRef} snapPoints={[1000]} index={-1} handleComponent={null} enablePanDownToClose={true}>
+				<BottomSheetView style={styles.contentContainer}>
+					<Text>Awesome 🎉</Text>
+					<Text>Awesome 🎉</Text>
+					<Text>Awesome 🎉</Text>
+					<Text>Awesome 🎉</Text>
+					<Text>Awesome 🎉</Text>
+				</BottomSheetView>
+			</BottomSheetModal>
+		</View>
 	);
 };
 
 const styles = StyleSheet.create({
+	contentContainer: {
+		flex: 1,
+		alignItems: 'center',
+		// position: 'absolute'
+	},
 	container: {
 		flex: 1,
-		justifyContent: 'flex-end',
-		margin: 10,
+		padding: 5,
+		left: 0,
+		position: 'absolute',
+		bottom: 85,
+		width: '100%',
 	},
 	player: {
 		backgroundColor: '#333',
@@ -192,8 +215,8 @@ const styles = StyleSheet.create({
 	progressBarInside: {
 		position: 'absolute',
 		bottom: 0,
-        left: 0,
-        zIndex: 10,
+		left: 0,
+		zIndex: 10,
 		backgroundColor: 'red',
 		height: 1.5,
 	},
