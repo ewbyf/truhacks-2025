@@ -2,6 +2,7 @@ import React, { createContext, ReactNode, useEffect, useState } from 'react';
 import { Song } from '../interfaces/Song';
 import { supabase } from '../lib/supabase';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getRecentSongs } from '../lib/supabaseUtils'
 
 interface UserContextType {
 	id: string;
@@ -50,8 +51,14 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 			const token = await AsyncStorage.getItem('token');
 			if (token) {
 				setId(token);
+                getRecentSongs(token)
+                .then((resp) => {
+                    setSongs(resp)
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
 			}
-            console.log(token);
 		};
         fetchToken();
 	}, []);

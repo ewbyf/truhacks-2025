@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useContext, useMemo, useRef, useState } from 'react';
 import { View, Text, StyleSheet, Button, SafeAreaView, ScrollView, TouchableOpacity, Image, TextInput, Alert, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -10,6 +10,8 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import { LogBox } from 'react-native';
 import api from '../lib/axiosConfig';
 import Toast from 'react-native-toast-message';
+import { createNewSong } from '../lib/supabaseUtils';
+import { UserContext } from '../contexts/UserContext';
 
 LogBox.ignoreLogs(['VirtualizedLists should never be nested inside plain ScrollViews with the same orientation']);
 
@@ -35,13 +37,13 @@ export default function MusicScreen() {
 	]);
 	const [prompt, setPrompt] = useState('');
 	const [loading, setLoading] = useState(false);
+    const { id } = useContext(UserContext);
 
 	const createSong = () => {
 		if (selectedTopic == '') {
 			Alert.alert('Must select a topic');
 			return;
 		}
-		console.log({ selectedGenre, selectedTopic, prompt });
 		setLoading(true);
 		api.post('/api/v1/sonic/create', {
 			customMode: false,
@@ -66,8 +68,9 @@ export default function MusicScreen() {
 					}, 3000);
 				} else {
 					// success
+                    createNewSong(resp.data[0].title, id, resp.data[0].tags, null, resp.data[0].audio_url);
 					setLoading(false);
-                    showSuccess();
+					showSuccess();
 				}
 				console.log(resp.data[0]);
 			})

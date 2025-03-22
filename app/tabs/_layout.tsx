@@ -1,5 +1,5 @@
 import { router, Tabs } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Alert, SafeAreaView, Text, TouchableOpacity, View, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import BottomPlayer from '../components/BottomPlayer';
@@ -7,8 +7,10 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { BottomSheetModal, BottomSheetModalProvider, BottomSheetView } from '@gorhom/bottom-sheet';
 
 const Navbar = ({ children }: { children: JSX.Element }) => {
+
+
 	return (
-		<GestureHandlerRootView >
+		<GestureHandlerRootView>
 			<BottomSheetModalProvider>
 				{children}
 				<Tabs
@@ -48,7 +50,7 @@ const Navbar = ({ children }: { children: JSX.Element }) => {
 					<Tabs.Screen
 						name="PlaylistScreen"
 						options={{
-							href:null,
+							href: null,
 							title: '',
 						}}
 					/>
@@ -59,7 +61,6 @@ const Navbar = ({ children }: { children: JSX.Element }) => {
 	);
 };
 
-const styles = {
-};
+const styles = {};
 
 export default Navbar;

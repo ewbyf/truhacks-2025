@@ -4,7 +4,8 @@ import { Audio } from 'expo-av';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Slider from '@react-native-community/slider';
 import { BottomSheetModal, BottomSheetModalProvider, BottomSheetView } from '@gorhom/bottom-sheet';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { useContext } from 'react';
+import { UserContext } from '../contexts/UserContext';
 
 const { width, height } = Dimensions.get('window');
 
@@ -14,9 +15,11 @@ const BottomPlayer = () => {
 	const [isLoaded, setIsLoaded] = useState(false);
 	const [position, setPosition] = useState(0);
 	const [duration, setDuration] = useState(0);
-	const [hasInteracted, setHasInteracted] = useState(false); // Track interaction state
+	const [hasInteracted, setHasInteracted] = useState(false);
 
 	const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+
+    const { currentSong } = useContext(UserContext);
 
 	const handlePresentModalPress = useCallback(async () => {
 		bottomSheetModalRef.current?.present();
@@ -26,12 +29,15 @@ const BottomPlayer = () => {
 	}, [hasInteracted]);
 
 	const loadSound = async () => {
+        if (currentSong.name == '') {
+            return;
+        }
 		await Audio.setAudioModeAsync({
 			playsInSilentModeIOS: true,
 			staysActiveInBackground: true,
 		});
 
-		const { sound } = await Audio.Sound.createAsync({ uri: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' }, { shouldPlay: false });
+		const { sound } = await Audio.Sound.createAsync({ uri: currentSong.song_file }, { shouldPlay: false });
 
 		setSound(sound);
 		setIsLoaded(true);
@@ -80,16 +86,20 @@ const BottomPlayer = () => {
 				sound.unloadAsync();
 			}
 		};
-	}, []);
+	}, [currentSong]);
+
+    if (currentSong.name == '') {
+        return null;
+    }
 
 	return (
 		<View style={styles.container}>
 			<TouchableOpacity activeOpacity={1} style={styles.player} onPress={handlePresentModalPress}>
 				<View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-					<Image style={styles.artwork} source={{ uri: 'https://picsum.photos/100' }} />
+					<Image style={styles.artwork} source={{ uri: currentSong.cover_art }} />
 					<View style={styles.info}>
-						<Text style={styles.title}>Song Title</Text>
-						<Text style={styles.artist}>pop, r&b</Text>
+						<Text style={styles.title}>{currentSong.name}</Text>
+						<Text style={styles.artist}>{currentSong.tag}</Text>
 					</View>
 					<View style={styles.controls}>
 						<TouchableOpacity onPress={rewindSong}>
