@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, StyleSheet, TouchableOpacity, View, Text } from 'react-native';
+import { Alert, StyleSheet, TouchableOpacity, View, Text, Button, Touchable } from 'react-native';
 import { supabase } from './lib/supabase';
 // import { Input, InputField } from '../../components/ui/input';
 // import { Button, ButtonText } from '../../components/ui/button';
@@ -46,45 +46,23 @@ export default function LoginScreen() {
 
 	return (
 		<View style={styles.container}>
-			{/* <View style={[styles.verticallySpaced, styles.mt20]}>
-				<Input variant="outline" size="md" isDisabled={false} isInvalid={false} isReadOnly={false}>
-					<InputField value={email} placeholder="email@address.com" autoCapitalize={'none'} onChangeText={(text) => setEmail(text)} />
-				</Input>
-			</View>
-			<View style={styles.verticallySpaced}>
-				<Input variant="outline" size="md" isDisabled={false} isInvalid={false} isReadOnly={false}>
-					<InputField
-						onChangeText={(text) => setPassword(text)}
-						value={password}
-						secureTextEntry={true}
-						placeholder="Password"
-						autoCapitalize={'none'}
-					/>
-				</Input>
-			</View>
-			<View style={[styles.verticallySpaced, styles.mt20]}>
-				<Button size="md" variant="solid" action="primary" onPress={() => signInWithEmail()}>
-					<ButtonText>Sign in</ButtonText>
-				</Button>
-			</View>
-			<View style={styles.verticallySpaced}>
-				<Button size="md" variant="solid" action="primary" onPress={() => signUpWithEmail()}>
-					<ButtonText>Sign up</ButtonText>
-				</Button>
-			</View> */}
-			<View style={styles.verticallySpaced}>
-				<TouchableOpacity onPress={() => router.navigate('./tabs/HomeScreen')}>
-					<Text>forward</Text>
-				</TouchableOpacity>
-			</View>
+			<TouchableOpacity style={styles.button} onPress={() => router.navigate('./tabs/HomeScreen')}>
+				<Text style={styles.buttonText}>Start Listening</Text>
+			</TouchableOpacity>
+			<Text>Hello World</Text>
 		</View>
 	);
 }
 
 const styles = StyleSheet.create({
 	container: {
+		display: 'flex',
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
 		marginTop: 40,
 		padding: 12,
+		backgroundColor: 'rgba(132, 42, 247, 0.55)'
 	},
 	verticallySpaced: {
 		paddingTop: 4,
@@ -94,4 +72,25 @@ const styles = StyleSheet.create({
 	mt20: {
 		marginTop: 20,
 	},
+	button: {
+		display: 'flex',
+		width: 160,
+		height: 42,
+		paddingVertical: 0,         // --Spacing-0
+		paddingHorizontal: 28,      // --Spacing-7
+		justifyContent: 'center',
+		alignItems: 'center',
+		gap: 12,                    // --Spacing-3
+		flexShrink: 0,
+		borderRadius: 10,
+		backgroundColor: 'rgba(132, 42, 247, 0.55)',
+	},
+	buttonText: {
+		color: '#FFF',
+		fontFamily: 'Roboto',
+		fontSize: 17,
+		fontStyle: 'normal',
+		fontWeight: 500,
+		lineHeight: 25,
+	}
 });
