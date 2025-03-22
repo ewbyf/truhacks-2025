@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, Button, SafeAreaView, ScrollView, TouchableOpac
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { BottomSheetModal, BottomSheetView, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import Icon from 'react-native-vector-icons/Ionicons';
-import LogoSmall from '../components/svgs/LogoSmall';
+import LogoSmall from '@/app/components/svgs/LogoSmall';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const LibraryScreen = () => {
@@ -38,7 +38,7 @@ const LibraryScreen = () => {
 					</TouchableOpacity>
 					<TouchableOpacity style={styles.createContainer}
 						onPress={() => {
-							router.push('./PlaylistScreen');
+							router.push('./PlaylistScreen' as const);
 						}}
 					>
 						<Image source={{ uri: 'https://picsum.photos/213' }} style={{ height: 75, width: 75 }} />
