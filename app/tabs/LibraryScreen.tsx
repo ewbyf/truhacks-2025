@@ -18,10 +18,10 @@ const LibraryScreen = () => {
 					<Text style={styles.subtitle}>{selected == "playlists" ? 'Playlists' : 'Songs'}</Text>
                     <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10 }}>
                         <TouchableOpacity style={[styles.selectionButton, {backgroundColor: selected == "playlists" ? '#732DFC' : '#403E43'}]} onPress={() => setSelected('playlists')}>
-                            <Text>Playlists</Text>
+                            <Text style={{color: selected == 'playlists' ? 'white' : 'black' }}>Playlists</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={[styles.selectionButton, {backgroundColor: selected == "songs" ? '#732DFC' : '#403E43'}]} onPress={() => setSelected('songs')}>
-                            <Text>Songs</Text>
+                            <Text style={{color: selected == 'songs' ? 'white' : 'black' }}>Songs</Text>
                         </TouchableOpacity>
                     </View>
 				</View>

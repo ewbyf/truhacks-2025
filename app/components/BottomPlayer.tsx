@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, Button, TouchableWithoutFeedback, Touchable, TouchableHighlight } from 'react-native';
 import { Audio } from 'expo-av';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Slider from '@react-native-community/slider';
@@ -84,7 +84,7 @@ const BottomPlayer = () => {
 
 	return (
 		<View style={styles.container}>
-			<TouchableOpacity style={styles.player} onPress={handlePresentModalPress}>
+			<TouchableOpacity activeOpacity={1} style={styles.player} onPress={handlePresentModalPress}>
 				<View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
 					<Image style={styles.artwork} source={{ uri: 'https://picsum.photos/100' }} />
 					<View style={styles.info}>
@@ -131,9 +131,9 @@ const BottomPlayer = () => {
 						</TouchableOpacity>
 					</View>
 					<Image source={{ uri: 'https://picsum.photos/203' }} style={{ height: 350, width: 350 }} />
-					<View style={{width: '100%'}}>
+					<View style={{ width: '100%' }}>
 						<View style={{ flexDirection: 'row', width: '100%' }}>
-							<View style={{gap: 5}}>
+							<View style={{ gap: 5 }}>
 								<Text style={styles.songName}>Song Name</Text>
 								<Text style={styles.genresName}>pop, r&b</Text>
 							</View>
@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
 		paddingBottom: 120,
 		paddingHorizontal: 20,
 		backgroundColor: '#333',
-        justifyContent: 'space-between'
+		justifyContent: 'space-between',
 	},
 	container: {
 		flex: 1,

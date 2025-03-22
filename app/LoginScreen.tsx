@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Alert, StyleSheet, TouchableOpacity, View, Text, Button, Touchable, TextInput, Image } from 'react-native';
+import { Alert, StyleSheet, TouchableOpacity, View, Text, Button, Touchable, TextInput, Image, SafeAreaView } from 'react-native';
 import GradientText from './components/GradientText';
 import { supabase } from './lib/supabase';
-// import { Input, InputField } from '../../components/ui/input';
-// import { Button, ButtonText } from '../../components/ui/button';
 import { useRouter } from 'expo-router';
-
+import Logo from './components/svgs/Logo';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import LoginBG from './components/svgs/LoginBG';
 
 export default function LoginScreen() {
 	const [email, setEmail] = useState('');
@@ -23,7 +23,6 @@ export default function LoginScreen() {
 				password: password,
 			})
 			.then((resp) => {
-				Alert.alert('yay');
 				console.log(resp.data);
 			})
 			.catch((err) => {
@@ -45,61 +44,47 @@ export default function LoginScreen() {
 		});
 
 		if (error) Alert.alert(error.message);
-		if (!session) Alert.alert('Please check your inbox for email verification!');
+		if (!error && !session) Alert.alert('Please check your inbox for email verification!');
 		setLoading(false);
 	}
 
 	return (
-		<View style={styles.container}>
-			<View style={{ position: 'absolute', top: 100 }}>
-				<Image
-					source={{ uri: 'https://vwqokxwilhvpiybjgsbt.supabase.co/storage/v1/object/public/images//logo.png' }}
-					style={{ width: 186, height: 186 }}
-					resizeMode="contain" // or 'cover', 'stretch', etc.
-				/>
+		<>
+			<View style={{ position: 'absolute', top: 0, left: 0, zIndex: -1 }}>
+				<LoginBG></LoginBG>
 			</View>
-			<View style={{ position: 'relative', top: -70, left: -12 }}>
-				<Text style={styles.phrase}>
-					Get into the{'\n'}rhythm of{' '}
-				</Text>
-				<GradientText text="learning" />
-			</View>
-			<View style={styles.bottom}>
-				<View style={styles.fields}>
-					<TextInput
-						style={styles.input}
-						value={email}
-						onChangeText={setEmail}
-						placeholder="Enter email"
-						placeholderTextColor="#999"
-					/>
-					<View style={styles.passwordContainer}>
-					<TextInput
-						style={styles.input}
-						value={password}
-						onChangeText={setPassword}
-						placeholder="Password"
-						placeholderTextColor="#999"
-						secureTextEntry={!showPassword}
-					/>
-					<TouchableOpacity
-						style={styles.eyeIcon}
-						onPress={() => setShowPassword(!showPassword)}
-					>
-						<Text style={{ color: '#999' }}>
-						{showPassword ? '🙈' : '👁️'}
-						</Text>
-					</TouchableOpacity>
+
+			<SafeAreaView style={styles.container}>
+				<KeyboardAwareScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flex: 1, padding: 40 }}>
+					<View style={{ width: '100%', alignItems: 'center' }}>
+						<Logo />
 					</View>
-					<TouchableOpacity>
-						<Text style={styles.forgot}>Forgot Password</Text>
-					</TouchableOpacity>
-				</View>
-				<TouchableOpacity style={styles.button} onPress={() => signInWithEmail()}>
-					<Text style={styles.buttonText}>Start Listening</Text>
-				</TouchableOpacity>
-			</View>
-		</View>
+					<View style={{ marginTop: 75, marginBottom: 25 }}>
+						<Text style={styles.phrase}>Get into the{'\n'}rhythm of </Text>
+						<GradientText text="learning" />
+					</View>
+					<View style={styles.bottom}>
+						<View style={styles.fields}>
+							<TextInput style={styles.input} value={email} onChangeText={setEmail} placeholder="Enter email" placeholderTextColor="#999" />
+							<TextInput
+								style={styles.input}
+								value={password}
+								onChangeText={setPassword}
+								placeholder="Password"
+								placeholderTextColor="#999"
+								secureTextEntry={!showPassword}
+							/>
+							<TouchableOpacity style={{ marginLeft: 'auto' }}>
+								<Text style={styles.forgot}>Forgot Password?</Text>
+							</TouchableOpacity>
+						</View>
+						<TouchableOpacity style={styles.button} onPress={() => signInWithEmail()}>
+							<Text style={styles.buttonText}>Start Listening</Text>
+						</TouchableOpacity>
+					</View>
+				</KeyboardAwareScrollView>
+			</SafeAreaView>
+		</>
 	);
 }
 
@@ -107,9 +92,8 @@ const styles = StyleSheet.create({
 	container: {
 		display: 'flex',
 		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
-		backgroundColor: '#1E1E1E'
+		// justifyContent: 'center',
+		// alignItems: 'center',
 	},
 	verticallySpaced: {
 		paddingTop: 4,
@@ -123,62 +107,50 @@ const styles = StyleSheet.create({
 		display: 'flex',
 		justifyContent: 'center',
 		alignItems: 'center',
-		gap: 100,
-		position: 'absolute',
-		bottom: 100,
-		left: 0,
-		right: 0,
+		gap: 30,
 	},
 	button: {
 		display: 'flex',
-		width: 160,
-		height: 42,
-		paddingVertical: 0,         // --Spacing-0
-		paddingHorizontal: 12,      // --Spacing-7
+		width: '100%',
+		height: 50,
+		paddingVertical: 0, 
+		paddingHorizontal: 12,
 		justifyContent: 'center',
 		alignItems: 'center',
-		gap: 12,                    // --Spacing-3
 		flexShrink: 0,
 		borderRadius: 10,
-		backgroundColor: 'rgba(132, 42, 247, 0.55)',
+		backgroundColor: '#732DFC',
 	},
 	buttonText: {
 		color: '#FFF',
 		fontFamily: 'Roboto',
 		fontSize: 17,
-		fontStyle: 'normal',      // optional, this is the default
-		fontWeight: '500',        // must be a string in React Native
-		lineHeight: 17,           
+		fontWeight: '500',
+		lineHeight: 17,
 	},
 	input: {
-		display: 'flex',               // optional; RN uses flex by default
-		width: 313,
+		width: '100%',
 		height: 53,
-		paddingVertical: 0,           // --Spacing-0
-		paddingHorizontal: 12,        // --Spacing-3
+		paddingHorizontal: 12,
 		alignItems: 'center',
-		gap: 8,                        // --Spacing-2 (works in RN 0.71+)
 		flexShrink: 0,
-		borderRadius: 8,              // --Border-radius-lg
+		borderRadius: 8,
 		borderWidth: 2,
-		borderColor: 'rgba(132, 42, 247, 0.7)',
-		opacity: 0.7,
+		borderColor: '#515054',
 		color: '#FFF',
 	},
 	fields: {
 		display: 'flex',
 		justifyContent: 'center',
 		alignItems: 'center',
-		gap: 15,
+		gap: 10,
+		width: '100%',
 	},
 	forgot: {
 		overflow: 'hidden',
 		color: 'rgba(255, 255, 255, 0.5)',
 		fontFamily: 'Roboto',
-		fontSize: 14,
-		fontStyle: 'normal',       // optional (default)
-		fontWeight: '400',
-		lineHeight: 21,
+		fontSize: 13,
 	},
 	phrase: {
 		width: 283,
@@ -186,22 +158,7 @@ const styles = StyleSheet.create({
 		color: 'rgba(142, 141, 141, 0.81)',
 		fontFamily: 'Roboto',
 		fontSize: 48,
-		fontStyle: 'normal',   // optional (default)
-		fontWeight: '600',     // must be a string
+		fontWeight: '600',
 		lineHeight: 48,
-
 	},
-	learning: {
-
-	},
-	passwordContainer: {
-		position: 'relative',
-		width: 313,
-	  },
-	  
-	  eyeIcon: {
-		position: 'absolute',
-		right: 12,
-		top: 15,
-	  },
 });

@@ -28,7 +28,7 @@ export default function Page() {
 		return null;
 	}
 
-	if (session && session.user) {
+	if (session != null && session.user != null) {
 		return <Redirect href="./tabs/HomeScreen"></Redirect>;
 	}
 
