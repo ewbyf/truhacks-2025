@@ -75,7 +75,7 @@ export default function MusicScreen() {
 					}, 3000);
 				} else {
 					// success
-					const data = await createNewSong(resp.data.data[0].title, id, selectedTopic, selectedGenre, null, resp.data.data[0].audio_url);
+					const data: any = await createNewSong(resp.data.data[0].title, id, selectedTopic, selectedGenre, null, resp.data.data[0].audio_url);
 					setSongs([...songs, data]);
 					setLoading(false);
 					showSuccess();
