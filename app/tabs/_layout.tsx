@@ -45,7 +45,7 @@ const Navbar = ({ children }: { children: JSX.Element }) => {
 						options={{
 						tabBarIcon: ({ focused }) =>
 						focused ? <AddSongsHoverIcon /> : <AddSongsIcon />,
-						title: 'Create Songs',
+						title: 'Create',
 					}}
 					/>
 

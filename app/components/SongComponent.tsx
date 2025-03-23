@@ -7,7 +7,7 @@ import { Song } from '../interfaces/Song';
 import { BottomSheetModal, BottomSheetModalProvider, BottomSheetView } from '@gorhom/bottom-sheet';
 import PlaylistLibrary from '@/app/components/PlaylistLibrary';
 import { useRouter } from 'expo-router';
-import { addSongToPlaylist } from '../lib/supabaseUtils';
+import { addSongsToPlaylist } from '../lib/supabaseUtils';
 
 const SongComponent = ({ song, inPlaylist, songs }: { song: Song; inPlaylist?: string; songs?: Song[] }) => {
 	const [isPlaying, setIsPlaying] = useState(false);
@@ -64,7 +64,7 @@ const SongComponent = ({ song, inPlaylist, songs }: { song: Song; inPlaylist?: s
 
 	const addToPlaylist = async () => {
 		selectedPlaylists.forEach(async (element) => {
-			await addSongToPlaylist(song, element);
+			await addSongsToPlaylist([song.id], element);
 		});
 	};
 
@@ -77,14 +77,14 @@ const SongComponent = ({ song, inPlaylist, songs }: { song: Song; inPlaylist?: s
 	};
 
 	return (
-		<View style={styles.container}>
+		<View style={[styles.container, {backgroundColor: isPlaying ? 'rgba(115,45,252,.8)' : '#252525'}]}>
 			<View style={{ flexDirection: 'row', alignItems: 'center' }}>
 				<Image style={styles.artwork} source={{ uri: song.cover_art }} />
 				<View style={styles.info}>
 					<Text style={[styles.title]} numberOfLines={1}>
 						{song.name}
 					</Text>
-					<Text style={styles.tag}>{song.tag}</Text>
+					<Text style={[styles.tag, {color: isPlaying ? 'lightgray' : 'gray'}]}>{song.tag}</Text>
 				</View>
 				<View style={styles.controls}>
 					<TouchableOpacity onPress={handlePresentModalPress}>
@@ -143,7 +143,13 @@ const SongComponent = ({ song, inPlaylist, songs }: { song: Song; inPlaylist?: s
 							))}
 						</View>
 					</ScrollView>
-					<TouchableOpacity style={styles.button}>
+					<TouchableOpacity
+						style={styles.button}
+						onPress={() => {
+							addToPlaylist();
+							bottomSheetModalRef.current?.dismiss();
+						}}
+					>
 						<Text style={{ color: 'white', fontWeight: 'bold', fontSize: 16 }}>Done</Text>
 					</TouchableOpacity>
 				</BottomSheetView>
