@@ -8,22 +8,35 @@ import { Song } from '../interfaces/Song';
 const SongComponent = ({ song }: { song: Song }) => {
 	const [sound, setSound] = useState<Audio.Sound | null>(null);
 	const [isPlaying, setIsPlaying] = useState(false);
+	const { currentSong, setCurrentSong, setPause, pause } = useContext(UserContext);
 
-	const { setCurrentSong } = useContext(UserContext);
+    useEffect(() => {
+        if (currentSong == song) {
+            setIsPlaying(true);
+        }
+        else {
+            setIsPlaying(false)
+        }
+    }, [currentSong])
+
+    useEffect(() => {
+        if (pause) {
+            setIsPlaying(false);
+        }
+        else if (!pause && currentSong == song) {
+            setIsPlaying(true);
+        }
+    }, [pause])
 
 	const playSound = async () => {
 		setCurrentSong(song);
-		setIsPlaying(true);
+        setPause(false)
 	};
 
 	const pauseSound = async () => {
-		// if (sound) {
-		// 	await sound.pauseAsync();
-		setIsPlaying(false);
-		// }
+		setIsPlaying(false)
+        setPause(true);
 	};
-
-    console.log(song.cover_art)
 
 	return (
 		<View style={styles.container}>

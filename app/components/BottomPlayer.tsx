@@ -19,7 +19,7 @@ const BottomPlayer = () => {
 
 	const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
-    const { currentSong } = useContext(UserContext);
+    const { currentSong, pause, setPause } = useContext(UserContext);
 
 	const handlePresentModalPress = useCallback(async () => {
 		bottomSheetModalRef.current?.present();
@@ -55,6 +55,7 @@ const BottomPlayer = () => {
 		if (sound && isLoaded && !isPlaying) {
 			await sound.playAsync();
 			setIsPlaying(true);
+            setPause(false)
 		}
 	};
 
@@ -62,11 +63,21 @@ const BottomPlayer = () => {
 		if (sound) {
 			await sound.pauseAsync();
 			setIsPlaying(false);
+            setPause(true)
 		}
 	};
 
 	const skipSong = () => {};
 	const rewindSong = () => {};
+
+    useEffect(() => {
+        if (pause) {
+            pauseSound();
+        }   
+        else {
+            playSound()
+        }
+    }, [pause])
 
 	useEffect(() => {
 		const interval = setInterval(async () => {
@@ -108,7 +119,7 @@ const BottomPlayer = () => {
 						<TouchableOpacity onPress={rewindSong}>
 							<Icon name="play-skip-back" color="white" size={30} />
 						</TouchableOpacity>
-						<TouchableOpacity onPress={isPlaying ? pauseSound : playSound}>
+						<TouchableOpacity onPress={(isPlaying && !pause) ? pauseSound : playSound}>
 							<Icon name={isPlaying ? 'pause' : 'play'} color="white" size={30} />
 						</TouchableOpacity>
 						<TouchableOpacity onPress={skipSong}>
@@ -181,7 +192,7 @@ const BottomPlayer = () => {
 							<TouchableOpacity onPress={rewindSong}>
 								<Icon name="play-skip-back" color="white" size={42} />
 							</TouchableOpacity>
-							<TouchableOpacity onPress={isPlaying ? pauseSound : playSound}>
+							<TouchableOpacity onPress={(isPlaying && !pause) ? pauseSound : playSound}>
 								<Icon name={isPlaying ? 'pause-circle-sharp' : 'play-circle-sharp'} color="white" size={84} />
 							</TouchableOpacity>
 							<TouchableOpacity onPress={skipSong}>

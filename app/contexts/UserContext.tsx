@@ -12,6 +12,8 @@ interface UserContextType {
 	setCurrentSong: (currentSong: Song) => void;
 	queue: Song[];
 	setQueue: (queue: Song[]) => void;
+    pause: boolean;
+    setPause: (pause: boolean) => void;
 }
 
 export const UserContext = createContext<UserContextType>({
@@ -31,6 +33,8 @@ export const UserContext = createContext<UserContextType>({
 	setCurrentSong: () => {},
 	queue: [],
 	setQueue: () => {},
+    pause: true,
+    setPause: () => {},
 });
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
@@ -47,6 +51,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         genre: '',
 	});
 	const [queue, setQueue] = useState<Song[]>([]);
+    const [pause, setPause] = useState<boolean>(true);
 
 	useEffect(() => {
 		const fetchToken = async () => {
@@ -65,5 +70,5 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         fetchToken();
 	}, []);
 
-	return <UserContext.Provider value={{ id, songs, setSongs, currentSong, setCurrentSong, queue, setQueue }}>{children}</UserContext.Provider>;
+	return <UserContext.Provider value={{ id, songs, setSongs, currentSong, setCurrentSong, queue, setQueue, pause, setPause }}>{children}</UserContext.Provider>;
 };
