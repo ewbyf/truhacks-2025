@@ -5,10 +5,10 @@ import { Audio } from 'expo-av';
 import { UserContext } from '../contexts/UserContext';
 import { Song } from '../interfaces/Song';
 
-const SongComponent = ({ song, inPlaylist, songs }: { song: Song, inPlaylist ?: boolean, songs?: Song[] }) => {
+const SongComponent = ({ song, inPlaylist, songs }: { song: Song, inPlaylist ?: string, songs?: Song[] }) => {
 	const [sound, setSound] = useState<Audio.Sound | null>(null);
 	const [isPlaying, setIsPlaying] = useState(false);
-	const { currentSong, setCurrentSong, setPause, pause, position, setPosition, queue, setQueue } = useContext(UserContext);
+	const { currentSong, setCurrentSong, setPause, pause, position, setPosition, queue, setQueue, setCurrentPlaylist, currentPlaylist } = useContext(UserContext);
 
     useEffect(() => {
         if (currentSong == song) {
@@ -29,12 +29,14 @@ const SongComponent = ({ song, inPlaylist, songs }: { song: Song, inPlaylist ?: 
     }, [pause])
 
 	const playSound = async () => {
-        if (!inPlaylist) {
+        if (inPlaylist != '') {
             setQueue([])
             setPosition(0)
+            setCurrentPlaylist('');
         }
         else if (songs && songs != queue) {
             setQueue(songs);
+            setCurrentPlaylist(inPlaylist)
         }
 		setCurrentSong(song);
         setPause(false);

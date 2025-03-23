@@ -3,7 +3,6 @@ import { supabase } from '@/app/lib/supabase';
 import { useRouter } from 'expo-router';
 
 import { View, Text, TouchableOpacity, Image, StyleSheet, Dimensions, SafeAreaView, ScrollView } from 'react-native';
-import RecentSong from '../components/RecentSong';
 import TrendingGrid from '../components/TrendingGrid';
 import LogoSmall from '../components/svgs/LogoSmall';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -109,7 +108,7 @@ export default function HomeScreen() {
 						<Text style={styles.subtitle}>Recently Added</Text>
 						<View style={styles.recentSongs}>
 							{songs.map((song) => (
-								<SongComponent song={song} />
+								<SongComponent key={song.id} song={song} />
 							))}
 						</View>
 					</View>

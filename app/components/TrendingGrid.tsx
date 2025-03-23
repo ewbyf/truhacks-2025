@@ -21,7 +21,7 @@ const TrendingGrid = () => {
 						</View>
 						<View style={styles.tag}>
                             {/* <EntypoIcon name="modern-mic" color="white" size={16}/> */}
-							<Text style={{ fontWeight: 'bold', color: 'white', fontSize: 14 }}>Pop</Text>
+							<Text style={{ fontWeight: 'bold', color: 'white', fontSize: 12 }}>Pop</Text>
 						</View>
 					</View>
 					<View style={{ gap: 5 }}>
@@ -31,7 +31,7 @@ const TrendingGrid = () => {
 						</View>
 						<View style={styles.tag}>
                             {/* <Icon name="code-slash" color="white" size={16}/> */}
-							<Text style={{ fontWeight: 'bold', color: 'white', fontSize: 14 }}>Coding</Text>
+							<Text style={{ fontWeight: 'bold', color: 'white', fontSize: 12 }}>Coding</Text>
 						</View>
 					</View>
 				</View>
