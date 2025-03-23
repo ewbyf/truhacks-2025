@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'expo-router';
-import { View, Text, StyleSheet, Button, SafeAreaView, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, Button, SafeAreaView, ScrollView, TouchableOpacity, TextInput, Image } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { BottomSheetModal, BottomSheetView, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -8,6 +8,7 @@ import RecentSong from '../../components/RecentSong';
   
 const PlaylistCreateScreen = () => {
     const [selected, setSelected] = useState('playlists');
+	const [playlistName, setplaylistName] = useState('');
 	const router = useRouter();
 
 	return (
@@ -25,12 +26,8 @@ const PlaylistCreateScreen = () => {
 						<Image  source={{ uri: 'https://picsum.photos/213' }} style={{ height: 256, width: 256 }} />
 					</View>
 				</TouchableOpacity>
-				<View style={styles.recentSongs}>
-					<RecentSong/>
-					<RecentSong/>
-					<RecentSong/>
-					<RecentSong/>
-				</View>
+				<TextInput style={styles.input} value={playlistName} onChangeText={setplaylistName} placeholder="Enter PlayList Name" placeholderTextColor="#999" />
+				
 			</ScrollView>
 		</SafeAreaView>
 	);
@@ -73,6 +70,17 @@ const styles = StyleSheet.create({
 		color: 'white',
 		fontSize: 17,
 		fontWeight: 'medium',
+	},
+	input: {
+		width: '100%',
+		height: 53,
+		paddingHorizontal: 12,
+		alignItems: 'center',
+		flexShrink: 0,
+		borderRadius: 8,
+		borderWidth: 2,
+		borderColor: '#515054',
+		color: '#FFF',
 	},
     selectionButton: {
         backgroundColor: '#732DFC',
