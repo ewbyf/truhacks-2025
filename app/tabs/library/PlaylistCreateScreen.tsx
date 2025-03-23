@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useRouter } from 'expo-router';
-import { View, Text, StyleSheet, Button, SafeAreaView, ScrollView, TouchableOpacity, TextInput, Image } from 'react-native';
+import { View, Text, StyleSheet, Button, SafeAreaView, ScrollView, TouchableOpacity, TextInput, Image, ActivityIndicator } from 'react-native';
 import { getSongs, createNewPlaylist, addSongToPlaylist, addSongsToPlaylist, setPlaylistSongCount } from '@/app/lib/supabaseUtils';
 import { UserContext } from '@/app/contexts/UserContext';
 import type { Song } from '@/app/interfaces/Song';
@@ -19,6 +19,7 @@ const PlaylistCreateScreen = () => {
 	const [availableSongs, setAvailableSongs] = useState<Song[]>([]);
 	const [selectedSongs, setSelectedSongs] = useState<number[]>([]);
 	const [image, setImage] = useState<string | null>(null);
+	const [loading, setLoading] = useState(false);
 
 	const { id, playlists, setPlaylists } = useContext(UserContext);
 
@@ -68,11 +69,13 @@ const PlaylistCreateScreen = () => {
 	};
 
 	const savePlaylist = async () => {
+
 		if (!playlistName || selectedSongs.length === 0) {
 			alert('Please enter playlist name, choose cover, and select songs.');
 			return;
 		}
 
+		setLoading(true);
 		try {
 			if (image) {
 				const filename = image.substring(image.lastIndexOf('/') + 1);
@@ -84,6 +87,7 @@ const PlaylistCreateScreen = () => {
 				setPlaylists([...playlists, playlist]);
 				await setPlaylistSongCount(playlist.id, selectedSongs.length);
 
+				setLoading(false);
 				Toast.show({
 					type: 'success',
 					text1: 'Playlist successfully created',
@@ -99,6 +103,8 @@ const PlaylistCreateScreen = () => {
 				await addSongsToPlaylist(selectedSongs, playlist.id);
 				await setPlaylistSongCount(playlist.id, selectedSongs.length);
 				setPlaylists([...playlists, playlist]);
+
+				setLoading(false);
 				Toast.show({
 					type: 'success',
 					text1: 'Playlist successfully created',
@@ -173,7 +179,11 @@ const PlaylistCreateScreen = () => {
 				</View>
 
 				<TouchableOpacity style={styles.saveButton} onPress={savePlaylist}>
-					<Text style={styles.saveButtonText}>Save Playlist</Text>
+					{!loading ? (
+						<Text style={styles.saveButtonText}>Save Playlist</Text>
+					) : (
+						<ActivityIndicator size="small"/>
+					)}
 				</TouchableOpacity>
 			</KeyboardAwareScrollView>
 		</SafeAreaView>
