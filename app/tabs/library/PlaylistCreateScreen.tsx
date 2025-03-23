@@ -10,7 +10,7 @@ import * as FileSystem from 'expo-file-system';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Header from '@/app/components/Header';
 import DinoDefaultBG from '@/app/components/svgs/DinoDefaultBG';
-import FontAwesomeIcon from 'react-native-vector-icons/Feather';
+import FeatherIcon from 'react-native-vector-icons/Feather';
 
 const PlaylistCreateScreen = () => {
 	//TODO : change image to default image when we finish designing it
@@ -87,8 +87,8 @@ const PlaylistCreateScreen = () => {
 						{image ? (
 							<Image source={{ uri: image }} style={{ height: 256, width: 256 }} />
 						) : (
-							<View>
-								<DinoDefaultBG width={256} height={256} opacity={0.1} />
+							<View style={{height: 256, width: 256, backgroundColor: '#252525', justifyContent: 'center', alignItems: 'center'}}>
+								<FeatherIcon name="upload" size={72} color="gray"/>
 							</View>
 						)}
 					</View>

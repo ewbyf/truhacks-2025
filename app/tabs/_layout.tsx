@@ -49,7 +49,7 @@ const Navbar = ({ children }: { children: JSX.Element }) => {
 					/>
 
 					<Tabs.Screen
-						name="PlaylistScreen"
+						name="library"
 						options={{
 						tabBarIcon: ({ focused }) =>
 						focused ? <LibraryIconHover /> : <LibraryIcon />,

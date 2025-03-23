@@ -126,7 +126,7 @@ export default function MusicScreen() {
 							ArrowUpIconComponent={({ style }) => <Icon name="chevron-up" color="gray" size={20} />}
 							TickIconComponent={({ style }) => <Icon name="checkmark" color="white" size={20} />}
 							dropDownContainerStyle={{
-								backgroundColor: '#323232',
+								backgroundColor: '#252525',
 								zIndex: 10,
 							}}
 							listItemLabelStyle={{
