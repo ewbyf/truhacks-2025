@@ -6,6 +6,8 @@ import { BottomSheetModal, BottomSheetView, BottomSheetModalProvider } from '@go
 import Icon from 'react-native-vector-icons/Ionicons';
 import RecentSong from '../../components/RecentSong';
 import * as ImagePicker from 'expo-image-picker';
+import {  } from '@supabase/supabase-js'; // adjust path if needed
+
 
 const [imageUri, setImageUri] = useState<string | null>(null);
 
