@@ -20,19 +20,7 @@ const LibraryScreen = () => {
 		setPlaylistsData(playlists)
 	}, [playlists])
 
-	// useEffect(() => {
-    //     const fetchPlaylists = async () => {
-    //         try {
-    //             const data = await getPlaylists(userID); // Await the promise
-    //             setPlaylistsData(data); // Set state with the resolved data
-    //         } catch (error) {
-    //             console.error('Error fetching playlists:', error);
-    //         }
-    //     };
-
-    //     fetchPlaylists();
-    // }, [userID]);
-
+	//updating playlist with most recent data
 	const handleRefresh = async () => {
 		setRefreshing(true);
 		try {

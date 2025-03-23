@@ -23,6 +23,7 @@ const PlaylistCreateScreen = () => {
 
 	const { id, playlists, setPlaylists } = useContext(UserContext);
 
+	//handles image picking for playlist creation
 	const choosePhoto = async () => {
 		let result = await ImagePicker.launchImageLibraryAsync({
 			allowsEditing: true,
@@ -35,6 +36,7 @@ const PlaylistCreateScreen = () => {
 		}
 	};
 
+	//grabs all songs from user
 	useEffect(() => {
 		const loadSongs = async () => {
 			try {
