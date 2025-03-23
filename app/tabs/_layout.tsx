@@ -19,6 +19,7 @@ const Navbar = ({ children }: { children: JSX.Element }) => {
 				{children}
 				<Tabs
 					screenOptions={{
+						//tabBarShowLabel: false,
 						tabBarStyle: {
 							backgroundColor: '#1E1E1E',
 							borderTopColor: '#5F5F5F',
@@ -34,7 +35,7 @@ const Navbar = ({ children }: { children: JSX.Element }) => {
 						name="HomeScreen"
 						options={{
 						tabBarIcon: ({ focused }) =>
-						focused ? <HomeIconHover /> : <HomeIcon />,
+						focused ? <HomeIconHover/> : <HomeIcon />,
 						title: 'Home',
 					}}
 					/>
