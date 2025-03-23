@@ -1,11 +1,8 @@
-import React, { useCallback, useMemo, useEffect, useRef, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useRouter } from 'expo-router';
-import { View, Text, StyleSheet, Button, SafeAreaView, ScrollView, TouchableOpacity, Image, RefreshControl } from 'react-native';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { BottomSheetModal, BottomSheetView, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import { View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, RefreshControl } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import LogoSmall from '@/app/components/svgs/LogoSmall';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import PlaylistLibrary from '@/app/components/PlaylistLibrary';
 import SongComponent from '@/app/components/SongComponent';
 

@@ -1,6 +1,5 @@
 import React, { createContext, ReactNode, useEffect, useState } from 'react';
 import { Song } from '../interfaces/Song';
-import { supabase } from '../lib/supabase';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getPlaylists, getSongs } from '../lib/supabaseUtils';
 import { PlaylistType } from '../interfaces/PlaylistType';

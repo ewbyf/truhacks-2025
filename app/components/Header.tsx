@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useEffect, useState, useContext } from 'react';
+import React from 'react';
 import { useRouter } from 'expo-router';
 import { View, Text, TouchableOpacity, } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';

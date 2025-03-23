@@ -2,10 +2,7 @@ import 'react-native-reanimated';
 import { useRouter } from 'expo-router';
 
 import { useState, useEffect } from 'react';
-import { supabase } from './lib/supabase';
 
-import { View, Text, SafeAreaView } from 'react-native';
-import { Session } from '@supabase/supabase-js';
 import { Redirect } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 

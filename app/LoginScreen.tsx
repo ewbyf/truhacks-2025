@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, StyleSheet, TouchableOpacity, View, Text, Button, Touchable, TextInput, Image, SafeAreaView } from 'react-native';
+import { StyleSheet, TouchableOpacity, View, Text, TextInput, SafeAreaView } from 'react-native';
 import GradientText from './components/GradientText';
 import { supabase } from './lib/supabase';
 import { useRouter } from 'expo-router';
@@ -35,19 +35,6 @@ export default function LoginScreen() {
 			.catch((err) => {
 				setErrorMessage('Invalid email or password.');
 			});
-	}
-
-	async function signUpWithEmail() {
-		const {
-			data: { session },
-			error,
-		} = await supabase.auth.signUp({
-			email: email,
-			password: password,
-		});
-
-		if (error) Alert.alert(error.message);
-		if (!error && !session) Alert.alert('Please check your inbox for email verification!');
 	}
 
 	return (

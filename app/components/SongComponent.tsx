@@ -1,11 +1,9 @@
 import { View, Text, TouchableOpacity, Image, StyleSheet, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useContext, useEffect, useState, useRef, useCallback } from 'react';
-import { Audio } from 'expo-av';
 import { UserContext } from '../contexts/UserContext';
 import { Song } from '../interfaces/Song';
-import { BottomSheetModal, BottomSheetModalProvider, BottomSheetView } from '@gorhom/bottom-sheet';
-import PlaylistLibrary from '@/app/components/PlaylistLibrary';
+import { BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
 import { useRouter } from 'expo-router';
 import { addSongsToPlaylist } from '../lib/supabaseUtils';
 
@@ -56,7 +54,7 @@ const SongComponent = ({ song, inPlaylist, songs }: { song: Song; inPlaylist?: s
 	};
 
 	const handlePresentModalPress = useCallback(async () => {
-        setSelectedPlaylists([]);
+		setSelectedPlaylists([]);
 		bottomSheetModalRef.current?.present();
 		setTimeout(() => {
 			bottomSheetModalRef.current?.snapToPosition(800);
@@ -78,14 +76,14 @@ const SongComponent = ({ song, inPlaylist, songs }: { song: Song; inPlaylist?: s
 	};
 
 	return (
-		<View style={[styles.container, {backgroundColor: isPlaying ? 'rgba(115,45,252,.8)' : '#252525'}]}>
+		<View style={[styles.container, { backgroundColor: isPlaying ? 'rgba(115,45,252,.8)' : '#252525' }]}>
 			<View style={{ flexDirection: 'row', alignItems: 'center' }}>
 				<Image style={styles.artwork} source={{ uri: song.cover_art }} />
 				<View style={styles.info}>
 					<Text style={[styles.title]} numberOfLines={1}>
 						{song.name}
 					</Text>
-					<Text style={[styles.tag, {color: isPlaying ? 'lightgray' : 'gray'}]}>{song.tag}</Text>
+					<Text style={[styles.tag, { color: isPlaying ? 'lightgray' : 'gray' }]}>{song.tag}</Text>
 				</View>
 				<View style={styles.controls}>
 					<TouchableOpacity onPress={handlePresentModalPress}>

@@ -1,5 +1,5 @@
-import React, { useCallback, useContext, useMemo, useRef, useState } from 'react';
-import { View, Text, StyleSheet, Button, SafeAreaView, ScrollView, TouchableOpacity, Image, TextInput, Alert, ActivityIndicator } from 'react-native';
+import React, { useContext, useState } from 'react';
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, TextInput, Alert, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -12,7 +12,6 @@ import api from '../lib/axiosConfig';
 import Toast from 'react-native-toast-message';
 import { createNewSong } from '../lib/supabaseUtils';
 import { UserContext } from '../contexts/UserContext';
-import { Song } from '../interfaces/Song';
 
 LogBox.ignoreLogs(['VirtualizedLists should never be nested inside plain ScrollViews with the same orientation']);
 

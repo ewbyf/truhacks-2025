@@ -1,8 +1,6 @@
-import React, { useCallback, useMemo, useRef, useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { View, Text, StyleSheet, Button, SafeAreaView, ScrollView, TouchableOpacity, Image } from 'react-native';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { BottomSheetModal, BottomSheetView, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import SongComponent from '@/app/components/SongComponent';
 
@@ -11,7 +9,6 @@ import { supabase } from '@/app/lib/supabase';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Header from '@/app/components/Header';
 import { PlaylistType } from '@/app/interfaces/PlaylistType';
-import { Song } from '@/app/interfaces/Song';
 import { UserContext } from '@/app/contexts/UserContext';
 
 export const options = {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useRouter } from 'expo-router';
-import { View, Text, StyleSheet, Button, SafeAreaView, ScrollView, TouchableOpacity, TextInput, Image, ActivityIndicator } from 'react-native';
-import { getSongs, createNewPlaylist, addSongToPlaylist, addSongsToPlaylist, setPlaylistSongCount } from '@/app/lib/supabaseUtils';
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, TextInput, Image, ActivityIndicator } from 'react-native';
+import { getSongs, createNewPlaylist, addSongsToPlaylist, setPlaylistSongCount } from '@/app/lib/supabaseUtils';
 import { UserContext } from '@/app/contexts/UserContext';
 import type { Song } from '@/app/interfaces/Song';
 import Icon from 'react-native-vector-icons/Ionicons';
