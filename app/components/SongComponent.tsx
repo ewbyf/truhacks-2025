@@ -56,6 +56,7 @@ const SongComponent = ({ song, inPlaylist, songs }: { song: Song; inPlaylist?: s
 	};
 
 	const handlePresentModalPress = useCallback(async () => {
+        setSelectedPlaylists([]);
 		bottomSheetModalRef.current?.present();
 		setTimeout(() => {
 			bottomSheetModalRef.current?.snapToPosition(800);

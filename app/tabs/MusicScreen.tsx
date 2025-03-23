@@ -56,6 +56,8 @@ export default function MusicScreen() {
 		})
 			.then((resp) => {
 				fetchSong(resp.data.task_id);
+				setSelectedTopic('');
+				setPrompt('');
 			})
 			.catch((err) => {
 				console.log(err);
@@ -66,7 +68,7 @@ export default function MusicScreen() {
 		console.log(task_id);
 		api.get(`/api/v1/sonic/task/${task_id}`)
 			.then(async (resp) => {
-                console.log(resp.data)
+				console.log(resp.data);
 				if (resp.data.data[0].state != 'succeeded') {
 					setTimeout(() => {
 						fetchSong(task_id);
