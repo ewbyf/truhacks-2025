@@ -24,6 +24,7 @@ const LibraryScreen = () => {
             try {
                 const data = await getPlaylists(userID); // Await the promise
                 setPlaylistsData(data); // Set state with the resolved data
+				console.log(data)
             } catch (error) {
                 console.error('Error fetching playlists:', error);
             }
@@ -63,10 +64,9 @@ const LibraryScreen = () => {
 								</View>
 								<Text style={styles.playlistTitle}>Create playlist</Text>
 							</TouchableOpacity>
-							{playlistsData.map((playlist, index) => {
-								<PlaylistLibrary id={playlist.id} name={playlist.name} image={playlist.cover_art}/>
-							})}
-							<PlaylistLibrary id={1} name={"test"} image={'https://picsum.photos/213'}/>
+							{playlistsData.map((playlist, index) => (
+								<PlaylistLibrary key={index} id={playlist.id} name={playlist.name} image={playlist.cover_art}/>
+							))}
 						</>
 					)} : {
 						selected == 'songs' && songs.map((song) => (

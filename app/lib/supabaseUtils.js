@@ -197,7 +197,7 @@ export const getPlaylistSongs = async (playlistID) => {
             song_id,
             songs (*)
         `)
-        .eq('playlist_id', playlistId);
+        .eq('playlist_id', playlistID);
 
     if (error) {
         throw error;

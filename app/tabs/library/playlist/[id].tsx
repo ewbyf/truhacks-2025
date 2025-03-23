@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState, useEffect } from 'react';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { View, Text, StyleSheet, Button, SafeAreaView, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -6,6 +6,9 @@ import { BottomSheetModal, BottomSheetView, BottomSheetModalProvider } from '@go
 import Icon from 'react-native-vector-icons/Ionicons';
 import RecentSong from '../../../components/RecentSong';
   
+import { getPlaylistSongs } from "@/app/lib/supabaseUtils";
+import { supabase } from '@/app/lib/supabase';
+
 export const options = {
     href: null,
     title:''
@@ -14,8 +17,39 @@ export const options = {
 const PlaylistScreen = () => {
     const { id } = useLocalSearchParams();
 
-    const [selected, setSelected] = useState('playlists');
+    const [playlist, setPlaylist] = useState<any[]>([]);
+	const [songs, setSongs] = useState<any[]>([]);
 	const router = useRouter();
+
+	useEffect(() => {
+        const fetchPlaylist = async () => {
+            try {
+                const { data: playlistData, error: playlistError } = await supabase
+					.from('playlists')
+					.select('*')
+					.eq('id', id)
+					.single();
+					
+				setPlaylist(playlistData);
+
+            } catch (error) {
+                console.error('Error fetching playlists:', error);
+            }
+        };
+
+		const fetchSongs = async () => {
+			try {
+                const songsData = await getPlaylistSongs(id); // Await the promise
+                setSongs(songsData); // Set state with the resolved data
+
+            } catch (error) {
+                console.error('Error fetching playlists:', error);
+            }
+		};
+
+        fetchPlaylist();
+		fetchSongs();
+    }, [id]);
 
 	return (
 		<SafeAreaView style={styles.container}>
