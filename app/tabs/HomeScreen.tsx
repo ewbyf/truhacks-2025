@@ -78,7 +78,11 @@ export default function HomeScreen() {
 							contentContainerStyle={{ gap: 20, paddingRight: 40 }}
 						>
 							{playlists.map((playlist, index) => (
-								<TouchableOpacity key={index} style={{ width: 100, height: 100, borderRadius: 15 }}>
+								<TouchableOpacity key={index} style={{ width: 100, height: 100, borderRadius: 15 }}
+									onPress={() => {
+										router.push('/tabs/library/PlaylistCreateScreen' as const);
+									}}
+								>
 									<Image source={{ uri: playlist.cover_art }} style={{ height: '100%', width: '100%', borderRadius: 15 }} />
 								</TouchableOpacity>
 							))}
