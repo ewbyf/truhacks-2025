@@ -1,17 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import SongComponent from '@/app/components/SongComponent';
-
 import { getPlaylistSongs } from '@/app/lib/supabaseUtils';
 import { supabase } from '@/app/lib/supabase';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { PlaylistType } from '@/app/interfaces/PlaylistType';
-import { Song } from '@/app/interfaces/Song';
 import { UserContext } from '@/app/contexts/UserContext';
-import Icon from 'react-native-vector-icons/Ionicons';
-import SongComponent from '@/app/components/SongComponent';
 import Header from '@/app/components/Header';
 
 export const options = {
