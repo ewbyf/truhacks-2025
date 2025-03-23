@@ -41,7 +41,7 @@ const LibraryScreen = () => {
 				<View style={styles.column}>
 					{selected == 'playlists' && (
 						<>
-							<TouchableOpacity style={styles.createContainer}>
+							<TouchableOpacity style={styles.createContainer} >
 								<View style={styles.createIcon}>
 									<Icon name="add" size={32} color="white"></Icon>
 								</View>
