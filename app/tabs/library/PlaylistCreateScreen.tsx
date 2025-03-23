@@ -106,13 +106,7 @@ const PlaylistCreateScreen = () => {
 					<Icon name="arrow-back" size={30} color="white" />
 				</TouchableOpacity>
 				<TouchableOpacity onPress={pickImage}>
-				<TouchableOpacity onPress={pickImage}>
 					<Text style={styles.playlistTitle}>Add picture?</Text>
-					<View style={{ justifyContent: 'center', alignItems: 'center' }}>
-						<Image
-						source={{ uri: imageUri ?? 'https://picsum.photos/213' }}
-						style={{ height: 256, width: 256 }}
-						/>
 					<View style={{ justifyContent: 'center', alignItems: 'center' }}>
 						<Image
 						source={{ uri: imageUri ?? 'https://picsum.photos/213' }}
