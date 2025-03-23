@@ -1,13 +1,15 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { View, Text, StyleSheet, Button, SafeAreaView, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { useRouter } from 'expo-router';
+import { View, Text, StyleSheet, Button, SafeAreaView, ScrollView, TouchableOpacity, TextInput, Image } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { BottomSheetModal, BottomSheetView, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import Icon from 'react-native-vector-icons/Ionicons';
-import RecentSong from '../components/RecentSong';
+import RecentSong from '../../components/RecentSong';
   
-const PlaylistScreen = () => {
+const PlaylistCreateScreen = () => {
     const [selected, setSelected] = useState('playlists');
-
+	const [playlistName, setplaylistName] = useState('');
+	const router = useRouter();
 
 	return (
 		<SafeAreaView style={styles.container}>
@@ -15,20 +17,17 @@ const PlaylistScreen = () => {
 				<View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
 					<Text style={styles.title}>LOGO</Text>
 				</View>
-				<TouchableOpacity onPress={() => console.log('Icon tapped')}>
+				<TouchableOpacity onPress={() => router.back()}>
 					<Icon name="arrow-back" size={30} color="white" />
 				</TouchableOpacity>
-				<View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-					<Image  source={{ uri: 'https://picsum.photos/213' }} style={{ height: 256, width: 256 }} />
-				</View>
-				<Text style={styles.playlistTitle}>Playlist #1</Text>
-				<Text style={styles.playlistTitle}>1 hours 45 min</Text>
-				<View style={styles.recentSongs}>
-					<RecentSong/>
-					<RecentSong/>
-					<RecentSong/>
-					<RecentSong/>
-				</View>
+				<TouchableOpacity>
+					<Text style={styles.playlistTitle}>Add picture?</Text>
+					<View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+						<Image  source={{ uri: 'https://picsum.photos/213' }} style={{ height: 256, width: 256 }} />
+					</View>
+				</TouchableOpacity>
+				<TextInput style={styles.input} value={playlistName} onChangeText={setplaylistName} placeholder="Enter PlayList Name" placeholderTextColor="#999" />
+				
 			</ScrollView>
 		</SafeAreaView>
 	);
@@ -72,6 +71,17 @@ const styles = StyleSheet.create({
 		fontSize: 17,
 		fontWeight: 'medium',
 	},
+	input: {
+		width: '100%',
+		height: 53,
+		paddingHorizontal: 12,
+		alignItems: 'center',
+		flexShrink: 0,
+		borderRadius: 8,
+		borderWidth: 2,
+		borderColor: '#515054',
+		color: '#FFF',
+	},
     selectionButton: {
         backgroundColor: '#732DFC',
         padding: 6,
@@ -86,4 +96,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default PlaylistScreen;
+export default PlaylistCreateScreen;

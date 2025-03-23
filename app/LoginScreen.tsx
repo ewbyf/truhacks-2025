@@ -30,7 +30,7 @@ export default function LoginScreen() {
 				await AsyncStorage.setItem('token', resp.data.user!.id);
 				console.log(resp.data.user!.id);
 				console.log('logged in');
-                router.navigate('./tabs/HomeScreen');
+                router.navigate('./tabs/HomeScreen'); //WHEN APPO RELOADS, THIS IS WHAT GETS US NAVIGATED
 			})
 			.catch((err) => {
 				setErrorMessage('Invalid email or password.');
