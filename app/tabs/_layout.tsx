@@ -59,6 +59,13 @@ const Navbar = ({ children }: { children: JSX.Element }) => {
 							title: '',
 						}}
 					/>
+					<Tabs.Screen
+						name="Playlist"
+						options={{
+							href:null,
+							title: '',
+						}}
+					/>
 				</Tabs>
 				<BottomPlayer />
 			</BottomSheetModalProvider>

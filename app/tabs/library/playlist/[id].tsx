@@ -1,12 +1,19 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { View, Text, StyleSheet, Button, SafeAreaView, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { BottomSheetModal, BottomSheetView, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import Icon from 'react-native-vector-icons/Ionicons';
-import RecentSong from '../../components/RecentSong';
+import RecentSong from '../../../components/RecentSong';
   
+export const options = {
+    href: null,
+    title:''
+}
+
 const PlaylistScreen = () => {
+    const { id } = useLocalSearchParams();
+
     const [selected, setSelected] = useState('playlists');
 	const router = useRouter();
 
