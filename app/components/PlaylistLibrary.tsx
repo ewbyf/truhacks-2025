@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, Button, SafeAreaView, ScrollView, TouchableOpac
 import { useRouter } from 'expo-router';
 
 type PlaylistLibraryProps = {
-    id: string;
+    id: number;
     name: string;
     image: string;
 };
@@ -12,7 +12,7 @@ const PlaylistLibrary = ({ id, name, image }: PlaylistLibraryProps) => {
     return (
         <TouchableOpacity style={styles.createContainer}
             onPress={() => {
-                router.push('/tabs/library/PlaylistScreen' as const);
+                router.push(`/tabs/library/playlist/${id}`);
             }}
         >
             <Image source={{ uri: image }} style={{ height: 75, width: 75 }} />
@@ -20,6 +20,8 @@ const PlaylistLibrary = ({ id, name, image }: PlaylistLibraryProps) => {
         </TouchableOpacity>
     );
 }
+
+export default PlaylistLibrary;
 
 const styles = StyleSheet.create({
     createContainer: {

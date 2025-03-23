@@ -6,6 +6,10 @@ import { BottomSheetModal, BottomSheetView, BottomSheetModalProvider } from '@go
 import Icon from 'react-native-vector-icons/Ionicons';
 import LogoSmall from '@/app/components/svgs/LogoSmall';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import PlaylistLibrary from '@/app/components/PlaylistLibrary';
+
+import { getPlaylists } from "@/app/lib/supabaseUtils";
+
 
 const LibraryScreen = () => {
     const [selected, setSelected] = useState('playlists');
@@ -40,14 +44,7 @@ const LibraryScreen = () => {
 						</View>
 						<Text style={styles.playlistTitle}>Create playlist</Text>
 					</TouchableOpacity>
-					<TouchableOpacity style={styles.createContainer}
-						onPress={() => {
-							router.push(`/tabs/library/playlist/${1}`)
-						}}
-					>
-						<Image source={{ uri: 'https://picsum.photos/213' }} style={{ height: 75, width: 75 }} />
-						<Text style={styles.playlistTitle}>Playlist #1</Text>
-					</TouchableOpacity>
+					<PlaylistLibrary id={1} name={"test"} image={'https://picsum.photos/213'}/>
 				</View>
 			</KeyboardAwareScrollView>
 		</SafeAreaView>
