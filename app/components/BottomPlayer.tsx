@@ -32,17 +32,20 @@ const BottomPlayer = () => {
         if (currentSong.name == '') {
             return;
         }
+        if (sound != null) {
+            await sound.unloadAsync()
+        }
 		await Audio.setAudioModeAsync({
 			playsInSilentModeIOS: true,
 			staysActiveInBackground: true,
 		});
 
-		const { sound } = await Audio.Sound.createAsync({ uri: currentSong.song_file }, { shouldPlay: true });
-
-		setSound(sound);
+		const { sound: newSound } = await Audio.Sound.createAsync({ uri: currentSong.song_file }, { shouldPlay: true });
+        setIsPlaying(true)
+		setSound(newSound);
 		setIsLoaded(true);
 
-		const status = await sound.getStatusAsync();
+		const status = await newSound.getStatusAsync();
 		if (status.isLoaded && status.durationMillis !== undefined) {
 			setDuration(status.durationMillis);
 		}
@@ -78,7 +81,7 @@ const BottomPlayer = () => {
 		return () => clearInterval(interval);
 	}, [sound]);
 
-	useEffect(() => {
+	useEffect(() => {  
 		loadSound();
 
 		return () => {
