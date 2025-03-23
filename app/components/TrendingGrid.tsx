@@ -3,34 +3,34 @@ import { View, Text, Image, StyleSheet, Dimensions } from 'react-native';
 import MaskedView from '@react-native-masked-view/masked-view';
 import { LinearGradient } from 'expo-linear-gradient';
 import Icon from 'react-native-vector-icons/Ionicons';
-import EntypoIcon from 'react-native-vector-icons/Entypo';
+import PurpleCircleBG from './svgs/PurpleCircleBG';
 
 const TrendingGrid = () => {
 	return (
 		<View style={styles.container}>
 			<View style={styles.row}>
 				<View style={{ alignItems: 'center', gap: 5 }}>
-					<Image source={{ uri: 'https://picsum.photos/202' }} style={styles.image} />
-					<Text style={styles.songName}>Song Name</Text>
+					<PurpleCircleBG style={styles.image} />
+					<Text style={styles.songName}>Love of Code</Text>
 				</View>
 				<View style={{ justifyContent: 'space-between', gap: 10 }}>
-                <View style={{ gap: 5 }}>
-						<View style={{flexDirection: 'row', alignItems: 'center', gap: 5}}>
+					<View style={{ gap: 5 }}>
+						<View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
 							<Icon name="musical-note" size={11} color="white" />
 							<Text style={styles.label}>GENRE</Text>
 						</View>
 						<View style={styles.tag}>
-                            {/* <EntypoIcon name="modern-mic" color="white" size={16}/> */}
+							{/* <EntypoIcon name="modern-mic" color="white" size={16}/> */}
 							<Text style={{ fontWeight: 'bold', color: 'white', fontSize: 12 }}>Pop</Text>
 						</View>
 					</View>
 					<View style={{ gap: 5 }}>
-						<View style={{flexDirection: 'row', alignItems: 'center', gap: 5}}>
+						<View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
 							<Icon name="rocket-sharp" size={11} color="white" />
 							<Text style={styles.label}>TOPIC</Text>
 						</View>
 						<View style={styles.tag}>
-                            {/* <Icon name="code-slash" color="white" size={16}/> */}
+							{/* <Icon name="code-slash" color="white" size={16}/> */}
 							<Text style={{ fontWeight: 'bold', color: 'white', fontSize: 12 }}>Coding</Text>
 						</View>
 					</View>
@@ -83,14 +83,14 @@ const styles = StyleSheet.create({
 	},
 	tag: {
 		padding: 10,
-        paddingHorizontal: 20,
-        width: '100%',
+		paddingHorizontal: 20,
+		width: '100%',
 		backgroundColor: '#732DFC',
 		borderRadius: 10,
 		alignItems: 'center',
-        // justifyContent: 'flex-start',
-        // flexDirection: 'row',
-        gap: 8,
+		// justifyContent: 'flex-start',
+		// flexDirection: 'row',
+		gap: 8,
 	},
 	gradientText: {
 		fontSize: 48,

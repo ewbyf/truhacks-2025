@@ -13,6 +13,8 @@ import SongComponent from '../components/SongComponent';
 import HomePageBG from '../components/svgs/HomePageBG';
 
 import { getPlaylists, getExplorePlaylists } from '../lib/supabaseUtils';
+import GreenDiamondBG from '../components/svgs/GreenDiamondBG';
+import Icon2 from 'react-native-vector-icons/Ionicons';
 
 export default function HomeScreen() {
 	const [playlists, setPlaylists] = useState<any[]>([]);
@@ -70,13 +72,14 @@ export default function HomeScreen() {
 						<Text style={styles.subtitle}>Recently Played</Text>
 						<TouchableOpacity>
 							<LinearGradient colors={['#101010', '#323232']} style={styles.recentPlaylist} start={{ x: 0, y: -0.2 }} end={{ x: 1, y: 1 }}>
-								<Image source={{ uri: 'https://picsum.photos/105' }} style={{ height: 100, width: 100, borderRadius: 15 }} />
+								<GreenDiamondBG></GreenDiamondBG>
 								<View style={{ alignItems: 'flex-start', justifyContent: 'center', gap: 10 }}>
-									<Text style={{ color: '#D0D0D0', fontWeight: 600, fontSize: 18 }}>GOATED PLAYLIST</Text>
+									<Text style={{ color: '#D0D0D0', fontWeight: 'bold', fontSize: 18 }}>GOATED PLAYLIST</Text>
 									<View style={styles.tag}>
 										<Text style={{ color: 'white', fontSize: 12 }}>Pop</Text>
 									</View>
 								</View>
+                                <Icon2 name={'play'} color="white" size={30} style={{marginLeft: 'auto', marginVertical: 'auto', marginRight: 10}} />
 							</LinearGradient>
 						</TouchableOpacity>
 					</View>

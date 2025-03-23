@@ -293,7 +293,7 @@ const styles = StyleSheet.create({
 		bottom: 0,
 		left: 0,
 		zIndex: 10,
-		backgroundColor: 'red',
+		backgroundColor: '#FA17DB',
 		height: 1.5,
 	},
 	playlistTitle: {

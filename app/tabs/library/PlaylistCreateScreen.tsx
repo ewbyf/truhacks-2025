@@ -13,7 +13,6 @@ import DinoDefaultBG from '@/app/components/svgs/DinoDefaultBG';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 
 const PlaylistCreateScreen = () => {
-	//TODO : change image to default image when we finish designing it
 	const router = useRouter();
 
 	const [playlistName, setplaylistName] = useState('');
@@ -53,6 +52,21 @@ const PlaylistCreateScreen = () => {
 		setSelectedSongs((prev) => (prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id]));
 	};
 
+	const covers = [
+		require('../../../assets/svgs/CirclePurplePlaylistBG.svg'),
+		require('../../../assets/svgs/DiamondGreenPlaylistBG.svg'),
+		require('../../../assets/svgs/SwirlPinkPlaylistBG.svg'),
+		require('../../../assets/svgs/TriangleOrangePlaylistBG.svg'),
+		require('../../../assets/svgs/Purple.svg'),
+	];
+
+	const generateRandomCover = () => {
+		const idx = Math.floor(Math.random() * 5);
+		const fileUri = Image.resolveAssetSource(covers[idx]).uri;
+        console.log(fileUri)
+		return fileUri;
+	};
+
 	const savePlaylist = async () => {
 		if (!playlistName || selectedSongs.length === 0) {
 			alert('Please enter playlist name, choose cover, and select songs.');
@@ -63,6 +77,16 @@ const PlaylistCreateScreen = () => {
 			if (image) {
 				const filename = image.substring(image.lastIndexOf('/') + 1);
 				const base64 = await FileSystem.readAsStringAsync(image, { encoding: 'base64' });
+
+				const playlist = await createNewPlaylist(id, playlistName, base64, filename);
+
+				await Promise.all(selectedSongs.map((songID) => addSongToPlaylist(songID, playlist.id)));
+
+				alert('Playlist created successfully!');
+			} else {
+				const temp = generateRandomCover();
+				const filename = temp.substring(temp.lastIndexOf('/') + 1);
+				const base64 = await FileSystem.readAsStringAsync(temp, { encoding: 'base64' });
 
 				const playlist = await createNewPlaylist(id, playlistName, base64, filename);
 
@@ -87,8 +111,8 @@ const PlaylistCreateScreen = () => {
 						{image ? (
 							<Image source={{ uri: image }} style={{ height: 256, width: 256 }} />
 						) : (
-							<View style={{height: 256, width: 256, backgroundColor: '#252525', justifyContent: 'center', alignItems: 'center'}}>
-								<FeatherIcon name="upload" size={72} color="gray"/>
+							<View style={{ height: 256, width: 256, backgroundColor: '#252525', justifyContent: 'center', alignItems: 'center' }}>
+								<FeatherIcon name="upload" size={72} color="gray" />
 							</View>
 						)}
 					</View>
