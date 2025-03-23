@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useEffect, useRef, useState, useContext } from 'react';
 import { useRouter } from 'expo-router';
-import { View, Text, StyleSheet, Button, SafeAreaView, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, Button, SafeAreaView, ScrollView, TouchableOpacity, Image, RefreshControl } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { BottomSheetModal, BottomSheetView, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -9,12 +9,14 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import PlaylistLibrary from '@/app/components/PlaylistLibrary';
 import SongComponent from '@/app/components/SongComponent';
 
+
 import { getPlaylists } from '@/app/lib/supabaseUtils';
 import { UserContext } from '@/app/contexts/UserContext';
 
 const LibraryScreen = () => {
 	const [playlistsData, setPlaylistsData] = useState<any[]>([]);
     const [selected, setSelected] = useState('playlists');
+	const [refreshing, setRefreshing] = useState(false);
 	const router = useRouter();
 	const { id: userID, songs } = useContext(UserContext);
 
@@ -30,6 +32,18 @@ const LibraryScreen = () => {
 
         fetchPlaylists();
     }, [userID]);
+
+	const handleRefresh = async () => {
+		setRefreshing(true);
+		try {
+		  const freshData = await getPlaylists(userID);
+		  setPlaylistsData(freshData);
+		} catch (error) {
+		  console.error('Refresh error:', error);
+		}
+		setRefreshing(false);
+	  };
+	  
 
 	return (
 		<SafeAreaView style={styles.container}>
@@ -59,35 +73,47 @@ const LibraryScreen = () => {
 				</View>
 
 				{/* Scrollable Playlist/Song Section */}
-				<ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: 80 }}>
-				<View style={styles.column}>
-					{selected === 'playlists' && (
-					<>
-						<TouchableOpacity
-						style={styles.createContainer}
-						onPress={() => router.push('/tabs/library/PlaylistCreateScreen' as const)}
-						>
-						<View style={styles.createIcon}>
-							<Icon name="add" size={32} color="white" />
-						</View>
-						<Text style={styles.playlistTitle}>Create playlist</Text>
-						</TouchableOpacity>
-
-						{playlistsData.map((playlist, index) => (
-						<PlaylistLibrary
-							key={index}
-							id={playlist.id}
-							name={playlist.name}
-							image={playlist.cover_art}
+				<ScrollView
+					style={{ flex: 1 }}
+					contentContainerStyle={{ paddingBottom: 80 }}
+					refreshControl={
+						<RefreshControl
+						refreshing={refreshing}
+						onRefresh={handleRefresh}
+						tintColor="white"
+						colors={['#732DFC']}
 						/>
-						))}
-					</>
-					)}
+					}
+					>
+					<View style={styles.column}>
+						{selected === 'playlists' && (
+						<>
+							<TouchableOpacity
+							style={styles.createContainer}
+							onPress={() => router.push('/tabs/library/PlaylistCreateScreen' as const)}
+							>
+							<View style={styles.createIcon}>
+								<Icon name="add" size={32} color="white" />
+							</View>
+							<Text style={styles.playlistTitle}>Create playlist</Text>
+							</TouchableOpacity>
+
+							{playlistsData.map((playlist, index) => (
+							<PlaylistLibrary
+								key={index}
+								id={playlist.id}
+								name={playlist.name}
+								image={playlist.cover_art}
+							/>
+							))}
+						</>
+						)}
 
 					{selected === 'songs' &&
 					songs.map((song) => <SongComponent key={song.id} song={song} />)}
 				</View>
 				</ScrollView>
+
 			</View>
 		</SafeAreaView>
 	);
