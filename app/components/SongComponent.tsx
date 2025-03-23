@@ -119,6 +119,7 @@ const SongComponent = ({ song, inPlaylist, songs }: { song: Song; inPlaylist?: s
 
 							{playlists.map((playlist) => (
 								<TouchableOpacity
+									key={playlist.id}
 									style={[
 										{
 											padding: 5,
