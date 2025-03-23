@@ -9,111 +9,93 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import PlaylistLibrary from '@/app/components/PlaylistLibrary';
 import SongComponent from '@/app/components/SongComponent';
 
-
 import { getPlaylists } from '@/app/lib/supabaseUtils';
 import { UserContext } from '@/app/contexts/UserContext';
 
 const LibraryScreen = () => {
 	const [playlistsData, setPlaylistsData] = useState<any[]>([]);
-    const [selected, setSelected] = useState('playlists');
+	const [selected, setSelected] = useState('playlists');
 	const [refreshing, setRefreshing] = useState(false);
 	const router = useRouter();
 	const { id: userID, songs } = useContext(UserContext);
 
 	useEffect(() => {
-        const fetchPlaylists = async () => {
-            try {
-                const data = await getPlaylists(userID); // Await the promise
-                setPlaylistsData(data); // Set state with the resolved data
-            } catch (error) {
-                console.error('Error fetching playlists:', error);
-            }
-        };
+		const fetchPlaylists = async () => {
+			try {
+				const data = await getPlaylists(userID); // Await the promise
+				setPlaylistsData(data); // Set state with the resolved data
+			} catch (error) {
+				console.error('Error fetching playlists:', error);
+			}
+		};
 
-        fetchPlaylists();
-    }, [userID]);
+		fetchPlaylists();
+	}, [userID]);
 
 	const handleRefresh = async () => {
 		setRefreshing(true);
 		try {
-		  const freshData = await getPlaylists(userID);
-		  setPlaylistsData(freshData);
+			const freshData = await getPlaylists(userID);
+			setPlaylistsData(freshData);
 		} catch (error) {
-		  console.error('Refresh error:', error);
+			console.error('Refresh error:', error);
 		}
 		setRefreshing(false);
-	  };
-	  
+	};
 
 	return (
 		<SafeAreaView style={styles.container}>
 			<View style={{ flex: 1, paddingHorizontal: 20 }}>
 				{/* Header */}
 				<View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-				<LogoSmall />
+					<LogoSmall />
 				</View>
 
 				{/* Title + Toggle */}
 				<View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 15 }}>
-				<Text style={styles.title}>Library</Text>
-				<View style={{ flexDirection: 'row', gap: 10 }}>
-					<TouchableOpacity
-					style={[styles.selectionButton, { backgroundColor: selected === 'playlists' ? '#732DFC' : '#323232' }]}
-					onPress={() => setSelected('playlists')}
-					>
-					<Text style={{ color: selected === 'playlists' ? 'white' : 'lightgray' }}>Playlists</Text>
-					</TouchableOpacity>
-					<TouchableOpacity
-					style={[styles.selectionButton, { backgroundColor: selected === 'songs' ? '#732DFC' : '#323232' }]}
-					onPress={() => setSelected('songs')}
-					>
-					<Text style={{ color: selected === 'songs' ? 'white' : 'lightgray' }}>Songs</Text>
-					</TouchableOpacity>
-				</View>
+					<Text style={styles.title}>Library</Text>
+					<View style={{ flexDirection: 'row', gap: 10 }}>
+						<TouchableOpacity
+							style={[styles.selectionButton, { backgroundColor: selected === 'playlists' ? '#732DFC' : '#323232' }]}
+							onPress={() => setSelected('playlists')}
+						>
+							<Text style={{ color: selected === 'playlists' ? 'white' : 'lightgray' }}>Playlists</Text>
+						</TouchableOpacity>
+						<TouchableOpacity
+							style={[styles.selectionButton, { backgroundColor: selected === 'songs' ? '#732DFC' : '#323232' }]}
+							onPress={() => setSelected('songs')}
+						>
+							<Text style={{ color: selected === 'songs' ? 'white' : 'lightgray' }}>Songs</Text>
+						</TouchableOpacity>
+					</View>
 				</View>
 
 				{/* Scrollable Playlist/Song Section */}
 				<ScrollView
 					style={{ flex: 1 }}
 					contentContainerStyle={{ paddingBottom: 80 }}
-					refreshControl={
-						<RefreshControl
-						refreshing={refreshing}
-						onRefresh={handleRefresh}
-						tintColor="white"
-						colors={['#732DFC']}
-						/>
-					}
-					>
+					showsVerticalScrollIndicator={false}
+					refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} tintColor="white" colors={['#732DFC']} />}
+				>
 					<View style={styles.column}>
 						{selected === 'playlists' && (
-						<>
-							<TouchableOpacity
-							style={styles.createContainer}
-							onPress={() => router.push('/tabs/library/PlaylistCreateScreen' as const)}
-							>
-							<View style={styles.createIcon}>
-								<Icon name="add" size={32} color="white" />
-							</View>
-							<Text style={styles.playlistTitle}>Create playlist</Text>
-							</TouchableOpacity>
+							<>
+								<TouchableOpacity style={styles.createContainer} onPress={() => router.push('/tabs/library/PlaylistCreateScreen' as const)}>
+									<View style={styles.createIcon}>
+										<Icon name="add" size={32} color="white" />
+									</View>
+									<Text style={styles.playlistTitle}>Create playlist</Text>
+								</TouchableOpacity>
 
-							{playlistsData.map((playlist, index) => (
-							<PlaylistLibrary
-								key={index}
-								id={playlist.id}
-								name={playlist.name}
-								image={playlist.cover_art}
-							/>
-							))}
-						</>
+								{playlistsData.map((playlist, index) => (
+									<PlaylistLibrary key={index} id={playlist.id} name={playlist.name} image={playlist.cover_art} num_songs={playlist.num_songs} />
+								))}
+							</>
 						)}
 
-					{selected === 'songs' &&
-					songs.map((song) => <SongComponent key={song.id} song={song} />)}
-				</View>
+						{selected === 'songs' && songs.map((song) => <SongComponent key={song.id} song={song} />)}
+					</View>
 				</ScrollView>
-
 			</View>
 		</SafeAreaView>
 	);
@@ -153,9 +135,9 @@ const styles = StyleSheet.create({
 		backgroundColor: '#252525',
 	},
 	playlistTitle: {
-		color: 'white',
-		fontSize: 17,
-		fontWeight: 'medium',
+        color: 'white',
+		fontSize: 18,
+		fontWeight: 'bold',
 	},
 	selectionButton: {
 		backgroundColor: '#732DFC',
