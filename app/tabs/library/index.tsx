@@ -17,20 +17,24 @@ const LibraryScreen = () => {
 	const [selected, setSelected] = useState('playlists');
 	const [refreshing, setRefreshing] = useState(false);
 	const router = useRouter();
-	const { id: userID, songs } = useContext(UserContext);
+	const { id: userID, songs, playlists } = useContext(UserContext);
 
 	useEffect(() => {
-		const fetchPlaylists = async () => {
-			try {
-				const data = await getPlaylists(userID); // Await the promise
-				setPlaylistsData(data); // Set state with the resolved data
-			} catch (error) {
-				console.error('Error fetching playlists:', error);
-			}
-		};
+		setPlaylistsData(playlists)
+	}, [playlists])
 
-		fetchPlaylists();
-	}, [userID]);
+	// useEffect(() => {
+    //     const fetchPlaylists = async () => {
+    //         try {
+    //             const data = await getPlaylists(userID); // Await the promise
+    //             setPlaylistsData(data); // Set state with the resolved data
+    //         } catch (error) {
+    //             console.error('Error fetching playlists:', error);
+    //         }
+    //     };
+
+    //     fetchPlaylists();
+    // }, [userID]);
 
 	const handleRefresh = async () => {
 		setRefreshing(true);
