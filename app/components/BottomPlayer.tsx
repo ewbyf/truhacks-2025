@@ -123,7 +123,7 @@ const BottomPlayer = () => {
 				<View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
 					<Image style={styles.artwork} source={{ uri: currentSong.cover_art }} />
 					<View style={styles.info}>
-						<Text style={styles.title} numberOfLines={1}>{currentSong.name}a</Text>
+						<Text style={styles.title} numberOfLines={1}>{currentSong.name}</Text>
 						<Text style={styles.artist}>{currentSong.genre}</Text>
 					</View>
 					<View style={styles.controls}>
@@ -299,7 +299,7 @@ const styles = StyleSheet.create({
 		bottom: 0,
 		left: 0,
 		zIndex: 10,
-		backgroundColor: '#FA17DB',
+		backgroundColor: 'rgba(115,45,252,.75)',
 		height: 1.5,
 	},
 	playlistTitle: {

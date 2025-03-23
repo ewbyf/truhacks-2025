@@ -1,6 +1,6 @@
 import { supabase } from './supabase';
 import { v4 as uuidv4 } from 'uuid';
-import { decode } from 'base64-arraybuffer'
+import { decode } from 'base64-arraybuffer';
 
 /**
  * Generates a unique file name based on the original file URI.
@@ -124,8 +124,7 @@ export const createNewSong = async (songName, userId, tag, genre, coverArt = nul
 };
 
 export const createNewPlaylist = async (userId, playlistName, coverArt, coverArtFileName) => {
-
-	const { data: uploadData, error: uploadError } = await supabase.storage.from('playlist-cover-art').upload(coverArtFileName,         decode(coverArt), {
+	const { data: uploadData, error: uploadError } = await supabase.storage.from('playlist-cover-art').upload(coverArtFileName, decode(coverArt), {
 		contentType: 'image/jpeg',
 	});
 
@@ -143,7 +142,7 @@ export const createNewPlaylist = async (userId, playlistName, coverArt, coverArt
 		.from('playlists')
 		.insert([
 			{
-                user_id: userId,
+				user_id: userId,
 				name: playlistName,
 				cover_art: imageURL.publicUrl,
 			},
@@ -190,17 +189,14 @@ export const getPlaylists = async (userID) => {
 
 // gets all playlists that dont belong to the current user (for exploring new playlists)
 export const getExplorePlaylists = async (userID) => {
-	const { data, error } = await supabase
-		.from('playlists')
-		.select('*')
-		.neq('user_id', userID);
+	const { data, error } = await supabase.from('playlists').select('*').neq('user_id', userID);
 
-		if (error) {
-			throw error;
-		}
+	if (error) {
+		throw error;
+	}
 
-		return data;
-}
+	return data;
+};
 
 // gets all users songs in order of datecreated
 export const getSongs = async (userID) => {
@@ -221,8 +217,9 @@ export const getPlaylistSongs = async (playlistID) => {
 			`
             song_id,
             songs (*)
-        `)
-        .eq('playlist_id', playlistID);
+        `
+		)
+		.eq('playlist_id', playlistID);
 
 	if (error) {
 		throw error;
@@ -234,23 +231,27 @@ export const getPlaylistSongs = async (playlistID) => {
 };
 
 export const addSongsToPlaylist = async (song_ids, playlistID) => {
-
 	const rowsToInsert = song_ids.map((songId) => ({
 		song_id: songId,
 		playlist_id: playlistID,
 	}));
-	
-	const { data, error } = await supabase
-        .from('playlist_songs')
-        .insert(rowsToInsert);
 
-    if (error) {
-        console.error('Error inserting rows:', error);
+	const { data, error } = await supabase.from('playlist_songs').insert(rowsToInsert);
+
+	if (error) {
+		console.error('Error inserting rows:', error);
 		throw error;
-    }
+	}
+
+	const { data: dat2, error: err2 } = await supabase.from('playlists').select('num_songs').eq('id', playlistID).single();
+
+	const { data: dat, error: err } = await supabase
+		.from('playlists')
+		.update({ num_songs: song_ids.length + dat2.num_songs })
+		.eq('id', playlistID);
 
 	return data;
-}
+};
 
 export const setPlaylistSongCount = async (id, number) => {
 	const { data, error } = await supabase
@@ -263,5 +264,4 @@ export const setPlaylistSongCount = async (id, number) => {
 	}
 
 	return data;
-
-}
+};
