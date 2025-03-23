@@ -1,7 +1,5 @@
-import BottomPlayer from '../components/BottomPlayer';
 import { supabase } from '@/app/lib/supabase';
 import { useRouter } from 'expo-router';
-
 import { View, Text, TouchableOpacity, Image, StyleSheet, Dimensions, SafeAreaView, ScrollView } from 'react-native';
 import TrendingGrid from '../components/TrendingGrid';
 import LogoSmall from '../components/svgs/LogoSmall';
@@ -12,20 +10,35 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import SongComponent from '../components/SongComponent';
+import HomePageBG from '../components/svgs/HomePageBG';
+
+import { getPlaylists } from '../lib/supabaseUtils';
 
 export default function HomeScreen() {
+	const [playlists, setPlaylists] = useState<any[]>([]);
 	const width = Dimensions.get('window').width;
 	const router = useRouter();
 
 	const { id, songs } = useContext(UserContext);
 
 	useEffect(() => {
-		console.log(id);
-		// get users playlist to display at the top
-	}, []);
+        const fetchPlaylists = async () => {
+            try {
+                const data = await getPlaylists(id); // Await the promise
+                setPlaylists(data); // Set state with the resolved data
+            } catch (error) {
+                console.error('Error fetching playlists:', error);
+            }
+        };
+
+        fetchPlaylists();
+    }, []);
 
 	return (
 		<SafeAreaView style={styles.container}>
+			<View style={[StyleSheet.absoluteFill]}>
+				<HomePageBG width="100%" height="100%" />
+			</View>
 			<KeyboardAwareScrollView showsVerticalScrollIndicator={false} style={{ paddingHorizontal: 20 }} contentContainerStyle={{ paddingBottom: 80 }}>
 				<View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
 					<LogoSmall />
@@ -64,18 +77,15 @@ export default function HomeScreen() {
 							style={{ display: 'flex', width: width }}
 							contentContainerStyle={{ gap: 20, paddingRight: 40 }}
 						>
-							<TouchableOpacity style={{ width: 100, height: 100, borderRadius: 15 }}>
-								<Image source={{ uri: 'https://picsum.photos/105' }} style={{ height: '100%', width: '100%', borderRadius: 15 }} />
-							</TouchableOpacity>
-							<TouchableOpacity style={{ width: 100, height: 100, borderRadius: 15 }}>
-								<Image source={{ uri: 'https://picsum.photos/101' }} style={{ height: '100%', width: '100%', borderRadius: 15 }} />
-							</TouchableOpacity>
-							<TouchableOpacity style={{ width: 100, height: 100, borderRadius: 15 }}>
-								<Image source={{ uri: 'https://picsum.photos/102' }} style={{ height: '100%', width: '100%', borderRadius: 15 }} />
-							</TouchableOpacity>
-							<TouchableOpacity style={{ width: 100, height: 100, borderRadius: 15 }}>
-								<Image source={{ uri: 'https://picsum.photos/103' }} style={{ height: '100%', width: '100%', borderRadius: 15 }} />
-							</TouchableOpacity>
+							{playlists.map((playlist, index) => (
+								<TouchableOpacity key={index} style={{ width: 100, height: 100, borderRadius: 15 }}
+									onPress={() => {
+										router.push(`/tabs/library/playlist/${playlist.id}`);
+									}}
+								>
+									<Image source={{ uri: playlist.cover_art }} style={{ height: '100%', width: '100%', borderRadius: 15 }} />
+								</TouchableOpacity>
+							))}
 						</ScrollView>
 					</View>
 					<View>
@@ -121,7 +131,8 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: '#1E1E1E',
+		backgroundColor: '#1E1E1E', // optional fallback
+		position: 'relative',
 	},
 	subtitle: {
 		fontSize: 28,

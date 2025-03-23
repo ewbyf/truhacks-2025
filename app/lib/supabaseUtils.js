@@ -8,7 +8,6 @@ const generateFileName = (fileUri) => {
 };
 
 // Tag set to its URL
-
 const tag_URL = {
 	algebra:
 		'https://vwqokxwilhvpiybjgsbt.supabase.co/storage/v1/object/sign/song-cover-art/Algebra.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJzb25nLWNvdmVyLWFydC9BbGdlYnJhLnBuZyIsImlhdCI6MTc0MjY4MDIwMSwiZXhwIjozMTU1MzExMTQ0MjAxfQ.3gtE7knLAwRKEAyMDczf4zHxN7qYiTLoEoW1pji8r4U',
@@ -158,6 +157,20 @@ export const getPlaylists = async (userID) => {
 	return data;
 };
 
+// gets all playlists that dont belong to the current user (for exploring new playlists)
+export const getExplorePlaylists = async (userID) => {
+	const { data, error } = await supabase
+		.from('playlists')
+		.select('*')
+		.neq('user_id', userID);
+
+		if (error) {
+			throw error;
+		}
+
+		return data;
+}
+
 // gets all users songs in order of datecreated
 export const getSongs = async (userID) => {
 	const { data, error } = await supabase.from('songs').select('*').eq('user_id', userID).order('created_at', { ascending: false });
@@ -184,16 +197,6 @@ export const getPlaylistSongs = async (playlistID) => {
 		throw error;
 	}
 
-	// `data` is an array of objects like:
-	// [
-	//   {
-	//     song_id: 1,
-	//     songs: { id: 1, name: "Song Name", ... }
-	//   },
-	//   ...
-	// ]
-	//
-	// Extract just the `songs` object from each row:
 	const songs = data.map((row) => row.songs);
 
 	return songs;
