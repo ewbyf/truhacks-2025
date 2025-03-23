@@ -72,13 +72,18 @@ const PlaylistScreen = () => {
 					<Image  source={{ uri: 'https://picsum.photos/213' }} style={{ height: 256, width: 256 }} />
 				</View>
 				<Text style={styles.playlistTitle}>Playlist #1</Text>
-				<Text style={styles.playlistTitle}>1 hours 45 min</Text>
-				<View style={styles.recentSongs}>
-					{songs.map((song, index) => (
-						<Song key={index} song={song}/>
-					))}
-					
-				</View>
+				{loading ? (
+					<>
+						<Text style={styles.playlistTitle}>1 hours 45 min</Text>
+						<View style={styles.recentSongs}>
+							{songs.map((song, index) => (
+								<Song key={index} song={song}/>
+							))}
+						</View>
+					</>
+				) : (
+					<></>
+				)}
 			</ScrollView>
 		</SafeAreaView>
 	);
