@@ -220,3 +220,17 @@ export const addSongsToPlaylist = async (song_ids, playlistID) => {
 
 	return data;
 }
+
+export const setPlaylistSongCount = async (id, number) => {
+	const { data, error } = await supabase
+		.from('playlists')
+		.update({ num_songs: number }) // update this to your column name
+		.eq('id', id); // filter by ID
+
+	if (error) {
+		throw error;
+	}
+
+	return data;
+
+}

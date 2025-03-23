@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useRouter } from 'expo-router';
 import { View, Text, StyleSheet, Button, SafeAreaView, ScrollView, TouchableOpacity, TextInput, Image } from 'react-native';
-import { getSongs, createNewPlaylist, addSongToPlaylist } from '@/app/lib/supabaseUtils';
+import { getSongs, createNewPlaylist, addSongToPlaylist, setPlaylistSongCount } from '@/app/lib/supabaseUtils';
 import { UserContext } from '@/app/contexts/UserContext';
 import type { Song } from '@/app/interfaces/Song';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -81,6 +81,8 @@ const PlaylistCreateScreen = () => {
 				const playlist = await createNewPlaylist(id, playlistName, base64, filename);
 
 				await Promise.all(selectedSongs.map((songID) => addSongToPlaylist(songID, playlist.id)));
+
+				await setPlaylistSongCount(id, selectedSongs.length);
 
 				alert('Playlist created successfully!');
 			} else {
