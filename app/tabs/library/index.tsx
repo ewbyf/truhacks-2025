@@ -24,7 +24,6 @@ const LibraryScreen = () => {
             try {
                 const data = await getPlaylists(userID); // Await the promise
                 setPlaylistsData(data); // Set state with the resolved data
-				console.log(data)
             } catch (error) {
                 console.error('Error fetching playlists:', error);
             }

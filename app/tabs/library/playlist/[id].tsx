@@ -5,6 +5,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { BottomSheetModal, BottomSheetView, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import Icon from 'react-native-vector-icons/Ionicons';
 import RecentSong from '../../../components/RecentSong';
+import Song from '@/app/components/SongComponent'
   
 import { getPlaylistSongs } from "@/app/lib/supabaseUtils";
 import { supabase } from '@/app/lib/supabase';
@@ -19,11 +20,13 @@ const PlaylistScreen = () => {
 
     const [playlist, setPlaylist] = useState<any[]>([]);
 	const [songs, setSongs] = useState<any[]>([]);
+	const [loading, setLoading] = useState(true);
 	const router = useRouter();
 
 	useEffect(() => {
         const fetchPlaylist = async () => {
             try {
+				console.log("HELLLOO");
                 const { data: playlistData, error: playlistError } = await supabase
 					.from('playlists')
 					.select('*')
@@ -38,10 +41,13 @@ const PlaylistScreen = () => {
         };
 
 		const fetchSongs = async () => {
+			console.log("HELLLOO");
 			try {
                 const songsData = await getPlaylistSongs(id); // Await the promise
                 setSongs(songsData); // Set state with the resolved data
-
+				console.log(songs);
+				console.log("AHHHHHHH");
+				setLoading(false)
             } catch (error) {
                 console.error('Error fetching playlists:', error);
             }
@@ -49,7 +55,9 @@ const PlaylistScreen = () => {
 
         fetchPlaylist();
 		fetchSongs();
-    }, [id]);
+    }, []);
+
+	if (loading) return null;
 
 	return (
 		<SafeAreaView style={styles.container}>
@@ -66,10 +74,10 @@ const PlaylistScreen = () => {
 				<Text style={styles.playlistTitle}>Playlist #1</Text>
 				<Text style={styles.playlistTitle}>1 hours 45 min</Text>
 				<View style={styles.recentSongs}>
-					<RecentSong/>
-					<RecentSong/>
-					<RecentSong/>
-					<RecentSong/>
+					{songs.map((song, index) => (
+						<Song key={index} song={song}/>
+					))}
+					
 				</View>
 			</ScrollView>
 		</SafeAreaView>
