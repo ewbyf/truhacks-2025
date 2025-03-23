@@ -12,6 +12,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import SongComponent from '../components/SongComponent';
 import HomePageBG from '../components/svgs/HomePageBG';
 
+
 export default function HomeScreen() {
 	const width = Dimensions.get('window').width;
 	const router = useRouter();
