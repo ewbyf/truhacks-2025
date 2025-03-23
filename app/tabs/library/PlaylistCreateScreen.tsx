@@ -82,7 +82,7 @@ const PlaylistCreateScreen = () => {
 
 				await addSongsToPlaylist(selectedSongs, playlist.id);
 				setPlaylists([...playlists, playlist]);
-				await setPlaylistSongCount(id, selectedSongs.length);
+				await setPlaylistSongCount(playlist.id, selectedSongs.length);
 
 				Toast.show({
 					type: 'success',
@@ -97,7 +97,7 @@ const PlaylistCreateScreen = () => {
 				const playlist = await createNewPlaylist(id, playlistName, base64, filename);
 
 				await addSongsToPlaylist(selectedSongs, playlist.id);
-				await setPlaylistSongCount(id, selectedSongs.length);
+				await setPlaylistSongCount(playlist.id, selectedSongs.length);
 				setPlaylists([...playlists, playlist]);
 				Toast.show({
 					type: 'success',
@@ -106,7 +106,7 @@ const PlaylistCreateScreen = () => {
 				});
 			}
 
-			router.push('/tabs/library');
+			router.navigate('/tabs/library');
 		} catch (err) {
 			console.error(err);
 			alert('Something went wrong while saving the playlist.');
