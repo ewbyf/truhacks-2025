@@ -173,7 +173,7 @@ export const getExplorePlaylists = async (userID) => {
 
 // gets all users songs in order of datecreated
 export const getSongs = async (userID) => {
-	const { data, error } = await supabase.from('songs').select('*').eq('user_id', userID).order('created_at', { ascending: true });
+	const { data, error } = await supabase.from('songs').select('*').eq('user_id', userID).order('created_at', { ascending: false });
 
 	if (error) {
 		throw error;
