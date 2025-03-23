@@ -33,50 +33,62 @@ const LibraryScreen = () => {
 
 	return (
 		<SafeAreaView style={styles.container}>
-			<KeyboardAwareScrollView showsVerticalScrollIndicator={false} style={{ paddingHorizontal: 20 }} contentContainerStyle={{ paddingBottom: 80 }}>
-				<View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-					<LogoSmall />
+			<View style={{ flex: 1, paddingHorizontal: 20 }}>
+				{/* Header */}
+				<View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+				<LogoSmall />
 				</View>
-				<View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 15 }}>
-					{/* <Text style={styles.subtitle}>{selected == "playlists" ? 'Playlists' : 'Songs'}</Text> */}
-					<Text style={styles.title}>Library</Text>
-					<View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-						<TouchableOpacity
-							style={[styles.selectionButton, { backgroundColor: selected == 'playlists' ? '#732DFC' : '#323232' }]}
-							onPress={() => setSelected('playlists')}
-						>
-							<Text style={{ color: selected == 'playlists' ? 'white' : 'lightgray' }}>Playlists</Text>
-						</TouchableOpacity>
-						<TouchableOpacity
-							style={[styles.selectionButton, { backgroundColor: selected == 'songs' ? '#732DFC' : '#323232' }]}
-							onPress={() => setSelected('songs')}
-						>
-							<Text style={{ color: selected == 'songs' ? 'white' : 'lightgray' }}>Songs</Text>
-						</TouchableOpacity>
-					</View>
+
+				{/* Title + Toggle */}
+				<View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 15 }}>
+				<Text style={styles.title}>Library</Text>
+				<View style={{ flexDirection: 'row', gap: 10 }}>
+					<TouchableOpacity
+					style={[styles.selectionButton, { backgroundColor: selected === 'playlists' ? '#732DFC' : '#323232' }]}
+					onPress={() => setSelected('playlists')}
+					>
+					<Text style={{ color: selected === 'playlists' ? 'white' : 'lightgray' }}>Playlists</Text>
+					</TouchableOpacity>
+					<TouchableOpacity
+					style={[styles.selectionButton, { backgroundColor: selected === 'songs' ? '#732DFC' : '#323232' }]}
+					onPress={() => setSelected('songs')}
+					>
+					<Text style={{ color: selected === 'songs' ? 'white' : 'lightgray' }}>Songs</Text>
+					</TouchableOpacity>
 				</View>
+				</View>
+
+				{/* Scrollable Playlist/Song Section */}
+				<ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: 80 }}>
 				<View style={styles.column}>
 					{selected === 'playlists' && (
-						<>
-							<TouchableOpacity
-								style={styles.createContainer}
-								onPress={() => {
-									router.push('/tabs/library/PlaylistCreateScreen' as const);
-								}}
-							>
-								<View style={styles.createIcon}>
-									<Icon name="add" size={32} color="white"></Icon>
-								</View>
-								<Text style={styles.playlistTitle}>Create playlist</Text>
-							</TouchableOpacity>
-							{playlistsData.map((playlist, index) => (
-								<PlaylistLibrary key={index} id={playlist.id} name={playlist.name} image={playlist.cover_art}/>
-							))}
-						</>
+					<>
+						<TouchableOpacity
+						style={styles.createContainer}
+						onPress={() => router.push('/tabs/library/PlaylistCreateScreen' as const)}
+						>
+						<View style={styles.createIcon}>
+							<Icon name="add" size={32} color="white" />
+						</View>
+						<Text style={styles.playlistTitle}>Create playlist</Text>
+						</TouchableOpacity>
+
+						{playlistsData.map((playlist, index) => (
+						<PlaylistLibrary
+							key={index}
+							id={playlist.id}
+							name={playlist.name}
+							image={playlist.cover_art}
+						/>
+						))}
+					</>
 					)}
-					{selected == 'songs' && songs.map((song) => <SongComponent key={song.id} song={song}></SongComponent>)}
+
+					{selected === 'songs' &&
+					songs.map((song) => <SongComponent key={song.id} song={song} />)}
 				</View>
-			</KeyboardAwareScrollView>
+				</ScrollView>
+			</View>
 		</SafeAreaView>
 	);
 };
