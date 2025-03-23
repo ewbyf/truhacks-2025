@@ -13,7 +13,6 @@ const BottomPlayer = () => {
 	const [isLoaded, setIsLoaded] = useState(false);
 	const [songPosition, setSongPosition] = useState(0);
 	const [duration, setDuration] = useState(0);
-	const [hasInteracted, setHasInteracted] = useState(false);
 
 	const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
@@ -24,7 +23,7 @@ const BottomPlayer = () => {
 		setTimeout(() => {
 			bottomSheetModalRef.current?.snapToPosition(1000);
 		}, 150);
-	}, [hasInteracted]);
+	}, []);
 
 	const loadSound = async () => {
 		if (currentSong.name == '') {
@@ -74,7 +73,14 @@ const BottomPlayer = () => {
 		}
 	};
 
-	const rewindSong = () => {};
+	const rewindSong = () => {
+        if (queue.length) {
+			setPosition(((position - 1) + queue.length) % queue.length);
+			setCurrentSong(queue[((position - 1) + queue.length) % queue.length]);
+			setIsPlaying(true);
+			setPause(false);
+		}
+    };
 
 	useEffect(() => {
 		if (pause) {
@@ -117,7 +123,7 @@ const BottomPlayer = () => {
 				<View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
 					<Image style={styles.artwork} source={{ uri: currentSong.cover_art }} />
 					<View style={styles.info}>
-						<Text style={styles.title}>{currentSong.name}</Text>
+						<Text style={styles.title} numberOfLines={1}>{currentSong.name}a</Text>
 						<Text style={styles.artist}>{currentSong.genre}</Text>
 					</View>
 					<View style={styles.controls}>
@@ -218,7 +224,7 @@ const styles = StyleSheet.create({
 		paddingTop: 80,
 		paddingBottom: 120,
 		paddingHorizontal: 20,
-		backgroundColor: '#333',
+		backgroundColor: '#252525',
 		justifyContent: 'space-between',
 	},
 	container: {
@@ -262,7 +268,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		width: 110,
-        marginRight: 10,
+        marginHorizontal: 8,
 	},
 	controlText: {
 		color: 'white',

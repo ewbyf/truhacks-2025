@@ -10,7 +10,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import SongComponent from '../components/SongComponent';
-import HomePageBG from '../components/svgs/HomePageBG';
 
 import { getPlaylists, getExplorePlaylists } from '../lib/supabaseUtils';
 import GreenDiamondBG from '../components/svgs/GreenDiamondBG';

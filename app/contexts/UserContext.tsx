@@ -2,7 +2,8 @@ import React, { createContext, ReactNode, useEffect, useState } from 'react';
 import { Song } from '../interfaces/Song';
 import { supabase } from '../lib/supabase';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getSongs } from '../lib/supabaseUtils';
+import { getPlaylists, getSongs } from '../lib/supabaseUtils';
+import { PlaylistType } from '../interfaces/PlaylistType';
 
 interface UserContextType {
 	id: string;
@@ -18,6 +19,8 @@ interface UserContextType {
 	setPosition: (position: number) => void;
 	currentPlaylist: string;
 	setCurrentPlaylist: (currentPlaylist: string) => void;
+    playlists: PlaylistType[];
+    setPlaylists: (playlist: PlaylistType[]) => void;
 }
 
 export const UserContext = createContext<UserContextType>({
@@ -43,6 +46,8 @@ export const UserContext = createContext<UserContextType>({
 	setPosition: () => {},
 	currentPlaylist: '',
 	setCurrentPlaylist: () => {},
+    playlists: [],
+    setPlaylists: () => {},
 });
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
@@ -62,6 +67,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 	const [pause, setPause] = useState<boolean>(true);
 	const [position, setPosition] = useState<number>(0);
 	const [currentPlaylist, setCurrentPlaylist] = useState<string>('');
+    const [playlists, setPlaylists] = useState<PlaylistType[]>([]);
 
 	useEffect(() => {
 		const fetchToken = async () => {
@@ -75,6 +81,13 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 					.catch((err) => {
 						console.log(err);
 					});
+                getPlaylists(token)
+                .then((resp) => {
+                    setPlaylists(resp);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
 			}
 		};
 		fetchToken();
@@ -96,6 +109,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 				setPosition,
 				currentPlaylist,
 				setCurrentPlaylist,
+                playlists,
+                setPlaylists
 			}}
 		>
 			{children}

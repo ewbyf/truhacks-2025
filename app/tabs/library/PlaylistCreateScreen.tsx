@@ -9,8 +9,8 @@ import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Header from '@/app/components/Header';
-import DinoDefaultBG from '@/app/components/svgs/DinoDefaultBG';
 import FeatherIcon from 'react-native-vector-icons/Feather';
+import Toast from 'react-native-toast-message';
 
 const PlaylistCreateScreen = () => {
 	const router = useRouter();
@@ -20,7 +20,7 @@ const PlaylistCreateScreen = () => {
 	const [selectedSongs, setSelectedSongs] = useState<number[]>([]);
 	const [image, setImage] = useState<string | null>(null);
 
-	const { id } = useContext(UserContext);
+	const { id, playlists, setPlaylists } = useContext(UserContext);
 
 	const choosePhoto = async () => {
 		let result = await ImagePicker.launchImageLibraryAsync({
@@ -63,7 +63,7 @@ const PlaylistCreateScreen = () => {
 	const generateRandomCover = () => {
 		const idx = Math.floor(Math.random() * 5);
 		const fileUri = Image.resolveAssetSource(covers[idx]).uri;
-        console.log(fileUri)
+		console.log(fileUri);
 		return fileUri;
 	};
 
@@ -81,10 +81,14 @@ const PlaylistCreateScreen = () => {
 				const playlist = await createNewPlaylist(id, playlistName, base64, filename);
 
 				await Promise.all(selectedSongs.map((songID) => addSongToPlaylist(songID, playlist.id)));
-
+				setPlaylists([...playlists, playlist]);
 				await setPlaylistSongCount(id, selectedSongs.length);
 
-				alert('Playlist created successfully!');
+				Toast.show({
+					type: 'success',
+					text1: 'Playlist successfully created',
+					text2: 'Your playlist has been added to your library.',
+				});
 			} else {
 				const temp = generateRandomCover();
 				const filename = temp.substring(temp.lastIndexOf('/') + 1);
@@ -93,8 +97,12 @@ const PlaylistCreateScreen = () => {
 				const playlist = await createNewPlaylist(id, playlistName, base64, filename);
 
 				await Promise.all(selectedSongs.map((songID) => addSongToPlaylist(songID, playlist.id)));
-
-				alert('Playlist created successfully!');
+				setPlaylists([...playlists, playlist]);
+				Toast.show({
+					type: 'success',
+					text1: 'Playlist successfully created',
+					text2: 'Your playlist has been added to your library.',
+				});
 			}
 
 			router.push('/tabs/library');
