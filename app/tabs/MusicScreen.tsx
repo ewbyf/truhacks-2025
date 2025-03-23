@@ -220,7 +220,6 @@ const styles = StyleSheet.create({
 		color: 'white',
 	},
 	input: {
-		// backgroundColor: 'gray',
 		borderRadius: 10,
 		fontSize: 16,
 		padding: 15,
