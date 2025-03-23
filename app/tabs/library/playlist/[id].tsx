@@ -1,18 +1,14 @@
-import React, { useCallback, useMemo, useRef, useState, useEffect, useContext } from 'react';
-import { useLocalSearchParams, useRouter } from 'expo-router';
-import { View, Text, StyleSheet, Button, SafeAreaView, ScrollView, TouchableOpacity, Image } from 'react-native';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { BottomSheetModal, BottomSheetView, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
-import Icon from 'react-native-vector-icons/Ionicons';
-import SongComponent from '@/app/components/SongComponent';
-
+import React, { useState, useEffect, useContext } from 'react';
+import { useLocalSearchParams } from 'expo-router';
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Image } from 'react-native';
 import { getPlaylistSongs } from '@/app/lib/supabaseUtils';
 import { supabase } from '@/app/lib/supabase';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import Header from '@/app/components/Header';
 import { PlaylistType } from '@/app/interfaces/PlaylistType';
-import { Song } from '@/app/interfaces/Song';
 import { UserContext } from '@/app/contexts/UserContext';
+import Icon from 'react-native-vector-icons/Ionicons';
+import SongComponent from '@/app/components/SongComponent';
+import Header from '@/app/components/Header';
 
 export const options = {
 	href: null,
@@ -26,10 +22,11 @@ const PlaylistScreen = () => {
 	const [songs, setSongs] = useState<any[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [isPlaying, setIsPlaying] = useState(false);
-	const router = useRouter();
 
 	const { setCurrentSong, pause, setPause, queue, setQueue, position, setPosition, currentPlaylist, setCurrentPlaylist } = useContext(UserContext);
 
+
+	//fetching playlist
 	useEffect(() => {
 		const fetchPlaylist = async () => {
 			try {
@@ -54,6 +51,7 @@ const PlaylistScreen = () => {
 		fetchSongs();
 	}, []);
 
+	//controls playing and pausing music
 	useEffect(() => {
 		if (pause) {
 			setIsPlaying(false);
@@ -62,6 +60,7 @@ const PlaylistScreen = () => {
 		}
 	}, [pause]);
 
+	//setting queue for songs
 	const playSound = async () => {
 		let tempPosition = position;
 		if (queue != songs) {
@@ -75,6 +74,7 @@ const PlaylistScreen = () => {
 		setIsPlaying(true);
 	};
 
+	//handle pausing
 	const pauseSound = async () => {
 		setIsPlaying(false);
 		setPause(true);
