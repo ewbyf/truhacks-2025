@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'expo-router';
 import { View, Text, StyleSheet, Button, SafeAreaView, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -12,8 +12,13 @@ import { getPlaylists } from "@/app/lib/supabaseUtils";
 
 
 const LibraryScreen = () => {
+	const [playlistsData, setPlaylistsData] = useState(null);
     const [selected, setSelected] = useState('playlists');
 	const router = useRouter();
+
+	useEffect(() => {
+        setPlaylistsData(getPlaylists())
+    }, []);
 
 	return (
 		<SafeAreaView style={styles.container}>
