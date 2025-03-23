@@ -80,7 +80,7 @@ export default function HomeScreen() {
 							{playlists.map((playlist, index) => (
 								<TouchableOpacity key={index} style={{ width: 100, height: 100, borderRadius: 15 }}
 									onPress={() => {
-										router.push(`/tabs/library/playlist/${id}`);
+										router.push(`/tabs/library/playlist/${playlist.id}`);
 									}}
 								>
 									<Image source={{ uri: playlist.cover_art }} style={{ height: '100%', width: '100%', borderRadius: 15 }} />
