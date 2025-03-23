@@ -9,16 +9,16 @@ import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Header from '@/app/components/Header';
+import DinoDefaultBG from '@/app/components/svgs/DinoDefaultBG';
 
 const PlaylistCreateScreen = () => {
 	//TODO : change image to default image when we finish designing it
-	const DEFAULT_IMAGE = 'https://picsum.photos/213';
 	const router = useRouter();
 
 	const [playlistName, setplaylistName] = useState('');
 	const [availableSongs, setAvailableSongs] = useState<Song[]>([]);
 	const [selectedSongs, setSelectedSongs] = useState<number[]>([]);
-	const [image, setImage] = useState<string | null>(DEFAULT_IMAGE);
+	const [image, setImage] = useState<string | null>(null);
 
 	const { id } = useContext(UserContext);
 
@@ -82,9 +82,13 @@ const PlaylistCreateScreen = () => {
 			<Header title="Create Playlist"></Header>
 			<KeyboardAwareScrollView style={{ paddingHorizontal: 20, paddingTop: 80 }} contentContainerStyle={{ paddingBottom: 80, gap: 20 }}>
 				<TouchableOpacity onPress={choosePhoto}>
-					<View style={{ justifyContent: 'center', alignItems: 'center' }}>
-						<Image source={{ uri: image ?? DEFAULT_IMAGE }} style={{ height: 256, width: 256 }} />
-					</View>
+				<View style={{ justifyContent: 'center', alignItems: 'center' }}>
+					{image ? (
+						<Image source={{ uri: image }} style={{ height: 256, width: 256 }} />
+					) : (
+						<DinoDefaultBG width={256} height={256} />
+					)}
+				</View>
 				</TouchableOpacity>
 				<View style={{ gap: 8 }}>
 					<View style={styles.row}>
