@@ -1,10 +1,14 @@
-import { router, Tabs } from 'expo-router';
-import React, { useContext, useEffect, useState } from 'react';
-import { Alert, SafeAreaView, Text, TouchableOpacity, View, ScrollView } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
-import BottomPlayer from '../components/BottomPlayer';
+import {  Tabs } from 'expo-router';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { BottomSheetModal, BottomSheetModalProvider, BottomSheetView } from '@gorhom/bottom-sheet';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import React from 'react';
+import BottomPlayer from '../components/BottomPlayer';
+import HomeIcon from '../components/svgs/HomeIcon';
+import HomeIconHover from '../components/svgs/HomeIconHover';
+import LibraryIcon from '../components/svgs/LibraryIcon';
+import LibraryIconHover from '../components/svgs/LibraryIconHover';
+import AddSongsIcon from '../components/svgs/AddSongsIcon';
+import AddSongsHoverIcon from '../components/svgs/AddSongsHoverIcon';
 
 const Navbar = ({ children }: { children: JSX.Element }) => {
 
@@ -29,24 +33,30 @@ const Navbar = ({ children }: { children: JSX.Element }) => {
 					<Tabs.Screen
 						name="HomeScreen"
 						options={{
-							tabBarIcon: ({ color, size }) => <Icon name="home" color={color} size={size} />,
-							title: 'Home',
-						}}
+						tabBarIcon: ({ focused }) =>
+						focused ? <HomeIconHover /> : <HomeIcon />,
+						title: 'Home',
+					}}
 					/>
+
 					<Tabs.Screen
 						name="MusicScreen"
 						options={{
-							tabBarIcon: ({ color, size }) => <Icon name="add" color={color} size={size} />,
-							title: 'Create Songs',
-						}}
+						tabBarIcon: ({ focused }) =>
+						focused ? <AddSongsHoverIcon /> : <AddSongsIcon />,
+						title: 'Create Songs',
+					}}
 					/>
+
 					<Tabs.Screen
 						name="library"
 						options={{
-							tabBarIcon: ({ color, size }) => <Icon name="book" color={color} size={size} />,
-							title: 'Library',
-						}}
+						tabBarIcon: ({ focused }) =>
+						focused ? <LibraryIconHover /> : <LibraryIcon />,
+						title: 'Library',
+					}}
 					/>
+
 					<Tabs.Screen
 						name="PlaylistScreen"
 						options={{
