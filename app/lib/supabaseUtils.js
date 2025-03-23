@@ -198,3 +198,22 @@ export const getPlaylistSongs = async (playlistID) => {
 
 	return songs;
 };
+
+export const addSongsToPlaylist = async (song_ids, playlistID) => {
+
+	const rowsToInsert = song_ids.map((songId) => ({
+		song_id: songId,
+		playlist_id: playlistID,
+	}));
+	
+	const { data, error } = await supabase
+        .from('playlist_songs')
+        .insert(rowsToInsert);
+
+    if (error) {
+        console.error('Error inserting rows:', error);
+		throw error;
+    }
+
+	return data;
+}
