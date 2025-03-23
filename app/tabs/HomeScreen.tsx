@@ -1,3 +1,5 @@
+
+
 import BottomPlayer from '../components/BottomPlayer';
 import { supabase } from '@/app/lib/supabase';
 import { useRouter } from 'expo-router';
@@ -7,7 +9,7 @@ import RecentSong from '../components/RecentSong';
 import TrendingGrid from '../components/TrendingGrid';
 import LogoSmall from '../components/svgs/LogoSmall';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { useContext, useEffect } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { UserContext } from '../contexts/UserContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -19,6 +21,8 @@ export default function HomeScreen() {
 
     useEffect(() => {
         console.log(id)
+		// get users playlist to display at the top
+
     }, [])
 
 	return (
