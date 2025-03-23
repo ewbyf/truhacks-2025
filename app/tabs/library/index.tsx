@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
 		display: 'flex',
 		justifyContent: 'center',
 		alignItems: 'center',
-		backgroundColor: '#403E43',
+		backgroundColor: '#323232',
 	},
 	playlistTitle: {
 		color: 'white',
