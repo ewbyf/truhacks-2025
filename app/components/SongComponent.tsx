@@ -126,13 +126,18 @@ const SongComponent = ({ song, inPlaylist, songs }: { song: Song; inPlaylist?: s
 											gap: 8,
 											alignItems: 'center',
 											width: '100%',
-											backgroundColor: selectedPlaylists.includes(playlist.id) ? 'rgba(115, 45, 252, .2)' : 'transparent',
 										},
 									]}
 									onPress={() => handlePlaylistClick(playlist.id)}
 								>
 									<Image source={{ uri: playlist.cover_art }} width={60} height={60}></Image>
-									<Text style={styles.playlistName}>{playlist.name}</Text>
+									<View style={{ gap: 3 }}>
+										<Text style={styles.playlistName}>{playlist.name}</Text>
+										<Text style={styles.numSongs}>{playlist.num_songs} songs</Text>
+									</View>
+									{selectedPlaylists.includes(playlist.id) && (
+										<Icon name="checkmark" size={24} color="white" style={{ marginLeft: 'auto' }} />
+									)}
 								</TouchableOpacity>
 							))}
 						</View>
@@ -198,6 +203,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		gap: 10,
+		padding: 5,
 	},
 	createIcon: {
 		width: 60,
@@ -229,6 +235,11 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 30,
 		margin: 10,
 		borderRadius: 20,
+	},
+	numSongs: {
+		color: 'gray',
+		fontSize: 13,
+		fontWeight: 'medium',
 	},
 });
 

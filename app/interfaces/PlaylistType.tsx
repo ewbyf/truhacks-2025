@@ -4,4 +4,5 @@ export interface PlaylistType {
 	created_at: Date;
 	id: number;
 	user_id: string;
+    num_songs: number;
 }
