@@ -25,9 +25,9 @@ function BlueStarBG(props: any) {
         width={90}
         height={90}
         rx={10}
-        fill="url(#paint0_linear_117_234)"
+        fill="url(#paint0_linear_140_161)"
       />
-      <G filter="url(#filter0_f_117_234)">
+      <G filter="url(#filter0_f_140_161)">
         <Path
           d="M47.5 15.89l6.87 22.307.761 2.47h25.322L61.9 54.887l-1.933 1.482.717 2.327 6.988 22.69-18.043-13.83-2.129-1.631-2.13 1.632-18.042 13.829 6.988-22.69.717-2.327-1.933-1.481-18.553-14.22h25.322l.76-2.47L47.5 15.89z"
           stroke="#6D7FFF"
@@ -42,11 +42,11 @@ function BlueStarBG(props: any) {
       />
       <Defs>
         <LinearGradient
-          id="paint0_linear_117_234"
-          x1={-13.4062}
-          y1={-21.7813}
-          x2={118.781}
-          y2={123.062}
+          id="paint0_linear_140_161"
+          x1={3}
+          y1={4}
+          x2={89.5}
+          y2={94}
           gradientUnits="userSpaceOnUse"
         >
           <Stop stopColor="#233DFF" />
