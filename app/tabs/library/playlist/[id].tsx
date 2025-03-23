@@ -1,11 +1,15 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState, useEffect } from 'react';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { View, Text, StyleSheet, Button, SafeAreaView, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { BottomSheetModal, BottomSheetView, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import Icon from 'react-native-vector-icons/Ionicons';
 import RecentSong from '../../../components/RecentSong';
+import Song from '@/app/components/SongComponent'
   
+import { getPlaylistSongs } from "@/app/lib/supabaseUtils";
+import { supabase } from '@/app/lib/supabase';
+
 export const options = {
     href: null,
     title:''
@@ -14,8 +18,46 @@ export const options = {
 const PlaylistScreen = () => {
     const { id } = useLocalSearchParams();
 
-    const [selected, setSelected] = useState('playlists');
+    const [playlist, setPlaylist] = useState<any[]>([]);
+	const [songs, setSongs] = useState<any[]>([]);
+	const [loading, setLoading] = useState(true);
 	const router = useRouter();
+
+	useEffect(() => {
+        const fetchPlaylist = async () => {
+            try {
+				console.log("HELLLOO");
+                const { data: playlistData, error: playlistError } = await supabase
+					.from('playlists')
+					.select('*')
+					.eq('id', id)
+					.single();
+					
+				setPlaylist(playlistData);
+
+            } catch (error) {
+                console.error('Error fetching playlists:', error);
+            }
+        };
+
+		const fetchSongs = async () => {
+			console.log("HELLLOO");
+			try {
+                const songsData = await getPlaylistSongs(id); // Await the promise
+                setSongs(songsData); // Set state with the resolved data
+				console.log(songs);
+				console.log("AHHHHHHH");
+				setLoading(false)
+            } catch (error) {
+                console.error('Error fetching playlists:', error);
+            }
+		};
+
+        fetchPlaylist();
+		fetchSongs();
+    }, []);
+
+	if (loading) return null;
 
 	return (
 		<SafeAreaView style={styles.container}>
@@ -32,10 +74,10 @@ const PlaylistScreen = () => {
 				<Text style={styles.playlistTitle}>Playlist #1</Text>
 				<Text style={styles.playlistTitle}>1 hours 45 min</Text>
 				<View style={styles.recentSongs}>
-					<RecentSong/>
-					<RecentSong/>
-					<RecentSong/>
-					<RecentSong/>
+					{songs.map((song, index) => (
+						<Song key={index} song={song}/>
+					))}
+					
 				</View>
 			</ScrollView>
 		</SafeAreaView>
