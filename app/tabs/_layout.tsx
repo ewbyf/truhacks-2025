@@ -56,14 +56,6 @@ const Navbar = ({ children }: { children: JSX.Element }) => {
 						title: 'Library',
 					}}
 					/>
-
-					<Tabs.Screen
-						name="library"
-						options={{
-							href: null,
-							title: '',
-						}}
-					/>
 					<Tabs.Screen
 						name="PlaylistCreateScreen"
 						options={{
