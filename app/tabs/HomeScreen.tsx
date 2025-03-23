@@ -1,18 +1,16 @@
-import BottomPlayer from '../components/BottomPlayer';
 import { supabase } from '@/app/lib/supabase';
 import { useRouter } from 'expo-router';
-
 import { View, Text, TouchableOpacity, Image, StyleSheet, Dimensions, SafeAreaView, ScrollView } from 'react-native';
-import RecentSong from '../components/RecentSong';
 import TrendingGrid from '../components/TrendingGrid';
 import LogoSmall from '../components/svgs/LogoSmall';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { useState, useContext, useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { UserContext } from '../contexts/UserContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import SongComponent from '../components/SongComponent';
+import HomePageBG from '../components/svgs/HomePageBG';
 
 export default function HomeScreen() {
 	const width = Dimensions.get('window').width;
@@ -27,6 +25,9 @@ export default function HomeScreen() {
 
 	return (
 		<SafeAreaView style={styles.container}>
+			<View style={[StyleSheet.absoluteFill, { opacity: 0.8 }]}>
+				<HomePageBG width="100%" height="100%" />
+			</View>
 			<KeyboardAwareScrollView showsVerticalScrollIndicator={false} style={{ paddingHorizontal: 20 }} contentContainerStyle={{ paddingBottom: 80 }}>
 				<View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
 					<LogoSmall />
@@ -122,7 +123,8 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: '#1E1E1E',
+		backgroundColor: '#1E1E1E', // optional fallback
+		position: 'relative',
 	},
 	subtitle: {
 		fontSize: 28,
