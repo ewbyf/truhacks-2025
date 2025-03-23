@@ -157,6 +157,20 @@ export const getPlaylists = async (userID) => {
 	return data;
 };
 
+// gets all playlists that dont belong to the current user (for exploring new playlists)
+export const getExplorePlaylists = async (userID) => {
+	const { data, error } = await supabase
+		.from('playlists')
+		.select('*')
+		.neq('user_id', userID);
+
+		if (error) {
+			throw error;
+		}
+
+		return data;
+}
+
 // gets all users songs in order of datecreated
 export const getSongs = async (userID) => {
 	const { data, error } = await supabase.from('songs').select('*').eq('user_id', userID).order('created_at', { ascending: false });

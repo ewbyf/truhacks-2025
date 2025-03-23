@@ -17,7 +17,7 @@ const BottomPlayer = () => {
 
 	const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
-    const { currentSong, setCurrentSong, pause, setPause, queue, setQueue, position, setPosition} = useContext(UserContext);
+	const { currentSong, setCurrentSong, pause, setPause, queue, setQueue, position, setPosition, currentPlaylist } = useContext(UserContext);
 
 	const handlePresentModalPress = useCallback(async () => {
 		bottomSheetModalRef.current?.present();
@@ -27,19 +27,19 @@ const BottomPlayer = () => {
 	}, [hasInteracted]);
 
 	const loadSound = async () => {
-        if (currentSong.name == '') {
-            return;
-        }
-        if (sound != null) {
-            await sound.unloadAsync()
-        }
+		if (currentSong.name == '') {
+			return;
+		}
+		if (sound != null) {
+			await sound.unloadAsync();
+		}
 		await Audio.setAudioModeAsync({
 			playsInSilentModeIOS: true,
 			staysActiveInBackground: true,
 		});
 
 		const { sound: newSound } = await Audio.Sound.createAsync({ uri: currentSong.song_file }, { shouldPlay: true });
-        setIsPlaying(true)
+		setIsPlaying(true);
 		setSound(newSound);
 		setIsLoaded(true);
 
@@ -53,7 +53,7 @@ const BottomPlayer = () => {
 		if (sound && isLoaded && !isPlaying) {
 			await sound.playAsync();
 			setIsPlaying(true);
-            setPause(false)
+			setPause(false);
 		}
 	};
 
@@ -61,31 +61,28 @@ const BottomPlayer = () => {
 		if (sound) {
 			await sound.pauseAsync();
 			setIsPlaying(false);
-            setPause(true)
+			setPause(true);
 		}
 	};
 
 	const skipSong = () => {
-        if (queue.length) {
-            setPosition((position + 1) % queue.length);
-            setCurrentSong(queue[(position + 1) % queue.length]);
-            setIsPlaying(true)
-            setPause(false);
-        }
-    };
+		if (queue.length) {
+			setPosition((position + 1) % queue.length);
+			setCurrentSong(queue[(position + 1) % queue.length]);
+			setIsPlaying(true);
+			setPause(false);
+		}
+	};
 
-	const rewindSong = () => {
+	const rewindSong = () => {};
 
-    };
-
-    useEffect(() => {
-        if (pause) {
-            pauseSound();
-        }   
-        else {
-            playSound()
-        }
-    }, [pause])
+	useEffect(() => {
+		if (pause) {
+			pauseSound();
+		} else {
+			playSound();
+		}
+	}, [pause]);
 
 	useEffect(() => {
 		const interval = setInterval(async () => {
@@ -100,7 +97,7 @@ const BottomPlayer = () => {
 		return () => clearInterval(interval);
 	}, [sound]);
 
-	useEffect(() => {  
+	useEffect(() => {
 		loadSound();
 
 		return () => {
@@ -110,9 +107,9 @@ const BottomPlayer = () => {
 		};
 	}, [currentSong]);
 
-    if (currentSong.name == '') {
-        return null;
-    }
+	if (currentSong.name == '') {
+		return null;
+	}
 
 	return (
 		<View style={styles.container}>
@@ -125,13 +122,13 @@ const BottomPlayer = () => {
 					</View>
 					<View style={styles.controls}>
 						<TouchableOpacity onPress={rewindSong}>
-							<Icon name="play-skip-back" color="white" size={30} />
+							<Icon name="play-skip-back" color="white" size={28} />
 						</TouchableOpacity>
-						<TouchableOpacity onPress={(isPlaying && !pause) ? pauseSound : playSound}>
-							<Icon name={isPlaying ? 'pause' : 'play'} color="white" size={30} />
+						<TouchableOpacity onPress={isPlaying && !pause ? pauseSound : playSound}>
+							<Icon name={isPlaying ? 'pause' : 'play'} color="white" size={28} />
 						</TouchableOpacity>
 						<TouchableOpacity onPress={skipSong}>
-							<Icon name="play-skip-forward" color="white" size={30} />
+							<Icon name="play-skip-forward" color="white" size={28} />
 						</TouchableOpacity>
 					</View>
 				</View>
@@ -157,7 +154,7 @@ const BottomPlayer = () => {
 						<TouchableOpacity onPress={() => bottomSheetModalRef?.current?.close()}>
 							<Icon name="chevron-down" color="white" size={36} />
 						</TouchableOpacity>
-						<Text style={styles.playlistTitle}>Playlist Name</Text>
+						<Text style={styles.playlistTitle}>{currentPlaylist}</Text>
 						<TouchableOpacity onPress={() => bottomSheetModalRef?.current?.close()}>
 							<Icon name="ellipsis-horizontal" color="white" size={36} />
 						</TouchableOpacity>
@@ -200,7 +197,7 @@ const BottomPlayer = () => {
 							<TouchableOpacity onPress={rewindSong}>
 								<Icon name="play-skip-back" color="white" size={42} />
 							</TouchableOpacity>
-							<TouchableOpacity onPress={(isPlaying && !pause) ? pauseSound : playSound}>
+							<TouchableOpacity onPress={isPlaying && !pause ? pauseSound : playSound}>
 								<Icon name={isPlaying ? 'pause-circle-sharp' : 'play-circle-sharp'} color="white" size={84} />
 							</TouchableOpacity>
 							<TouchableOpacity onPress={skipSong}>
@@ -264,7 +261,8 @@ const styles = StyleSheet.create({
 	controls: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		width: 120,
+		width: 110,
+        marginRight: 10,
 	},
 	controlText: {
 		color: 'white',

@@ -2,7 +2,7 @@ import React, { createContext, ReactNode, useEffect, useState } from 'react';
 import { Song } from '../interfaces/Song';
 import { supabase } from '../lib/supabase';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getSongs } from '../lib/supabaseUtils'
+import { getSongs } from '../lib/supabaseUtils';
 
 interface UserContextType {
 	id: string;
@@ -12,10 +12,12 @@ interface UserContextType {
 	setCurrentSong: (currentSong: Song) => void;
 	queue: Song[];
 	setQueue: (queue: Song[]) => void;
-    pause: boolean;
-    setPause: (pause: boolean) => void;
-    position: number;
-    setPosition: (position: number) => void;
+	pause: boolean;
+	setPause: (pause: boolean) => void;
+	position: number;
+	setPosition: (position: number) => void;
+	currentPlaylist: string;
+	setCurrentPlaylist: (currentPlaylist: string) => void;
 }
 
 export const UserContext = createContext<UserContextType>({
@@ -30,15 +32,17 @@ export const UserContext = createContext<UserContextType>({
 		name: '',
 		song_file: '',
 		user_id: 0,
-        genre: ''
+		genre: '',
 	},
 	setCurrentSong: () => {},
 	queue: [],
 	setQueue: () => {},
-    pause: true,
-    setPause: () => {},
-    position: 0,
-    setPosition: () => {},
+	pause: true,
+	setPause: () => {},
+	position: 0,
+	setPosition: () => {},
+	currentPlaylist: '',
+	setCurrentPlaylist: () => {},
 });
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
@@ -52,28 +56,49 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 		name: '',
 		song_file: '',
 		user_id: 0,
-        genre: '',
+		genre: '',
 	});
 	const [queue, setQueue] = useState<Song[]>([]);
-    const [pause, setPause] = useState<boolean>(true);
-    const [position, setPosition] = useState<number>(0);
+	const [pause, setPause] = useState<boolean>(true);
+	const [position, setPosition] = useState<number>(0);
+	const [currentPlaylist, setCurrentPlaylist] = useState<string>('');
 
 	useEffect(() => {
 		const fetchToken = async () => {
 			const token = await AsyncStorage.getItem('token');
 			if (token) {
 				setId(token);
-                getSongs(token)
-                .then((resp) => {
-                    setSongs(resp)
-                })
-                .catch((err) => {
-                    console.log(err)
-                })
+				getSongs(token)
+					.then((resp) => {
+						setSongs(resp);
+					})
+					.catch((err) => {
+						console.log(err);
+					});
 			}
 		};
-        fetchToken();
+		fetchToken();
 	}, []);
 
-	return <UserContext.Provider value={{ id, songs, setSongs, currentSong, setCurrentSong, queue, setQueue, pause, setPause, position, setPosition }}>{children}</UserContext.Provider>;
+	return (
+		<UserContext.Provider
+			value={{
+				id,
+				songs,
+				setSongs,
+				currentSong,
+				setCurrentSong,
+				queue,
+				setQueue,
+				pause,
+				setPause,
+				position,
+				setPosition,
+				currentPlaylist,
+				setCurrentPlaylist,
+			}}
+		>
+			{children}
+		</UserContext.Provider>
+	);
 };

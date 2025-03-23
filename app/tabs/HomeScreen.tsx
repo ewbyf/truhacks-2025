@@ -4,7 +4,7 @@ import { View, Text, TouchableOpacity, Image, StyleSheet, Dimensions, SafeAreaVi
 import TrendingGrid from '../components/TrendingGrid';
 import LogoSmall from '../components/svgs/LogoSmall';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { useContext, useEffect } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { UserContext } from '../contexts/UserContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -12,16 +12,27 @@ import { LinearGradient } from 'expo-linear-gradient';
 import SongComponent from '../components/SongComponent';
 import HomePageBG from '../components/svgs/HomePageBG';
 
+import { getPlaylists } from '../lib/supabaseUtils';
+
 export default function HomeScreen() {
+	const [playlists, setPlaylists] = useState<any[]>([]);
 	const width = Dimensions.get('window').width;
 	const router = useRouter();
 
 	const { id, songs } = useContext(UserContext);
 
 	useEffect(() => {
-		console.log(id);
-		// get users playlist to display at the top
-	}, []);
+        const fetchPlaylists = async () => {
+            try {
+                const data = await getPlaylists(id); // Await the promise
+                setPlaylists(data); // Set state with the resolved data
+            } catch (error) {
+                console.error('Error fetching playlists:', error);
+            }
+        };
+
+        fetchPlaylists();
+    }, []);
 
 	return (
 		<SafeAreaView style={styles.container}>
@@ -66,18 +77,15 @@ export default function HomeScreen() {
 							style={{ display: 'flex', width: width }}
 							contentContainerStyle={{ gap: 20, paddingRight: 40 }}
 						>
-							<TouchableOpacity style={{ width: 100, height: 100, borderRadius: 15 }}>
-								<Image source={{ uri: 'https://picsum.photos/105' }} style={{ height: '100%', width: '100%', borderRadius: 15 }} />
-							</TouchableOpacity>
-							<TouchableOpacity style={{ width: 100, height: 100, borderRadius: 15 }}>
-								<Image source={{ uri: 'https://picsum.photos/101' }} style={{ height: '100%', width: '100%', borderRadius: 15 }} />
-							</TouchableOpacity>
-							<TouchableOpacity style={{ width: 100, height: 100, borderRadius: 15 }}>
-								<Image source={{ uri: 'https://picsum.photos/102' }} style={{ height: '100%', width: '100%', borderRadius: 15 }} />
-							</TouchableOpacity>
-							<TouchableOpacity style={{ width: 100, height: 100, borderRadius: 15 }}>
-								<Image source={{ uri: 'https://picsum.photos/103' }} style={{ height: '100%', width: '100%', borderRadius: 15 }} />
-							</TouchableOpacity>
+							{playlists.map((playlist, index) => (
+								<TouchableOpacity key={index} style={{ width: 100, height: 100, borderRadius: 15 }}
+									onPress={() => {
+										router.push(`/tabs/library/playlist/${playlist.id}`);
+									}}
+								>
+									<Image source={{ uri: playlist.cover_art }} style={{ height: '100%', width: '100%', borderRadius: 15 }} />
+								</TouchableOpacity>
+							))}
 						</ScrollView>
 					</View>
 					<View>

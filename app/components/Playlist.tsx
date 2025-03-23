@@ -1,7 +1,5 @@
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { useEffect, useState } from 'react';
-import { Audio } from 'expo-av';
 
 type PlaylistProps = {
   id: string;
@@ -13,7 +11,6 @@ const Playlist = ({ id, name, image }: PlaylistProps) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Image style={styles.artwork} source={{ uri: image }} />
           <View style={styles.info}>
@@ -25,7 +22,6 @@ const Playlist = ({ id, name, image }: PlaylistProps) => {
             </TouchableOpacity>
           </View>
         </View>
-      </TouchableOpacity>
     </View>
   );
 };

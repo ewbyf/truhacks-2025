@@ -10,6 +10,7 @@ import * as FileSystem from 'expo-file-system';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Header from '@/app/components/Header';
 import DinoDefaultBG from '@/app/components/svgs/DinoDefaultBG';
+import FontAwesomeIcon from 'react-native-vector-icons/Feather';
 
 
 const PlaylistCreateScreen = () => {
@@ -83,13 +84,21 @@ const PlaylistCreateScreen = () => {
 			<Header title="Create Playlist"></Header>
 			<KeyboardAwareScrollView style={{ paddingHorizontal: 20, paddingTop: 80 }} contentContainerStyle={{ paddingBottom: 80, gap: 20 }}>
 				<TouchableOpacity onPress={choosePhoto}>
-				<View style={{ justifyContent: 'center', alignItems: 'center' }}>
-					{image ? (
-						<Image source={{ uri: image }} style={{ height: 256, width: 256 }} />
-					) : (
-						<DinoDefaultBG width={256} height={256} />
-					)}
-				</View>
+					<View style={{ justifyContent: 'center', alignItems: 'center' }}>
+						{image ? (
+							<Image source={{ uri: image }} style={{ height: 256, width: 256 }} />
+						) : (
+							<View>
+								<FontAwesomeIcon
+									name="edit-2"
+									color="lightgray"
+									size={100}
+									style={{ position: 'absolute', top: 70, right: 70, zIndex: 10, }}
+								/>
+								<DinoDefaultBG width={256} height={256} opacity={0.1} />
+							</View>
+						)}
+					</View>
 				</TouchableOpacity>
 				<View style={{ gap: 8 }}>
 					<View style={styles.row}>

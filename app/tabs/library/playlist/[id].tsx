@@ -4,7 +4,6 @@ import { View, Text, StyleSheet, Button, SafeAreaView, ScrollView, TouchableOpac
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { BottomSheetModal, BottomSheetView, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import Icon from 'react-native-vector-icons/Ionicons';
-import RecentSong from '../../../components/RecentSong';
 import SongComponent from '@/app/components/SongComponent';
 
 import { getPlaylistSongs } from '@/app/lib/supabaseUtils';
@@ -29,15 +28,13 @@ const PlaylistScreen = () => {
 	const [isPlaying, setIsPlaying] = useState(false);
 	const router = useRouter();
 
-	const { setCurrentSong, pause, setPause, queue, setQueue, position, setPosition } = useContext(UserContext);
+	const { setCurrentSong, pause, setPause, queue, setQueue, position, setPosition, currentPlaylist, setCurrentPlaylist } = useContext(UserContext);
 
 	useEffect(() => {
 		const fetchPlaylist = async () => {
 			try {
 				const { data: playlistData, error: playlistError } = await supabase.from('playlists').select('*').eq('id', id).single();
-
 				setPlaylist(playlistData);
-				console.log(playlistData);
 			} catch (error) {
 				console.error('Error fetching playlists:', error);
 			}
@@ -46,7 +43,6 @@ const PlaylistScreen = () => {
 		const fetchSongs = async () => {
 			try {
 				const songsData = await getPlaylistSongs(id);
-				console.log(songsData);
 				setSongs(songsData);
 				setLoading(false);
 			} catch (error) {
@@ -73,9 +69,10 @@ const PlaylistScreen = () => {
 			tempPosition = 0;
 		}
 		setQueue(songs);
+        setCurrentPlaylist(playlist!.name)
 		setCurrentSong(songs[tempPosition]);
 		setPause(false);
-        setIsPlaying(true)
+		setIsPlaying(true);
 	};
 
 	const pauseSound = async () => {
@@ -85,13 +82,25 @@ const PlaylistScreen = () => {
 
 	return (
 		<SafeAreaView style={styles.container}>
-			{!loading && playlist && <Header title={playlist.name}></Header>}
-			<KeyboardAwareScrollView style={{ paddingHorizontal: 20, paddingTop: 80 }} contentContainerStyle={{ paddingBottom: 80, gap: 20 }}>
+			{!loading && playlist && <Header title=""></Header>}
+			<KeyboardAwareScrollView style={{ paddingHorizontal: 20, paddingTop: 60 }} contentContainerStyle={{ paddingBottom: 80, gap: 20 }}>
 				<View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
 					<Image source={{ uri: 'https://picsum.photos/213' }} style={{ height: 256, width: 256 }} />
 				</View>
-				<View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-					<Text>pop</Text>
+				<View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+					<View>
+						{playlist && <Text style={styles.playlistName}>{playlist.name}</Text>}
+						{playlist && (
+							<Text style={styles.date}>
+								{new Date(playlist!.created_at).toLocaleString('en-US', {
+									month: 'long',
+									day: 'numeric',
+									year: 'numeric',
+								})}
+							</Text>
+						)}
+						<Text style={styles.songsNumber}>{songs.length} songs</Text>
+					</View>
 					<TouchableOpacity onPress={isPlaying && !pause ? pauseSound : playSound}>
 						<Icon name={isPlaying ? 'pause-circle-sharp' : 'play-circle-sharp'} color="white" size={84} />
 					</TouchableOpacity>
@@ -101,7 +110,7 @@ const PlaylistScreen = () => {
 						{/* <Text style={styles.playlistTitle}>1 hours 45 min</Text> */}
 						<View style={styles.recentSongs}>
 							{songs.map((song, index) => (
-								<SongComponent key={index} song={song} inPlaylist={true} songs={songs}/>
+								<SongComponent key={index} song={song} inPlaylist={playlist?.name} songs={songs} />
 							))}
 						</View>
 					</>
@@ -163,6 +172,19 @@ const styles = StyleSheet.create({
 		display: 'flex',
 		gap: 10,
 	},
+    playlistName: {
+        color: 'white',
+		fontSize: 28,
+		fontWeight: 'bold',
+    },
+	date: {
+		color: 'gray',
+		fontSize: 18,
+	},
+    songsNumber: {
+        color: 'gray',
+		fontSize: 14,
+    }
 });
 
 export default PlaylistScreen;
