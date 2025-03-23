@@ -1,30 +1,27 @@
-import React, { useCallback, useMemo, useRef, useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useRouter } from 'expo-router';
 import { View, Text, StyleSheet, Button, SafeAreaView, ScrollView, TouchableOpacity, TextInput, Image } from 'react-native';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { BottomSheetModal, BottomSheetView, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
-import Icon from 'react-native-vector-icons/Ionicons';
-import RecentSong from '../../components/RecentSong';
 import { getSongs, createNewPlaylist, addSongToPlaylist } from '@/app/lib/supabaseUtils';
 import { UserContext } from '@/app/contexts/UserContext';
 import type { Song } from '@/app/interfaces/Song';
+import Icon from 'react-native-vector-icons/Ionicons';
 import * as ImagePicker from 'expo-image-picker';
-
 import * as FileSystem from 'expo-file-system';
 
 
 const PlaylistCreateScreen = () => {
-	const [selected, setSelected] = useState('playlists');
-	const [playlistName, setplaylistName] = useState('');
+
+	//TODO : change image to default image when we finish designing it
+	const DEFAULT_IMAGE = 'https://picsum.photos/213';
 	const router = useRouter();
 
-	const [imageUri, setImageUri] = useState<string | null>(null);
+	const [playlistName, setplaylistName] = useState('');
 	const [availableSongs, setAvailableSongs] = useState<Song[]>([]);
 	const [selectedSongs, setSelectedSongs] = useState<number[]>([]);
-
-	const [image, setImage] = useState<string | null>(null);
+	const [image, setImage] = useState<string | null>(DEFAULT_IMAGE);
 
 	const { id } = useContext(UserContext);
+
 
 	const choosePhoto = async () => {
 		let result = await ImagePicker.launchImageLibraryAsync({
@@ -93,7 +90,7 @@ const PlaylistCreateScreen = () => {
 				<TouchableOpacity onPress={choosePhoto}>
 					<Text style={styles.playlistTitle}>Add picture?</Text>
 					<View style={{ justifyContent: 'center', alignItems: 'center' }}>
-						<Image source={{ uri: image ?? 'https://picsum.photos/213' }} style={{ height: 256, width: 256 }} />
+						<Image source={{ uri: image ?? DEFAULT_IMAGE }} style={{ height: 256, width: 256 }} />
 					</View>
 				</TouchableOpacity>
 				<TextInput
