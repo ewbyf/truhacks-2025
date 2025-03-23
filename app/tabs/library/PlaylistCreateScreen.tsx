@@ -80,7 +80,8 @@ const PlaylistCreateScreen = () => {
 
 				const playlist = await createNewPlaylist(id, playlistName, base64, filename);
 
-				await addSongsToPlaylist(selectedSongs, playlist.id)				setPlaylists([...playlists, playlist]);
+				await addSongsToPlaylist(selectedSongs, playlist.id);
+				setPlaylists([...playlists, playlist]);
 				await setPlaylistSongCount(id, selectedSongs.length);
 
 				Toast.show({
@@ -95,7 +96,7 @@ const PlaylistCreateScreen = () => {
 
 				const playlist = await createNewPlaylist(id, playlistName, base64, filename);
 
-				await addSongsToPlaylist(selectedSongs, playlist.id)
+				await addSongsToPlaylist(selectedSongs, playlist.id);
 				await setPlaylistSongCount(id, selectedSongs.length);
 				setPlaylists([...playlists, playlist]);
 				Toast.show({
