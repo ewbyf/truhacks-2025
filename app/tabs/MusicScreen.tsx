@@ -128,7 +128,7 @@ export default function MusicScreen() {
 							ArrowUpIconComponent={({ style }) => <Icon name="chevron-up" color="gray" size={20} />}
 							TickIconComponent={({ style }) => <Icon name="checkmark" color="white" size={20} />}
 							dropDownContainerStyle={{
-								backgroundColor: '#403E43',
+								backgroundColor: '#323232',
 								zIndex: 10,
 							}}
 							listItemLabelStyle={{
@@ -156,7 +156,7 @@ export default function MusicScreen() {
 								return (
 									<TouchableOpacity
 										key={index}
-										style={[styles.button, { backgroundColor: selectedGenre == genre.name ? '#732DFC' : '#403E43' }]}
+										style={[styles.button, { backgroundColor: selectedGenre == genre.name ? '#732DFC' : '#323232' }]}
 										onPress={() => setSelectedGenre(genre.name)}
 									>
 										<IconComponent name={genre.icon} size={24} color="white" />
@@ -226,8 +226,8 @@ const styles = StyleSheet.create({
 		padding: 15,
 		borderWidth: 1.5,
 		color: 'white',
-		borderColor: '#403E43',
-		backgroundColor: '#403E43',
+		borderColor: '#323232',
+		backgroundColor: '#323232',
 	},
 	row: {
 		display: 'flex',

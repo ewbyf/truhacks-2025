@@ -10,6 +10,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { useContext, useEffect } from 'react';
 import { UserContext } from '../contexts/UserContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 export default function HomeScreen() {
 	const width = Dimensions.get('window').width;
@@ -32,8 +33,10 @@ export default function HomeScreen() {
 							supabase.auth.signOut();
 							router.push('/');
 						}}
+                        style={{flexDirection: 'row', alignItems: 'center', gap: 5, backgroundColor: '#323232', padding: 10, borderRadius: 10}}
 					>
-						<Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold' }}>Sign out</Text>
+						<Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>Sign out</Text>
+                        <Icon name="logout" size={20} color="white"></Icon>
 					</TouchableOpacity>
 				</View>
 				<Text style={styles.title}>Home</Text>
