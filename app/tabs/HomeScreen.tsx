@@ -91,7 +91,7 @@ export default function HomeScreen() {
 							contentContainerStyle={{ gap: 20, paddingRight: 40 }}
 						>
 							{playlists.map((playlist, index) => (
-								<TouchableOpacity key={index} style={{ width: 100, height: 100, borderRadius: 15 }}
+								<TouchableOpacity key={playlist.id} style={{ width: 100, height: 100, borderRadius: 15 }}
 									onPress={() => {
 										router.push(`/tabs/library/playlist/${playlist.id}`);
 									}}
@@ -114,7 +114,7 @@ export default function HomeScreen() {
 							contentContainerStyle={{ gap: 20, paddingRight: 40 }}
 						>
 							{explorePlaylists.map((playlist, index) => (
-								<TouchableOpacity key={index} style={{ width: 100, height: 100, borderRadius: 15 }}
+								<TouchableOpacity key={playlist.id} style={{ width: 100, height: 100, borderRadius: 15 }}
 									onPress={() => {
 										router.push(`/tabs/library/playlist/${playlist.id}`);
 									}}
