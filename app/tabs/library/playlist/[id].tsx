@@ -85,7 +85,7 @@ const PlaylistScreen = () => {
 			{!loading && playlist && <Header title=""></Header>}
 			<KeyboardAwareScrollView style={{ paddingHorizontal: 20, paddingTop: 60 }} contentContainerStyle={{ paddingBottom: 80, gap: 20 }}>
 				<View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-					<Image source={{ uri: 'https://picsum.photos/213' }} style={{ height: 256, width: 256 }} />
+					<Image source={{ uri: playlist?.cover_art }} style={{ height: 256, width: 256 }} />
 				</View>
 				<View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
 					<View>
