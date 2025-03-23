@@ -5,50 +5,48 @@ import { Audio } from 'expo-av';
 import { UserContext } from '../contexts/UserContext';
 import { Song } from '../interfaces/Song';
 
-const SongComponent = ({ song, inPlaylist, songs }: { song: Song, inPlaylist ?: string, songs?: Song[] }) => {
+const SongComponent = ({ song, inPlaylist, songs }: { song: Song; inPlaylist?: string; songs?: Song[] }) => {
 	const [sound, setSound] = useState<Audio.Sound | null>(null);
 	const [isPlaying, setIsPlaying] = useState(false);
-	const { currentSong, setCurrentSong, setPause, pause, position, setPosition, queue, setQueue, setCurrentPlaylist, currentPlaylist } = useContext(UserContext);
+	const { currentSong, setCurrentSong, setPause, pause, position, setPosition, queue, setQueue, setCurrentPlaylist, currentPlaylist } =
+		useContext(UserContext);
 
-    useEffect(() => {
-        if (currentSong == song) {
-            setIsPlaying(true);
-        }
-        else {
-            setIsPlaying(false)
-        }
-    }, [currentSong])
+	useEffect(() => {
+		if (currentSong == song) {
+			setIsPlaying(true);
+		} else {
+			setIsPlaying(false);
+		}
+	}, [currentSong]);
 
-    useEffect(() => {
-        if (pause) {
-            setIsPlaying(false);
-        }
-        else if (!pause && currentSong == song) {
-            setIsPlaying(true);
-        }
-    }, [pause])
+	useEffect(() => {
+		if (pause) {
+			setIsPlaying(false);
+		} else if (!pause && currentSong == song) {
+			setIsPlaying(true);
+		}
+	}, [pause]);
 
 	const playSound = async () => {
-        if (inPlaylist != '') {
-            setQueue([])
-            setPosition(0)
-            setCurrentPlaylist('');
-        }
-        else if (songs && songs != queue) {
-            setQueue(songs);
-            setCurrentPlaylist(inPlaylist)
-        }
+		if (inPlaylist != '') {
+			setQueue([]);
+			setPosition(0);
+			setCurrentPlaylist('');
+		} else if (songs && songs != queue) {
+			setQueue(songs);
+			setCurrentPlaylist(inPlaylist);
+		}
 		setCurrentSong(song);
-        setPause(false);
-        const idx = queue.findIndex((s) => s == song);
-        if (idx >= 0) {
-            setPosition(idx);
-        }
+		setPause(false);
+		const idx = queue.findIndex((s) => s == song);
+		if (idx >= 0) {
+			setPosition(idx);
+		}
 	};
 
 	const pauseSound = async () => {
-		setIsPlaying(false)
-        setPause(true);
+		setIsPlaying(false);
+		setPause(true);
 	};
 
 	return (
@@ -76,7 +74,7 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		padding: 5,
-        paddingVertical: 8,
+		paddingVertical: 8,
 		width: '100%',
 		backgroundColor: '#252525',
 		borderRadius: 10,
