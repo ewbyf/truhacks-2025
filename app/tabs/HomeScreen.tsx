@@ -25,7 +25,7 @@ export default function HomeScreen() {
 
 	return (
 		<SafeAreaView style={styles.container}>
-			<View style={[StyleSheet.absoluteFill, { opacity: 0.8 }]}>
+			<View style={[StyleSheet.absoluteFill]}>
 				<HomePageBG width="100%" height="100%" />
 			</View>
 			<KeyboardAwareScrollView showsVerticalScrollIndicator={false} style={{ paddingHorizontal: 20 }} contentContainerStyle={{ paddingBottom: 80 }}>
