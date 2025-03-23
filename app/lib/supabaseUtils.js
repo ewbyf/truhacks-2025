@@ -175,7 +175,7 @@ export const getPlaylists = async (userID) => {
 }
 
 // gets all users songs in order of datecreated
-export const getRecentSongs = async (userID) => {
+export const getSongs = async (userID) => {
     const { data, error } = await supabase
         .from('songs')
         .select('*')
