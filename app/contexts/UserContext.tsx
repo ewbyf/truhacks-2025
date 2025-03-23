@@ -2,7 +2,7 @@ import React, { createContext, ReactNode, useEffect, useState } from 'react';
 import { Song } from '../interfaces/Song';
 import { supabase } from '../lib/supabase';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getRecentSongs } from '../lib/supabaseUtils'
+import { getSongs } from '../lib/supabaseUtils'
 
 interface UserContextType {
 	id: string;
@@ -58,7 +58,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 			const token = await AsyncStorage.getItem('token');
 			if (token) {
 				setId(token);
-                getRecentSongs(token)
+                getSongs(token)
                 .then((resp) => {
                     setSongs(resp)
                 })

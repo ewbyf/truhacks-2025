@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		padding: 5,
 		width: '100%',
-		backgroundColor: '#626262',
+		backgroundColor: '#252525',
 		borderRadius: 10,
 	},
 	artwork: {

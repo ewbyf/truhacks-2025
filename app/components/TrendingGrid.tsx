@@ -20,7 +20,7 @@ const TrendingGrid = () => {
 							<Text style={styles.label}>GENRE</Text>
 						</View>
 						<View style={styles.tag}>
-                            <EntypoIcon name="modern-mic" color="white" size={16}/>
+                            {/* <EntypoIcon name="modern-mic" color="white" size={16}/> */}
 							<Text style={{ fontWeight: 'bold', color: 'white', fontSize: 14 }}>Pop</Text>
 						</View>
 					</View>
@@ -30,7 +30,7 @@ const TrendingGrid = () => {
 							<Text style={styles.label}>TOPIC</Text>
 						</View>
 						<View style={styles.tag}>
-                            <Icon name="code-slash" color="white" size={16}/>
+                            {/* <Icon name="code-slash" color="white" size={16}/> */}
 							<Text style={{ fontWeight: 'bold', color: 'white', fontSize: 14 }}>Coding</Text>
 						</View>
 					</View>
@@ -46,7 +46,7 @@ const TrendingGrid = () => {
 							<Text style={[styles.gradientText, { opacity: 0 }]}>152</Text>
 						</LinearGradient>
 					</MaskedView>
-					<Text style={{ color: '#5F5F5F', fontSize: 14, fontWeight: '300' }}>times</Text>
+					<Text style={{ color: '#5F5F5F', fontSize: 15, fontWeight: '300' }}>times</Text>
 				</View>
 			</View>
 		</View>
@@ -83,12 +83,13 @@ const styles = StyleSheet.create({
 	},
 	tag: {
 		padding: 10,
+        paddingHorizontal: 20,
         width: '100%',
 		backgroundColor: '#732DFC',
 		borderRadius: 10,
 		alignItems: 'center',
-        justifyContent: 'flex-start',
-        flexDirection: 'row',
+        // justifyContent: 'flex-start',
+        // flexDirection: 'row',
         gap: 8,
 	},
 	gradientText: {

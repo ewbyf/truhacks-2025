@@ -45,38 +45,40 @@ export default function HomeScreen() {
 				<View style={{ gap: 15 }}>
 					<View>
 						<Text style={styles.subtitle}>Recently Played</Text>
-						<LinearGradient colors={['#101010', '#323232']} style={styles.recentPlaylist} start={{ x: 0, y: -0.2 }} end={{ x: 1, y: 1 }}>
-							<Image source={{ uri: 'https://picsum.photos/105' }} style={{ height: 100, width: 100, borderRadius: 15 }} />
-							<View style={{ alignItems: 'flex-start', justifyContent: 'center', gap: 10 }}>
-								<Text style={{ color: '#D0D0D0', fontWeight: 600, fontSize: 18 }}>GOATED PLAYLIST</Text>
-								<View style={styles.tag}>
-									<Text style={{ color: 'white', fontSize: 12 }}>Pop</Text>
+						<TouchableOpacity>
+							<LinearGradient colors={['#101010', '#323232']} style={styles.recentPlaylist} start={{ x: 0, y: -0.2 }} end={{ x: 1, y: 1 }}>
+								<Image source={{ uri: 'https://picsum.photos/105' }} style={{ height: 100, width: 100, borderRadius: 15 }} />
+								<View style={{ alignItems: 'flex-start', justifyContent: 'center', gap: 10 }}>
+									<Text style={{ color: '#D0D0D0', fontWeight: 600, fontSize: 18 }}>GOATED PLAYLIST</Text>
+									<View style={styles.tag}>
+										<Text style={{ color: 'white', fontSize: 12 }}>Pop</Text>
+									</View>
 								</View>
-							</View>
-						</LinearGradient>
+							</LinearGradient>
+						</TouchableOpacity>
 					</View>
-                    <View>
-					<Text style={styles.subtitle}>Playlists</Text>
-					<ScrollView
-						horizontal
-						showsHorizontalScrollIndicator={false}
-						style={{ display: 'flex', width: width }}
-						contentContainerStyle={{ gap: 20, paddingRight: 40 }}
-					>
-						<TouchableOpacity style={{ width: 100, height: 100, borderRadius: 15 }}>
-							<Image source={{ uri: 'https://picsum.photos/105' }} style={{ height: '100%', width: '100%', borderRadius: 15 }} />
-						</TouchableOpacity>
-						<TouchableOpacity style={{ width: 100, height: 100, borderRadius: 15 }}>
-							<Image source={{ uri: 'https://picsum.photos/101' }} style={{ height: '100%', width: '100%', borderRadius: 15 }} />
-						</TouchableOpacity>
-						<TouchableOpacity style={{ width: 100, height: 100, borderRadius: 15 }}>
-							<Image source={{ uri: 'https://picsum.photos/102' }} style={{ height: '100%', width: '100%', borderRadius: 15 }} />
-						</TouchableOpacity>
-						<TouchableOpacity style={{ width: 100, height: 100, borderRadius: 15 }}>
-							<Image source={{ uri: 'https://picsum.photos/103' }} style={{ height: '100%', width: '100%', borderRadius: 15 }} />
-						</TouchableOpacity>
-					</ScrollView>
-				</View>
+					<View>
+						<Text style={styles.subtitle}>Playlists</Text>
+						<ScrollView
+							horizontal
+							showsHorizontalScrollIndicator={false}
+							style={{ display: 'flex', width: width }}
+							contentContainerStyle={{ gap: 20, paddingRight: 40 }}
+						>
+							<TouchableOpacity style={{ width: 100, height: 100, borderRadius: 15 }}>
+								<Image source={{ uri: 'https://picsum.photos/105' }} style={{ height: '100%', width: '100%', borderRadius: 15 }} />
+							</TouchableOpacity>
+							<TouchableOpacity style={{ width: 100, height: 100, borderRadius: 15 }}>
+								<Image source={{ uri: 'https://picsum.photos/101' }} style={{ height: '100%', width: '100%', borderRadius: 15 }} />
+							</TouchableOpacity>
+							<TouchableOpacity style={{ width: 100, height: 100, borderRadius: 15 }}>
+								<Image source={{ uri: 'https://picsum.photos/102' }} style={{ height: '100%', width: '100%', borderRadius: 15 }} />
+							</TouchableOpacity>
+							<TouchableOpacity style={{ width: 100, height: 100, borderRadius: 15 }}>
+								<Image source={{ uri: 'https://picsum.photos/103' }} style={{ height: '100%', width: '100%', borderRadius: 15 }} />
+							</TouchableOpacity>
+						</ScrollView>
+					</View>
 					<View>
 						<Text style={styles.subtitle}>Trending</Text>
 						<TrendingGrid />
@@ -104,7 +106,7 @@ export default function HomeScreen() {
 						</ScrollView>
 					</View>
 					<View>
-						<Text style={styles.subtitle}>Recently played</Text>
+						<Text style={styles.subtitle}>Recently Added</Text>
 						<View style={styles.recentSongs}>
 							{songs.map((song) => (
 								<SongComponent song={song} />
