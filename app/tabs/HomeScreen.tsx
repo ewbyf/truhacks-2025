@@ -12,10 +12,11 @@ import { LinearGradient } from 'expo-linear-gradient';
 import SongComponent from '../components/SongComponent';
 import HomePageBG from '../components/svgs/HomePageBG';
 
-import { getPlaylists } from '../lib/supabaseUtils';
+import { getPlaylists, getExplorePlaylists } from '../lib/supabaseUtils';
 
 export default function HomeScreen() {
 	const [playlists, setPlaylists] = useState<any[]>([]);
+	const [explorePlaylists, setExplorePlaylists] = useState<any[]>([]);
 	const width = Dimensions.get('window').width;
 	const router = useRouter();
 
@@ -31,7 +32,17 @@ export default function HomeScreen() {
             }
         };
 
+		const fetchExplorePlaylists = async () => {
+			try {
+                const exploreData = await getExplorePlaylists(id); // Await the promise
+                setExplorePlaylists(exploreData); // Set state with the resolved data
+            } catch (error) {
+                console.error('Error fetching playlists:', error);
+            }
+		};
+
         fetchPlaylists();
+		fetchExplorePlaylists();
     }, []);
 
 	return (
@@ -100,18 +111,15 @@ export default function HomeScreen() {
 							style={{ display: 'flex', width: width }}
 							contentContainerStyle={{ gap: 20, paddingRight: 40 }}
 						>
-							<TouchableOpacity style={{ width: 100, height: 100, borderRadius: 15 }}>
-								<Image source={{ uri: 'https://picsum.photos/105' }} style={{ height: '100%', width: '100%', borderRadius: 15 }} />
-							</TouchableOpacity>
-							<TouchableOpacity style={{ width: 100, height: 100, borderRadius: 15 }}>
-								<Image source={{ uri: 'https://picsum.photos/101' }} style={{ height: '100%', width: '100%', borderRadius: 15 }} />
-							</TouchableOpacity>
-							<TouchableOpacity style={{ width: 100, height: 100, borderRadius: 15 }}>
-								<Image source={{ uri: 'https://picsum.photos/102' }} style={{ height: '100%', width: '100%', borderRadius: 15 }} />
-							</TouchableOpacity>
-							<TouchableOpacity style={{ width: 100, height: 100, borderRadius: 15 }}>
-								<Image source={{ uri: 'https://picsum.photos/103' }} style={{ height: '100%', width: '100%', borderRadius: 15 }} />
-							</TouchableOpacity>
+							{explorePlaylists.map((playlist, index) => (
+								<TouchableOpacity key={index} style={{ width: 100, height: 100, borderRadius: 15 }}
+									onPress={() => {
+										router.push(`/tabs/library/playlist/${playlist.id}`);
+									}}
+								>
+									<Image source={{ uri: playlist.cover_art }} style={{ height: '100%', width: '100%', borderRadius: 15 }} />
+								</TouchableOpacity>
+							))}
 						</ScrollView>
 					</View>
 					<View>
