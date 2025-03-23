@@ -9,42 +9,48 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import PlaylistLibrary from '@/app/components/PlaylistLibrary';
 import SongComponent from '@/app/components/SongComponent';
 
-import { getPlaylists } from "@/app/lib/supabaseUtils";
+import { getPlaylists } from '@/app/lib/supabaseUtils';
 import { UserContext } from '@/app/contexts/UserContext';
-
 
 const LibraryScreen = () => {
 	const [playlistsData, setPlaylistsData] = useState(null);
-    const [selected, setSelected] = useState('playlists');
+	const [selected, setSelected] = useState('playlists');
 	const router = useRouter();
 	const { songs } = useContext(UserContext);
 
 	useEffect(() => {
-        //setPlaylistsData(getPlaylists())
-    }, []);
+		//setPlaylistsData(getPlaylists())
+	}, []);
 
 	return (
 		<SafeAreaView style={styles.container}>
-			<KeyboardAwareScrollView showsVerticalScrollIndicator={false} style={{ paddingHorizontal: 20 }} contentContainerStyle={{paddingBottom: 80}}>
+			<KeyboardAwareScrollView showsVerticalScrollIndicator={false} style={{ paddingHorizontal: 20 }} contentContainerStyle={{ paddingBottom: 80 }}>
 				<View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-					<LogoSmall/>
+					<LogoSmall />
 				</View>
 				<View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 15 }}>
 					{/* <Text style={styles.subtitle}>{selected == "playlists" ? 'Playlists' : 'Songs'}</Text> */}
-                    <Text style={styles.title}>Library</Text>
-                    <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-                        <TouchableOpacity style={[styles.selectionButton, {backgroundColor: selected == "playlists" ? '#732DFC' : '#403E43'}]} onPress={() => setSelected('playlists')}>
-                            <Text style={{color: selected == 'playlists' ? 'white' : 'black' }}>Playlists</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={[styles.selectionButton, {backgroundColor: selected == "songs" ? '#732DFC' : '#403E43'}]} onPress={() => setSelected('songs')}>
-                            <Text style={{color: selected == 'songs' ? 'white' : 'black' }}>Songs</Text>
-                        </TouchableOpacity>
-                    </View>
+					<Text style={styles.title}>Library</Text>
+					<View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+						<TouchableOpacity
+							style={[styles.selectionButton, { backgroundColor: selected == 'playlists' ? '#732DFC' : '#403E43' }]}
+							onPress={() => setSelected('playlists')}
+						>
+							<Text style={{ color: selected == 'playlists' ? 'white' : 'black' }}>Playlists</Text>
+						</TouchableOpacity>
+						<TouchableOpacity
+							style={[styles.selectionButton, { backgroundColor: selected == 'songs' ? '#732DFC' : '#403E43' }]}
+							onPress={() => setSelected('songs')}
+						>
+							<Text style={{ color: selected == 'songs' ? 'white' : 'black' }}>Songs</Text>
+						</TouchableOpacity>
+					</View>
 				</View>
 				<View style={styles.column}>
-					{selected === "playlists" && (
+					{selected === 'playlists' && (
 						<>
-							<TouchableOpacity style={styles.createContainer}
+							<TouchableOpacity
+								style={styles.createContainer}
 								onPress={() => {
 									router.push('/tabs/library/PlaylistCreateScreen' as const);
 								}}
@@ -54,13 +60,10 @@ const LibraryScreen = () => {
 								</View>
 								<Text style={styles.playlistTitle}>Create playlist</Text>
 							</TouchableOpacity>
-							<PlaylistLibrary id={1} name={"test"} image={'https://picsum.photos/213'}/>
+							<PlaylistLibrary id={1} name={'test'} image={'https://picsum.photos/213'} />
 						</>
-					)} : {
-						selected == 'songs' && songs.map((song) => (
-							<SongComponent key={song.id} song={song}></SongComponent>
-						))
-					}	
+					)}
+					{selected == 'songs' && songs.map((song) => <SongComponent key={song.id} song={song}></SongComponent>)}
 				</View>
 			</KeyboardAwareScrollView>
 		</SafeAreaView>
@@ -72,10 +75,10 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: '#1E1E1E',
 	},
-    column: {
-        display: 'flex',
-        gap: 10
-    },
+	column: {
+		display: 'flex',
+		gap: 10,
+	},
 	title: {
 		fontSize: 36,
 		fontWeight: 'bold',
@@ -105,12 +108,12 @@ const styles = StyleSheet.create({
 		fontSize: 17,
 		fontWeight: 'medium',
 	},
-    selectionButton: {
-        backgroundColor: '#732DFC',
-        padding: 6,
-        paddingHorizontal: 8,
-        borderRadius: 10,
-    }
+	selectionButton: {
+		backgroundColor: '#732DFC',
+		padding: 6,
+		paddingHorizontal: 8,
+		borderRadius: 10,
+	},
 });
 
 export default LibraryScreen;
