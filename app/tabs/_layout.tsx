@@ -41,7 +41,7 @@ const Navbar = ({ children }: { children: JSX.Element }) => {
 						}}
 					/>
 					<Tabs.Screen
-						name="LibraryScreen"
+						name="library"
 						options={{
 							tabBarIcon: ({ color, size }) => <Icon name="book" color={color} size={size} />,
 							title: 'Library',
@@ -69,7 +69,7 @@ const Navbar = ({ children }: { children: JSX.Element }) => {
 						}}
 					/>
 					<Tabs.Screen
-						name="library"
+						name="LibraryScreen"
 						options={{
 							href:null,
 							title: '',

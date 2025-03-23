@@ -156,7 +156,7 @@ export default function MusicScreen() {
 								return (
 									<TouchableOpacity
 										key={index}
-										style={[styles.button, { backgroundColor: selectedGenre == genre.name ? '#732DFC' : '#323232' }]}
+										style={[styles.button, { backgroundColor: selectedGenre == genre.name ? '#732DFC' : '#252525' }]}
 										onPress={() => setSelectedGenre(genre.name)}
 									>
 										<IconComponent name={genre.icon} size={24} color="white" />
@@ -225,8 +225,8 @@ const styles = StyleSheet.create({
 		padding: 15,
 		borderWidth: 1.5,
 		color: 'white',
-		borderColor: '#323232',
-		backgroundColor: '#323232',
+		borderColor: '#252525',
+		backgroundColor: '#252525',
 	},
 	row: {
 		display: 'flex',
