@@ -2,12 +2,28 @@ import { supabase } from './supabase';
 import { v4 as uuidv4 } from 'uuid';
 import { decode } from 'base64-arraybuffer'
 
+/**
+ * Generates a unique file name based on the original file URI.
+ *
+ * This function extracts the file extension from the provided URI, generates a UUID,
+ * and then returns a new file name that preserves the extension.
+ *
+ * @param {string} fileUri - The original file URI (e.g., from an image or audio file).
+ * @returns {string} A unique file name (e.g., "3f8c8f9a-1234-5678-90ab-cdef12345678.jpg").
+ */
 const generateFileName = (fileUri) => {
 	const extension = fileUri.split('.').pop().split('?')[0];
 	return `${uuidv4()}.${extension}`;
 };
 
-// Tag set to its URL
+/**
+ * Predefined cover art URLs mapped to tags.
+ *
+ * This object maps a tag (such as 'algebra', 'coding', etc.) to a preset cover art URL.
+ * It is used when a cover art image is not provided so that a default image can be used.
+ *
+ * @type {Object<string, string>}
+ */
 const tag_URL = {
 	algebra:
 		'https://vwqokxwilhvpiybjgsbt.supabase.co/storage/v1/object/sign/song-cover-art/Algebra.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJzb25nLWNvdmVyLWFydC9BbGdlYnJhLnBuZyIsImlhdCI6MTc0MjY4MDIwMSwiZXhwIjozMTU1MzExMTQ0MjAxfQ.3gtE7knLAwRKEAyMDczf4zHxN7qYiTLoEoW1pji8r4U',
@@ -24,6 +40,21 @@ const tag_URL = {
 		'https://vwqokxwilhvpiybjgsbt.supabase.co/storage/v1/object/sign/song-cover-art/Physics.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJzb25nLWNvdmVyLWFydC9QaHlzaWNzLnBuZyIsImlhdCI6MTc0MjY4MDI3NiwiZXhwIjozMTU1MzExMTQ0Mjc2fQ.1OeJfXEE5xZVMDPO7lDwnlzrFxKndAjhVCeDxMMm2Y0',
 };
 
+/**
+ * Creates a new song record in the "songs" table.
+ *
+ * This function handles uploading a cover art image if provided (or uses a preset URL based on the tag),
+ * and then inserts a new row in the "songs" table with the song's metadata.
+ *
+ * @param {string} songName - The name of the song.
+ * @param {number|string} userId - The ID of the user creating the song.
+ * @param {string} tag - The tag for the song (e.g., "algebra", "coding").
+ * @param {string} genre - The genre of the song.
+ * @param {string|null} [coverArt=null] - The URI (or base64 data) of the cover art image. If null, a default image from tag_URL is used.
+ * @param {string} songURL - The URL where the song file is located.
+ * @returns {Promise<Object>} The inserted song record.
+ * @throws Will throw an error if any Supabase operation fails.
+ */
 export const createNewSong = async (songName, userId, tag, genre, coverArt = null, songURL) => {
 	if (coverArt) {
 		// create file names for the cover art files
