@@ -12,7 +12,7 @@ import Header from '@/app/components/Header';
 
 const PlaylistCreateScreen = () => {
 	//TODO : change image to default image when we finish designing it
-	const DEFAULT_IMAGE = 'https://picsum.photos/213';
+	const DEFAULT_IMAGE = '@/app/components/svgs/DinoDefaultBG';
 	const router = useRouter();
 
 	const [playlistName, setplaylistName] = useState('');
