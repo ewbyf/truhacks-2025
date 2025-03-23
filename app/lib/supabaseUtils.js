@@ -8,7 +8,6 @@ const generateFileName = (fileUri) => {
 };
 
 // Tag set to its URL
-
 const tag_URL = {
 	algebra:
 		'https://vwqokxwilhvpiybjgsbt.supabase.co/storage/v1/object/sign/song-cover-art/Algebra.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJzb25nLWNvdmVyLWFydC9BbGdlYnJhLnBuZyIsImlhdCI6MTc0MjY4MDIwMSwiZXhwIjozMTU1MzExMTQ0MjAxfQ.3gtE7knLAwRKEAyMDczf4zHxN7qYiTLoEoW1pji8r4U',
@@ -184,16 +183,6 @@ export const getPlaylistSongs = async (playlistID) => {
 		throw error;
 	}
 
-	// `data` is an array of objects like:
-	// [
-	//   {
-	//     song_id: 1,
-	//     songs: { id: 1, name: "Song Name", ... }
-	//   },
-	//   ...
-	// ]
-	//
-	// Extract just the `songs` object from each row:
 	const songs = data.map((row) => row.songs);
 
 	return songs;

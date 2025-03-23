@@ -110,7 +110,7 @@ export default function HomeScreen() {
 						<Text style={styles.subtitle}>Recently Added</Text>
 						<View style={styles.recentSongs}>
 							{songs.map((song) => (
-								<SongComponent song={song} />
+								<SongComponent key={song.id} song={song} />
 							))}
 						</View>
 					</View>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useRouter } from 'expo-router';
 import { View, Text, StyleSheet, Button, SafeAreaView, ScrollView, TouchableOpacity, TextInput, Image } from 'react-native';
-import { getSongs, createNewPlaylist, addSongToPlaylist } from '@/app/lib/supabaseUtils';
+import { getSongs, createNewPlaylist, addSongsToPlaylist} from '@/app/lib/supabaseUtils';
 import { UserContext } from '@/app/contexts/UserContext';
 import type { Song } from '@/app/interfaces/Song';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -10,6 +10,7 @@ import * as FileSystem from 'expo-file-system';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Header from '@/app/components/Header';
 import DinoDefaultBG from '@/app/components/svgs/DinoDefaultBG';
+
 
 const PlaylistCreateScreen = () => {
 	//TODO : change image to default image when we finish designing it
@@ -65,8 +66,8 @@ const PlaylistCreateScreen = () => {
 
 				const playlist = await createNewPlaylist(id, playlistName, base64, filename);
 
-				await Promise.all(selectedSongs.map((songID) => addSongToPlaylist(songID, playlist.id)));
-
+				//await Promise.all(selectedSongs.map((songID) => addSongToPlaylist(songID, playlist.id)));
+				await addSongsToPlaylist(selectedSongs, playlist.id);
 				alert('Playlist created successfully!');
 			}
 
