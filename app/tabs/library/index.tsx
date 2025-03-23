@@ -14,14 +14,23 @@ import { UserContext } from '@/app/contexts/UserContext';
 
 
 const LibraryScreen = () => {
-	const [playlistsData, setPlaylistsData] = useState(null);
+	const [playlistsData, setPlaylistsData] = useState<any[]>([]);
     const [selected, setSelected] = useState('playlists');
 	const router = useRouter();
-	const { songs } = useContext(UserContext);
+	const { id: userID, songs } = useContext(UserContext);
 
 	useEffect(() => {
-        //setPlaylistsData(getPlaylists())
-    }, []);
+        const fetchPlaylists = async () => {
+            try {
+                const data = await getPlaylists(userID); // Await the promise
+                setPlaylistsData(data); // Set state with the resolved data
+            } catch (error) {
+                console.error('Error fetching playlists:', error);
+            }
+        };
+
+        fetchPlaylists();
+    }, [userID]);
 
 	return (
 		<SafeAreaView style={styles.container}>
@@ -54,6 +63,9 @@ const LibraryScreen = () => {
 								</View>
 								<Text style={styles.playlistTitle}>Create playlist</Text>
 							</TouchableOpacity>
+							{playlistsData.map((playlist, index) => {
+								<PlaylistLibrary id={playlist.id} name={playlist.name} image={playlist.cover_art}/>
+							})}
 							<PlaylistLibrary id={1} name={"test"} image={'https://picsum.photos/213'}/>
 						</>
 					)} : {
