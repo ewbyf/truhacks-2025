@@ -7,19 +7,17 @@ import { BottomSheetModal, BottomSheetModalProvider, BottomSheetView } from '@go
 import { useContext } from 'react';
 import { UserContext } from '../contexts/UserContext';
 
-const { width, height } = Dimensions.get('window');
-
 const BottomPlayer = () => {
 	const [sound, setSound] = useState<Audio.Sound | null>(null);
 	const [isPlaying, setIsPlaying] = useState(false);
 	const [isLoaded, setIsLoaded] = useState(false);
-	const [position, setPosition] = useState(0);
+	const [songPosition, setSongPosition] = useState(0);
 	const [duration, setDuration] = useState(0);
 	const [hasInteracted, setHasInteracted] = useState(false);
 
 	const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
-    const { currentSong, pause, setPause } = useContext(UserContext);
+    const { currentSong, setCurrentSong, pause, setPause, queue, setQueue, position, setPosition} = useContext(UserContext);
 
 	const handlePresentModalPress = useCallback(async () => {
 		bottomSheetModalRef.current?.present();
@@ -67,8 +65,18 @@ const BottomPlayer = () => {
 		}
 	};
 
-	const skipSong = () => {};
-	const rewindSong = () => {};
+	const skipSong = () => {
+        if (queue.length) {
+            setPosition((position + 1) % queue.length);
+            setCurrentSong(queue[(position + 1) % queue.length]);
+            setIsPlaying(true)
+            setPause(false);
+        }
+    };
+
+	const rewindSong = () => {
+
+    };
 
     useEffect(() => {
         if (pause) {
@@ -84,7 +92,7 @@ const BottomPlayer = () => {
 			if (sound) {
 				const status = await sound.getStatusAsync();
 				if (status.isLoaded) {
-					setPosition(status.positionMillis);
+					setSongPosition(status.positionMillis);
 				}
 			}
 		}, 1000);
@@ -128,7 +136,7 @@ const BottomPlayer = () => {
 					</View>
 				</View>
 				<View style={styles.progressBarContainer}>
-					<View style={[styles.progressBarInside, { width: `${(position / duration) * 100}%` }]}></View>
+					<View style={[styles.progressBarInside, { width: `${(songPosition / duration) * 100}%` }]}></View>
 				</View>
 			</TouchableOpacity>
 
@@ -165,7 +173,7 @@ const BottomPlayer = () => {
 						<View style={styles.progressContainer}>
 							<Slider
 								style={styles.progressBar}
-								value={position / duration}
+								value={songPosition / duration}
 								minimumValue={0}
 								maximumValue={1}
 								thumbTintColor="white"
@@ -175,13 +183,13 @@ const BottomPlayer = () => {
 									if (sound) {
 										const newPosition = value * duration;
 										await sound.setPositionAsync(newPosition);
-										setPosition(newPosition);
+										setSongPosition(newPosition);
 									}
 								}}
 							/>
 							<View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: -10 }}>
 								<Text style={styles.timestamp}>
-									{Math.floor(Math.floor(position / 1000) / 60)}:{String(Math.floor(position / 1000) % 60).padStart(2, '0')}
+									{Math.floor(Math.floor(songPosition / 1000) / 60)}:{String(Math.floor(songPosition / 1000) % 60).padStart(2, '0')}
 								</Text>
 								<Text style={styles.timestamp}>
 									{Math.floor(Math.floor(duration / 1000) / 60)}:{String(Math.floor(duration / 1000) % 60).padStart(2, '0')}

@@ -48,26 +48,24 @@ export default function MusicScreen() {
 			return;
 		}
 		setLoading(true);
-		fetchSong('3536a285-cca5-4e09-b2d9-ef765df58982');
-		// api.post('/api/v1/sonic/create', {
-		// 	custom_mode: false,
-		// 	tags: selectedGenre,
-		// 	gpt_description_prompt: prompt,
-		//     mv: 'sonic-v3-5'
-		// })
-		// 	.then((resp) => {
-		// 		console.log('first req:', resp.data);
-		// 		fetchSong(resp.data.task_id);
-		// 	})
-		// 	.catch((err) => {
-		// 		console.log(err);
-		// 	});
+		api.post('/api/v1/sonic/create', {
+			custom_mode: false,
+			tags: selectedGenre,
+			gpt_description_prompt: prompt,
+			mv: 'sonic-v3-5',
+		})
+			.then((resp) => {
+				fetchSong(resp.data.task_id);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
 	};
 
 	const fetchSong = async (task_id: string) => {
 		console.log(task_id);
 		api.get(`/api/v1/sonic/task/${task_id}`)
-			.then(async(resp) => {
+			.then(async (resp) => {
 				if (resp.data.data[0].state != 'succeeded') {
 					setTimeout(() => {
 						fetchSong(task_id);
@@ -75,7 +73,7 @@ export default function MusicScreen() {
 				} else {
 					// success
 					const data = await createNewSong(resp.data.data[0].title, id, selectedTopic, selectedGenre, null, resp.data.data[0].audio_url);
-                    setSongs([...songs, data]);
+					setSongs([...songs, data]);
 					setLoading(false);
 					showSuccess();
 				}

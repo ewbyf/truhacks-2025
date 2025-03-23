@@ -1,88 +1,114 @@
-import React, { useCallback, useMemo, useRef, useState, useEffect } from 'react';
+import React, { useCallback, useMemo, useRef, useState, useEffect, useContext } from 'react';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { View, Text, StyleSheet, Button, SafeAreaView, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { BottomSheetModal, BottomSheetView, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import Icon from 'react-native-vector-icons/Ionicons';
 import RecentSong from '../../../components/RecentSong';
-import Song from '@/app/components/SongComponent'
-  
-import { getPlaylistSongs } from "@/app/lib/supabaseUtils";
+import SongComponent from '@/app/components/SongComponent';
+
+import { getPlaylistSongs } from '@/app/lib/supabaseUtils';
 import { supabase } from '@/app/lib/supabase';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import Header from '@/app/components/Header';
+import { PlaylistType } from '@/app/interfaces/PlaylistType';
+import { Song } from '@/app/interfaces/Song';
+import { UserContext } from '@/app/contexts/UserContext';
 
 export const options = {
-    href: null,
-    title:''
-}
+	href: null,
+	title: '',
+};
 
 const PlaylistScreen = () => {
-    const { id } = useLocalSearchParams();
+	const { id } = useLocalSearchParams();
 
-    const [playlist, setPlaylist] = useState<any[]>([]);
+	const [playlist, setPlaylist] = useState<PlaylistType>();
 	const [songs, setSongs] = useState<any[]>([]);
 	const [loading, setLoading] = useState(true);
+	const [isPlaying, setIsPlaying] = useState(false);
 	const router = useRouter();
 
+	const { setCurrentSong, pause, setPause, queue, setQueue, position, setPosition } = useContext(UserContext);
+
 	useEffect(() => {
-        const fetchPlaylist = async () => {
-            try {
-				console.log("HELLLOO");
-                const { data: playlistData, error: playlistError } = await supabase
-					.from('playlists')
-					.select('*')
-					.eq('id', id)
-					.single();
-					
-				setPlaylist(playlistData);
-
-            } catch (error) {
-                console.error('Error fetching playlists:', error);
-            }
-        };
-
-		const fetchSongs = async () => {
-			console.log("HELLLOO");
+		const fetchPlaylist = async () => {
 			try {
-                const songsData = await getPlaylistSongs(id); // Await the promise
-                setSongs(songsData); // Set state with the resolved data
-				console.log(songs);
-				console.log("AHHHHHHH");
-				setLoading(false)
-            } catch (error) {
-                console.error('Error fetching playlists:', error);
-            }
+				const { data: playlistData, error: playlistError } = await supabase.from('playlists').select('*').eq('id', id).single();
+
+				setPlaylist(playlistData);
+				console.log(playlistData);
+			} catch (error) {
+				console.error('Error fetching playlists:', error);
+			}
 		};
 
-        fetchPlaylist();
+		const fetchSongs = async () => {
+			try {
+				const songsData = await getPlaylistSongs(id);
+				console.log(songsData);
+				setSongs(songsData);
+				setLoading(false);
+			} catch (error) {
+				console.error('Error fetching playlists:', error);
+			}
+		};
+
+		fetchPlaylist();
 		fetchSongs();
-    }, []);
+	}, []);
+
+	useEffect(() => {
+		if (pause) {
+			setIsPlaying(false);
+		} else if (!pause && queue == songs) {
+			setIsPlaying(true);
+		}
+	}, [pause]);
+
+	const playSound = async () => {
+		let tempPosition = position;
+		if (queue != songs) {
+			setPosition(0);
+			tempPosition = 0;
+		}
+		setQueue(songs);
+		setCurrentSong(songs[tempPosition]);
+		setPause(false);
+        setIsPlaying(true)
+	};
+
+	const pauseSound = async () => {
+		setIsPlaying(false);
+		setPause(true);
+	};
 
 	return (
 		<SafeAreaView style={styles.container}>
-			<ScrollView style={{ paddingHorizontal: 20 }}>
-				<View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-					<Text style={styles.title}>LOGO</Text>
-				</View>
-				<TouchableOpacity onPress={() => router.back()}>
-					<Icon name="arrow-back" size={30} color="white" />
-				</TouchableOpacity>
+			{!loading && playlist && <Header title={playlist.name}></Header>}
+			<KeyboardAwareScrollView style={{ paddingHorizontal: 20, paddingTop: 80 }} contentContainerStyle={{ paddingBottom: 80, gap: 20 }}>
 				<View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-					<Image  source={{ uri: 'https://picsum.photos/213' }} style={{ height: 256, width: 256 }} />
+					<Image source={{ uri: 'https://picsum.photos/213' }} style={{ height: 256, width: 256 }} />
 				</View>
-				<Text style={styles.playlistTitle}>Playlist #1</Text>
+				<View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+					<Text>pop</Text>
+					<TouchableOpacity onPress={isPlaying && !pause ? pauseSound : playSound}>
+						<Icon name={isPlaying ? 'pause-circle-sharp' : 'play-circle-sharp'} color="white" size={84} />
+					</TouchableOpacity>
+				</View>
 				{!loading ? (
 					<>
-						<Text style={styles.playlistTitle}>1 hours 45 min</Text>
+						{/* <Text style={styles.playlistTitle}>1 hours 45 min</Text> */}
 						<View style={styles.recentSongs}>
 							{songs.map((song, index) => (
-								<Song key={index} song={song}/>
+								<SongComponent key={index} song={song} inPlaylist={true} songs={songs}/>
 							))}
 						</View>
 					</>
 				) : (
 					<></>
 				)}
-			</ScrollView>
+			</KeyboardAwareScrollView>
 		</SafeAreaView>
 	);
 };
@@ -92,10 +118,10 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: '#1E1E1E',
 	},
-    column: {
-        display: 'flex',
-        gap: 10
-    },
+	column: {
+		display: 'flex',
+		gap: 10,
+	},
 	title: {
 		fontSize: 44,
 		fontWeight: 'bold',
@@ -125,12 +151,12 @@ const styles = StyleSheet.create({
 		fontSize: 17,
 		fontWeight: 'medium',
 	},
-    selectionButton: {
-        backgroundColor: '#732DFC',
-        padding: 6,
-        paddingHorizontal: 8,
-        borderRadius: 10,
-    },
+	selectionButton: {
+		backgroundColor: '#732DFC',
+		padding: 6,
+		paddingHorizontal: 8,
+		borderRadius: 10,
+	},
 	recentSongs: {
 		paddingVertical: 10,
 		paddingHorizontal: 0,

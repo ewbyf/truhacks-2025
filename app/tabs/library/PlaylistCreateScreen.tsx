@@ -8,9 +8,9 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import Header from '@/app/components/Header';
 
 const PlaylistCreateScreen = () => {
-
 	//TODO : change image to default image when we finish designing it
 	const DEFAULT_IMAGE = 'https://picsum.photos/213';
 	const router = useRouter();
@@ -21,7 +21,6 @@ const PlaylistCreateScreen = () => {
 	const [image, setImage] = useState<string | null>(DEFAULT_IMAGE);
 
 	const { id } = useContext(UserContext);
-
 
 	const choosePhoto = async () => {
 		let result = await ImagePicker.launchImageLibraryAsync({
@@ -80,28 +79,7 @@ const PlaylistCreateScreen = () => {
 
 	return (
 		<SafeAreaView style={styles.container}>
-			<View
-				style={{
-					position: 'absolute',
-					top: 0,
-					width: '100%',
-					height: 120,
-					alignItems: 'flex-end',
-					flexDirection: 'row',
-					backgroundColor: '#1E1E1E',
-					padding: 20,
-					zIndex: 99,
-					justifyContent: 'space-between',
-				}}
-			>
-				<View style={{ flex: 1 }}>
-					<TouchableOpacity onPress={() => router.back()}>
-						<Icon name="arrow-back" size={30} color="white" />
-					</TouchableOpacity>
-				</View>
-				<Text style={{ flex: 2, textAlign: 'center', fontWeight: 'bold', color: 'white', fontSize: 22 }}>Create Playlist</Text>
-				<View style={{ flex: 1 }}></View>
-			</View>
+			<Header title="Create Playlist"></Header>
 			<KeyboardAwareScrollView style={{ paddingHorizontal: 20, paddingTop: 80 }} contentContainerStyle={{ paddingBottom: 80, gap: 20 }}>
 				<TouchableOpacity onPress={choosePhoto}>
 					<View style={{ justifyContent: 'center', alignItems: 'center' }}>
